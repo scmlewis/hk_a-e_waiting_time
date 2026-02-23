@@ -72,6 +72,8 @@ In your repository settings:
 
 - Go to **Settings → Pages**
 - Under **Build and deployment**, set **Source** to **GitHub Actions**
+- Go to **Settings → Actions → General → Workflow permissions**
+- Set **Read and write permissions** and save
 
 After that, each push to `main` automatically publishes the latest build.
 
