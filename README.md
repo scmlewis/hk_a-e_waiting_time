@@ -71,7 +71,8 @@ GitHub Actions workflow is defined in [.github/workflows/ci-cd.yml](.github/work
 In your repository settings:
 
 - Go to **Settings → Pages**
-- Under **Build and deployment**, set **Source** to **GitHub Actions**
+- Under **Build and deployment**, set **Source** to **Deploy from a branch**
+- Set **Branch** to `gh-pages` and folder to `/ (root)`
 - Go to **Settings → Actions → General → Workflow permissions**
 - Set **Read and write permissions** and save
 
