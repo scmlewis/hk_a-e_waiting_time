@@ -124,6 +124,7 @@ export function HospitalTable({
               {group.hospitals.map((hospital) => {
                 const selectedTriage = hospital.triage[selectedCategory]
                 const isExpanded = expandedHospitalName === hospital.hospitalName
+                const detailsId = `hospital-table-details-${hospital.hospitalName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
 
                 return (
                   <Fragment key={hospital.hospitalName}>
@@ -163,6 +164,8 @@ export function HospitalTable({
                         <button
                           type="button"
                           onClick={() => onToggleExpanded(hospital.hospitalName)}
+                          aria-expanded={isExpanded}
+                          aria-controls={detailsId}
                           className={`cursor-pointer rounded-md border px-2 py-1 text-xs transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
                             isDark
                               ? 'border-slate-600 text-slate-200 hover:bg-slate-800'
@@ -177,6 +180,10 @@ export function HospitalTable({
                     <tr className={`border-t ${isDark ? 'border-slate-800 bg-slate-900' : 'border-slate-100 bg-slate-50'}`}>
                       <td colSpan={3} className={`px-4 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                         <div
+                          id={detailsId}
+                          role="region"
+                          aria-label={`${hospital.hospitalName} details`}
+                          aria-hidden={!isExpanded}
                           className={`grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-300 motion-reduce:transition-none ${
                             isExpanded ? 'my-3 grid-rows-[1fr] opacity-100' : 'my-0 grid-rows-[0fr] opacity-0'
                           }`}

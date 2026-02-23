@@ -49,6 +49,13 @@ export interface AppLabels {
   refreshingData: string
   staleTimestamp: string
   refreshErrorSuffix: string
+  dataConfidenceTitle: string
+  dataConfidenceFresh: string
+  dataConfidenceStaleSource: string
+  dataConfidenceStaleNetwork: string
+  dataConfidenceStaleBoth: string
+  emergencyHint: string
+  callEmergencyNow: string
   noMatch: string
   noHospitals: string
   noDataFromSource: string
@@ -96,6 +103,13 @@ const EN_LABELS: AppLabels = {
   refreshingData: 'Refreshing latest waiting-time data...',
   staleTimestamp: 'Source update timestamp appears stale (older than 30 minutes).',
   refreshErrorSuffix: 'Showing last successful data snapshot.',
+  dataConfidenceTitle: 'Data confidence',
+  dataConfidenceFresh: 'Live data looks current.',
+  dataConfidenceStaleSource: 'Source timestamp is stale (over 30 minutes).',
+  dataConfidenceStaleNetwork: 'Latest refresh failed. Showing last successful snapshot.',
+  dataConfidenceStaleBoth: 'Latest refresh failed and source timestamp is stale. Treat waiting times as reference only.',
+  emergencyHint: 'Severe symptoms or emergency condition?',
+  callEmergencyNow: 'Call 999 now',
   noMatch: 'No hospitals match your current filters.',
   noHospitals: 'No hospitals are available to display.',
   noDataFromSource: 'No hospital data is currently available from the source.',
@@ -235,6 +249,13 @@ const ZH_HK_LABELS: AppLabels = {
   refreshingData: '正在更新最新輪候時間資料...',
   staleTimestamp: '來源更新時間可能過舊（超過 30 分鐘）。',
   refreshErrorSuffix: '現正顯示最近一次成功更新的資料。',
+  dataConfidenceTitle: '資料可信度',
+  dataConfidenceFresh: '即時資料看來屬於最新狀態。',
+  dataConfidenceStaleSource: '來源時間戳已過舊（超過 30 分鐘）。',
+  dataConfidenceStaleNetwork: '最近一次更新失敗，現正顯示最近一次成功快照。',
+  dataConfidenceStaleBoth: '最近一次更新失敗且來源時間戳過舊，輪候時間只供參考。',
+  emergencyHint: '如有嚴重症狀或緊急情況？',
+  callEmergencyNow: '立即致電 999',
   noMatch: '沒有醫院符合目前篩選條件。',
   noHospitals: '目前沒有可顯示的醫院資料。',
   noDataFromSource: '來源目前沒有可用的醫院資料。',

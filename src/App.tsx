@@ -83,6 +83,11 @@ function App() {
   const hasDataRef = useRef(false)
   const hasTrackedPageViewRef = useRef(false)
   const hadSearchValueRef = useRef(false)
+  const filterSheetTitleId = 'mobile-filter-sheet-title'
+  const sortSheetTitleId = 'mobile-sort-sheet-title'
+  const filterSheetCloseButtonRef = useRef<HTMLButtonElement | null>(null)
+  const sortSheetCloseButtonRef = useRef<HTMLButtonElement | null>(null)
+  const lastFocusedElementBeforeSheetRef = useRef<HTMLElement | null>(null)
 
   const handleSortModeChange = useCallback((mode: SortMode) => {
     setSortMode((previousMode) => {
@@ -93,6 +98,20 @@ function App() {
       return mode
     })
   }, [])
+
+  const toggleLanguageMode = useCallback(() => {
+    setLanguageMode((currentMode) => (currentMode === 'en' ? 'zh-HK' : 'en'))
+  }, [])
+
+  const toggleThemeMode = useCallback(() => {
+    setThemeMode((currentMode) => {
+      if (currentMode === 'auto') {
+        return systemPrefersDark ? 'light' : 'dark'
+      }
+
+      return currentMode === 'dark' ? 'light' : 'dark'
+    })
+  }, [systemPrefersDark])
 
   const handleViewChange = useCallback((nextView: AppView) => {
     setActiveView(nextView)
@@ -522,6 +541,36 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!isMobileFilterSheetOpen) {
+      return
+    }
+
+    lastFocusedElementBeforeSheetRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    filterSheetCloseButtonRef.current?.focus()
+  }, [isMobileFilterSheetOpen])
+
+  useEffect(() => {
+    if (!isMobileSortSheetOpen) {
+      return
+    }
+
+    lastFocusedElementBeforeSheetRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    sortSheetCloseButtonRef.current?.focus()
+  }, [isMobileSortSheetOpen])
+
+  useEffect(() => {
+    if (hasMobileOverlayOpen) {
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = ''
+      }
+    }
+
+    document.body.style.overflow = ''
+    lastFocusedElementBeforeSheetRef.current?.focus()
+  }, [hasMobileOverlayOpen])
+
   return (
     <div className={`relative isolate overflow-x-clip pb-24 md:pb-10 ${isDark ? 'bg-slate-950 text-slate-100' : 'text-slate-900'}`}>
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
@@ -545,111 +594,56 @@ function App() {
               : 'border-white/60 bg-white/85 shadow-[0_8px_30px_rgba(2,6,23,0.08)]'
           }`}
         >
-          <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex items-start justify-between gap-2">
             <div>
               <h1 className={`text-2xl font-bold tracking-tight md:text-3xl ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
                 {labels.title}
               </h1>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <div
-                className={`inline-flex items-center gap-1 rounded-lg border p-1 text-xs font-semibold ${
-                  isDark ? 'border-slate-700 bg-slate-900 text-slate-300' : 'border-slate-200 bg-white text-slate-600'
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={toggleLanguageMode}
+                className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+                  isDark
+                    ? 'border-slate-700 bg-slate-900 text-slate-100 hover:bg-slate-800'
+                    : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
+                aria-label={`${labels.languageTraditionalChinese} / ${labels.languageEnglish}`}
+                aria-pressed={languageMode === 'zh-HK'}
               >
-                <button
-                  type="button"
-                  onClick={() => setLanguageMode('en')}
-                  className={`cursor-pointer rounded-md px-2 py-1 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
-                    languageMode === 'en'
-                      ? 'bg-slate-900 text-white'
-                      : isDark
-                        ? 'text-slate-300 hover:bg-slate-800'
-                        : 'text-slate-600 hover:bg-slate-100'
-                  }`}
-                  aria-pressed={languageMode === 'en'}
-                >
-                  EN
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguageMode('zh-HK')}
-                  className={`cursor-pointer rounded-md px-2 py-1 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
-                    languageMode === 'zh-HK'
-                      ? 'bg-slate-900 text-white'
-                      : isDark
-                        ? 'text-slate-300 hover:bg-slate-800'
-                        : 'text-slate-600 hover:bg-slate-100'
-                  }`}
-                  aria-pressed={languageMode === 'zh-HK'}
-                >
-                  繁
-                </button>
-              </div>
+                <span className="font-bold">語</span>
+                <span>{languageMode === 'en' ? 'EN' : '繁'}</span>
+              </button>
 
-              <div
-                className={`inline-flex items-center gap-1 rounded-lg border p-1 text-xs font-semibold uppercase tracking-wide ${
-                  isDark ? 'border-slate-700 bg-slate-900 text-slate-300' : 'border-slate-200 bg-white text-slate-500'
+              <button
+                type="button"
+                onClick={toggleThemeMode}
+                className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border px-3 py-2 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+                  isDark
+                    ? 'border-slate-700 bg-slate-900 text-slate-100 hover:bg-slate-800'
+                    : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
+                aria-label={resolvedTheme === 'dark' ? labels.themeLight : labels.themeDark}
+                aria-pressed={resolvedTheme === 'dark'}
               >
-                {([
-                  {
-                    mode: 'light' as const,
-                    ariaLabel: labels.themeLight,
-                    icon: (
-                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-                        <circle cx="12" cy="12" r="4" />
-                        <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41" />
-                      </svg>
-                    ),
-                  },
-                  {
-                    mode: 'dark' as const,
-                    ariaLabel: labels.themeDark,
-                    icon: (
-                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3c.27 0 .54.02.8.05A7 7 0 0 0 21 12.79Z" />
-                      </svg>
-                    ),
-                  },
-                  {
-                    mode: 'auto' as const,
-                    ariaLabel: labels.themeAuto,
-                    icon: (
-                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-                        <rect x="3" y="4" width="18" height="12" rx="2" />
-                        <path d="M8 20h8M12 16v4" />
-                      </svg>
-                    ),
-                  },
-                ]).map(({ mode, ariaLabel, icon }) => {
-                  const isSelected = themeMode === mode
-                  return (
-                    <button
-                      key={mode}
-                      type="button"
-                      onClick={() => setThemeMode(mode)}
-                      className={`cursor-pointer rounded-md px-2 py-1 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
-                        isSelected
-                          ? 'bg-slate-900 text-white'
-                          : isDark
-                            ? 'text-slate-300 hover:bg-slate-800'
-                            : 'text-slate-600 hover:bg-slate-100'
-                      }`}
-                      aria-label={ariaLabel}
-                      aria-pressed={isSelected}
-                    >
-                      {icon}
-                    </button>
-                  )
-                })}
-              </div>
+                {resolvedTheme === 'dark' ? (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3c.27 0 .54.02.8.05A7 7 0 0 0 21 12.79Z" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <circle cx="12" cy="12" r="4" />
+                    <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41" />
+                  </svg>
+                )}
+              </button>
 
               <button
                 type="button"
                 onClick={() => void loadData()}
                 disabled={loading || isRefreshing}
-                className={`inline-flex cursor-pointer items-center rounded-lg border px-3 py-2 text-sm font-medium shadow-sm transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+                className={`hidden cursor-pointer items-center rounded-lg border px-3 py-2 text-sm font-medium shadow-sm transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:inline-flex ${
                   isDark
                     ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
                     : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
@@ -660,12 +654,12 @@ function App() {
             </div>
           </div>
 
-          <p className={`max-w-3xl text-sm leading-6 md:text-base ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+          <p className={`max-w-3xl text-[15px] leading-6 md:text-base ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
             {labels.subtitle}
           </p>
 
           <div
-            className={`inline-flex items-center gap-1 rounded-xl border p-1 ${
+            className={`grid w-full grid-cols-2 items-center gap-1 rounded-xl border p-1 md:inline-flex md:w-auto ${
               isDark ? 'border-slate-700 bg-slate-900/85' : 'border-slate-200 bg-white/90'
             }`}
             role="tablist"
@@ -676,7 +670,7 @@ function App() {
               role="tab"
               aria-selected={activeView === 'wait-times'}
               onClick={() => handleViewChange('wait-times')}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none ${
+              className={`w-full rounded-lg px-3 py-2 text-[15px] font-medium transition-colors duration-200 motion-reduce:transition-none md:w-auto md:py-1.5 md:text-sm ${
                 activeView === 'wait-times'
                   ? isDark
                     ? 'bg-slate-100 text-slate-900'
@@ -693,7 +687,7 @@ function App() {
               role="tab"
               aria-selected={activeView === 'overview'}
               onClick={() => handleViewChange('overview')}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none ${
+              className={`w-full rounded-lg px-3 py-2 text-[15px] font-medium transition-colors duration-200 motion-reduce:transition-none md:w-auto md:py-1.5 md:text-sm ${
                 activeView === 'overview'
                   ? isDark
                     ? 'bg-slate-100 text-slate-900'
@@ -711,7 +705,7 @@ function App() {
             <button
               type="button"
               onClick={() => setIsLegendExpanded(!isLegendExpanded)}
-              className={`flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${isDark ? 'border-slate-700 bg-slate-900/50 text-slate-300 hover:bg-slate-800' : 'border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
+              className={`flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${isDark ? 'border-slate-700 bg-slate-900/50 text-slate-300 hover:bg-slate-800' : 'border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
             >
               <span className="flex items-center gap-2">
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
@@ -737,19 +731,19 @@ function App() {
             >
               <div className="min-h-0">
                 <div className="flex flex-wrap gap-2 px-1">
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-300">
+                <span className="inline-flex items-center gap-1 text-sm font-medium text-emerald-300">
                   <span className="h-2 w-2 rounded-full bg-emerald-500" />
                   {labels.shortWait}
                 </span>
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-300">
+                <span className="inline-flex items-center gap-1 text-sm font-medium text-amber-300">
                   <span className="h-2 w-2 rounded-full bg-amber-500" />
                   {labels.moderateWait}
                 </span>
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-rose-300">
+                <span className="inline-flex items-center gap-1 text-sm font-medium text-rose-300">
                   <span className="h-2 w-2 rounded-full bg-rose-500" />
                   {labels.longWait}
                 </span>
-                <span className={`inline-flex items-center gap-1 text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                <span className={`inline-flex items-center gap-1 text-sm font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                   <span className="h-2 w-2 rounded-full bg-slate-400" />
                   {labels.unknownWait}
                 </span>
@@ -788,6 +782,23 @@ function App() {
           isDark={isDark}
           labels={labels.lastUpdated}
         />}
+
+        {activeView === 'wait-times' && (
+          <div className="md:hidden">
+            <button
+              type="button"
+              onClick={() => void loadData()}
+              disabled={loading || isRefreshing}
+              className={`w-full cursor-pointer rounded-lg border px-3 py-2.5 text-sm font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+                isDark
+                  ? 'border-slate-700 bg-slate-900 text-slate-100'
+                  : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              {isRefreshing ? labels.refreshing : labels.refreshNow}
+            </button>
+          </div>
+        )}
 
         {activeView === 'wait-times' && !loading && isRefreshing && (
           <p
@@ -845,21 +856,21 @@ function App() {
         {activeView === 'wait-times' && <section className="space-y-3 md:hidden">
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${
                 isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white/90 text-slate-600'
               }`}
             >
               {labels.triageCategoryLabels[selectedTriageCategory]}
             </span>
             <span
-              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${
                 isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white/90 text-slate-600'
               }`}
             >
               {activeClusterLabel}
             </span>
             <span
-              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${
                 isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white/90 text-slate-600'
               }`}
             >
@@ -1029,10 +1040,20 @@ function App() {
         className={`fixed inset-x-0 bottom-0 z-30 rounded-t-2xl border-x border-t p-4 shadow-2xl backdrop-blur transition-transform duration-300 motion-reduce:transition-none md:hidden ${
           isMobileFilterSheetOpen ? 'translate-y-0' : 'translate-y-full'
         } ${isDark ? 'border-sky-900/50 bg-slate-900/95' : 'border-sky-100 bg-white/98'}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={filterSheetTitleId}
+        aria-hidden={!isMobileFilterSheetOpen}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            setIsMobileFilterSheetOpen(false)
+          }
+        }}
       >
         <div className="mb-3 flex items-center justify-between">
-          <p className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{labels.showFiltersSettings}</p>
+          <p id={filterSheetTitleId} className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{labels.showFiltersSettings}</p>
           <button
+            ref={filterSheetCloseButtonRef}
             type="button"
             onClick={() => setIsMobileFilterSheetOpen(false)}
             className={`rounded-md border px-2 py-1 text-xs font-semibold ${
@@ -1062,10 +1083,20 @@ function App() {
         className={`fixed inset-x-0 bottom-0 z-30 rounded-t-2xl border-x border-t p-4 shadow-2xl backdrop-blur transition-transform duration-300 motion-reduce:transition-none md:hidden ${
           isMobileSortSheetOpen ? 'translate-y-0' : 'translate-y-full'
         } ${isDark ? 'border-indigo-900/50 bg-slate-900/95' : 'border-indigo-100 bg-white/98'}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={sortSheetTitleId}
+        aria-hidden={!isMobileSortSheetOpen}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            setIsMobileSortSheetOpen(false)
+          }
+        }}
       >
         <div className="mb-3 flex items-center justify-between">
-          <p className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{labels.quickSort}</p>
+          <p id={sortSheetTitleId} className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{labels.quickSort}</p>
           <button
+            ref={sortSheetCloseButtonRef}
             type="button"
             onClick={() => setIsMobileSortSheetOpen(false)}
             className={`rounded-md border px-2 py-1 text-xs font-semibold ${
@@ -1139,7 +1170,7 @@ function App() {
               setIsMobileFilterSheetOpen(false)
               setIsMobileSortSheetOpen(true)
             }}
-            className={`flex-1 cursor-pointer rounded-lg border px-3 py-2 text-xs font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+            className={`flex-1 cursor-pointer rounded-lg border px-3 py-2.5 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
               isDark
                 ? 'border-slate-700 bg-slate-900 text-slate-100'
                 : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
@@ -1153,25 +1184,13 @@ function App() {
               setIsMobileSortSheetOpen(false)
               setIsMobileFilterSheetOpen((value) => !value)
             }}
-            className={`cursor-pointer rounded-lg border px-3 py-2 text-xs font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+            className={`cursor-pointer rounded-lg border px-3 py-2.5 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
               isDark
                 ? 'border-slate-700 bg-slate-900 text-slate-100'
                 : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
             }`}
           >
             {labels.quickFilter}
-          </button>
-          <button
-            type="button"
-            onClick={() => void loadData()}
-            disabled={loading || isRefreshing}
-            className={`cursor-pointer rounded-lg border px-3 py-2 text-xs font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
-              isDark
-                ? 'border-slate-700 bg-slate-900 text-slate-100'
-                : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-            }`}
-          >
-            {labels.refreshNow}
           </button>
         </div>
       </div>}

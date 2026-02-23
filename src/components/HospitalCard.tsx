@@ -27,6 +27,7 @@ export function HospitalCard({
   onToggleExpanded,
 }: HospitalCardProps) {
   const selectedTriage = hospital.triage[selectedCategory]
+  const detailsId = `hospital-details-${hospital.hospitalName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
 
   return (
     <article
@@ -39,6 +40,8 @@ export function HospitalCard({
           onToggleExpanded()
         }
       }}
+      aria-expanded={isExpanded}
+      aria-controls={detailsId}
       className={`enter-fade-up group cursor-pointer rounded-2xl border p-3 shadow-sm backdrop-blur transition duration-200 motion-reduce:transition-none hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
         isDark ? 'bg-slate-900/85 focus-visible:ring-slate-500' : 'bg-white/90 focus-visible:ring-slate-400'
       } ${
@@ -95,6 +98,10 @@ export function HospitalCard({
       </div>
 
       <div
+        id={detailsId}
+        role="region"
+        aria-label={`${hospital.hospitalName} details`}
+        aria-hidden={!isExpanded}
         className={`grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-300 motion-reduce:transition-none ${
           isExpanded ? 'mt-2.5 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
         }`}
