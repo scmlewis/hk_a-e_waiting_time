@@ -34,8 +34,8 @@ export function FilterBar({
 }: FilterBarProps) {
   return (
     <section
-      className={`space-y-3 rounded-2xl border p-3 shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur md:p-5 md:space-y-4 ${
-        isDark ? 'border-sky-900/50 bg-sky-950/25' : 'border-sky-100/80 bg-sky-50/70'
+      className={`space-y-3 rounded-2xl border p-3 shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur md:p-5 md:space-y-4 md:backdrop-blur-none ${
+        isDark ? 'border-sky-900/50 bg-sky-950/25 md:bg-slate-950' : 'border-sky-100/80 bg-sky-50/70 md:bg-white'
       }`}
     >
       <div className="space-y-1.5">
