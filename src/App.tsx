@@ -443,7 +443,9 @@ function App() {
   const locationControls = (
     <div
       className={`mt-2.5 flex flex-wrap items-center gap-2 rounded-xl border p-2.5 text-xs md:text-sm ${
-        isDark ? 'border-sky-900/50 bg-sky-950/20 text-slate-300' : 'border-sky-100/80 bg-sky-50/70 text-slate-600'
+        isDark
+          ? 'border-sky-900/50 bg-sky-950/20 text-slate-300 md:bg-slate-950'
+          : 'border-sky-100/80 bg-sky-50/70 text-slate-600 md:bg-white'
       }`}
     >
       <button
