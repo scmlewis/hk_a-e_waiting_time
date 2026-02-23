@@ -458,10 +458,15 @@ function App() {
   }, [languageMode, labels.filter.allClusters, selectedCluster])
 
   const hasMobileOverlayOpen = isMobileFilterSheetOpen || isMobileSortSheetOpen
+  const waitSemanticsHint =
+    languageMode === 'zh-HK'
+      ? '一半輪候病人能在以下時間內就診，大部份人可於括號內顯示的時間就診。'
+      : 'Half of waiting patients can be seen within the following time, and most can be seen within the time shown in brackets.'
+  const shouldShowLocationPrompt = locationStatus === 'idle' && userLocation === null
 
   const locationControls = (
     <div
-      className={`mt-2.5 flex flex-wrap items-center gap-2 rounded-xl border p-2.5 text-xs md:text-sm ${
+      className={`mt-2.5 flex flex-wrap items-center gap-2.5 rounded-xl border p-3 text-sm md:gap-2 md:p-2.5 md:text-sm ${
         isDark
           ? 'border-sky-900/50 bg-sky-950/20 text-slate-300 md:bg-slate-950'
           : 'border-sky-100/80 bg-sky-50/70 text-slate-600 md:bg-white'
@@ -471,7 +476,7 @@ function App() {
         type="button"
         onClick={() => void handleUseMyLocation()}
         disabled={locationStatus === 'locating'}
-        className={`inline-flex cursor-pointer items-center rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+        className={`inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3.5 py-2 text-sm font-medium transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${
           isDark
             ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
             : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
@@ -484,7 +489,7 @@ function App() {
         <button
           type="button"
           onClick={handleClearLocation}
-          className={`inline-flex cursor-pointer items-center rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+          className={`inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3.5 py-2 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${
             isDark
               ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
               : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
@@ -572,7 +577,7 @@ function App() {
   }, [hasMobileOverlayOpen])
 
   return (
-    <div className={`relative isolate overflow-x-clip pb-24 md:pb-10 ${isDark ? 'bg-slate-950 text-slate-100' : 'text-slate-900'}`}>
+    <div className={`relative isolate overflow-x-clip pb-28 md:pb-10 ${isDark ? 'bg-slate-950 text-slate-100' : 'text-slate-900'}`}>
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div
           className={`absolute left-1/2 top-[-220px] h-[420px] w-[420px] -translate-x-1/2 rounded-full blur-3xl ${
@@ -586,15 +591,15 @@ function App() {
         />
       </div>
 
-      <main className="mx-auto min-h-screen w-full max-w-6xl space-y-5 px-4 py-4 md:px-6 md:py-6 lg:px-8">
+      <main className="mx-auto min-h-screen w-full max-w-6xl space-y-6 px-4 py-4 md:space-y-7 md:px-6 md:py-6 lg:px-8">
         <header
-          className={`enter-fade-up space-y-4 rounded-2xl border p-5 backdrop-blur md:p-6 ${
+          className={`enter-fade-up space-y-5 rounded-2xl border p-5 backdrop-blur md:space-y-6 md:p-6 ${
             isDark
               ? 'border-slate-700/70 bg-slate-900/80 shadow-[0_8px_30px_rgba(2,6,23,0.45)]'
               : 'border-white/60 bg-white/85 shadow-[0_8px_30px_rgba(2,6,23,0.08)]'
           }`}
         >
-          <div className="flex items-start justify-between gap-2">
+          <div className="flex items-start justify-between gap-3">
             <div>
               <h1 className={`text-2xl font-bold tracking-tight md:text-3xl ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
                 {labels.title}
@@ -645,8 +650,8 @@ function App() {
                 disabled={loading || isRefreshing}
                 className={`hidden cursor-pointer items-center rounded-lg border px-3 py-2 text-sm font-medium shadow-sm transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:inline-flex ${
                   isDark
-                    ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
-                    : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                    ? 'border-sky-700 bg-sky-600 text-white hover:bg-sky-500'
+                    : 'border-sky-700 bg-sky-600 text-white hover:bg-sky-700'
                 }`}
               >
                 {isRefreshing ? labels.refreshing : labels.refreshNow}
@@ -773,6 +778,16 @@ function App() {
               {labels.unknownWait}
             </span>
           </div>}
+          {activeView === 'wait-times' && (
+            <div
+              className={`rounded-lg border px-3 py-2 text-xs leading-5 ${
+                isDark ? 'border-sky-900/50 bg-sky-950/25 text-slate-300' : 'border-sky-100 bg-sky-50/70 text-slate-700'
+              }`}
+              role="note"
+            >
+              {waitSemanticsHint}
+            </div>
+          )}
         </header>
 
         {activeView === 'wait-times' && <LastUpdated
@@ -783,6 +798,32 @@ function App() {
           labels={labels.lastUpdated}
         />}
 
+        {activeView === 'wait-times' && shouldShowLocationPrompt && (
+          <section
+            className={`rounded-xl border p-3 md:p-4 ${
+              isDark ? 'border-sky-900/50 bg-sky-950/25' : 'border-sky-100 bg-sky-50/70'
+            }`}
+            aria-live="polite"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className={`text-sm md:text-base ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                {labels.sortNearest} • {labels.distanceEstimateHint}
+              </p>
+              <button
+                type="button"
+                onClick={() => void handleUseMyLocation()}
+                className={`inline-flex min-h-11 items-center rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+                  isDark
+                    ? 'border-slate-600 bg-slate-900 text-slate-100 hover:bg-slate-800'
+                    : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                {labels.useMyLocation}
+              </button>
+            </div>
+          </section>
+        )}
+
         {activeView === 'wait-times' && (
           <div className="md:hidden">
             <button
@@ -791,8 +832,8 @@ function App() {
               disabled={loading || isRefreshing}
               className={`w-full cursor-pointer rounded-lg border px-3 py-2.5 text-sm font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
                 isDark
-                  ? 'border-slate-700 bg-slate-900 text-slate-100'
-                  : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                  ? 'border-sky-700 bg-sky-600 text-white hover:bg-sky-500'
+                  : 'border-sky-700 bg-sky-600 text-white hover:bg-sky-700'
               }`}
             >
               {isRefreshing ? labels.refreshing : labels.refreshNow}
@@ -1056,7 +1097,7 @@ function App() {
             ref={filterSheetCloseButtonRef}
             type="button"
             onClick={() => setIsMobileFilterSheetOpen(false)}
-            className={`rounded-md border px-2 py-1 text-xs font-semibold ${
+            className={`rounded-md border px-3 py-1.5 text-sm font-semibold ${
               isDark ? 'border-slate-700 bg-slate-900 text-slate-200' : 'border-slate-300 bg-white text-slate-700'
             }`}
           >
@@ -1099,7 +1140,7 @@ function App() {
             ref={sortSheetCloseButtonRef}
             type="button"
             onClick={() => setIsMobileSortSheetOpen(false)}
-            className={`rounded-md border px-2 py-1 text-xs font-semibold ${
+            className={`rounded-md border px-3 py-1.5 text-sm font-semibold ${
               isDark ? 'border-slate-700 bg-slate-900 text-slate-200' : 'border-slate-300 bg-white text-slate-700'
             }`}
           >
@@ -1110,7 +1151,7 @@ function App() {
           <button
             type="button"
             onClick={() => applyMobileSortMode('waiting')}
-            className={`w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ${
+            className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium ${
               sortMode === 'waiting'
                 ? isDark
                   ? 'border-slate-600 bg-slate-100 text-slate-900'
@@ -1125,7 +1166,7 @@ function App() {
           <button
             type="button"
             onClick={() => applyMobileSortMode('name')}
-            className={`w-full rounded-lg border px-3 py-2 text-left text-sm font-medium ${
+            className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium ${
               sortMode === 'name'
                 ? isDark
                   ? 'border-slate-600 bg-slate-100 text-slate-900'
@@ -1141,7 +1182,7 @@ function App() {
             type="button"
             onClick={() => applyMobileSortMode('nearest')}
             disabled={!isNearestSortAvailable}
-            className={`w-full rounded-lg border px-3 py-2 text-left text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
+            className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
               sortMode === 'nearest'
                 ? isDark
                   ? 'border-slate-600 bg-slate-100 text-slate-900'
@@ -1160,17 +1201,17 @@ function App() {
         className={`fixed inset-x-0 bottom-0 z-30 border-t p-3 backdrop-blur transition-transform duration-300 motion-reduce:transition-none md:hidden ${
           hasMobileOverlayOpen ? 'translate-y-full' : 'translate-y-0'
         } ${
-          isDark ? 'border-indigo-900/50 bg-indigo-950/90' : 'border-indigo-100 bg-white/95'
+          isDark ? 'border-slate-800/80 bg-slate-900/82' : 'border-indigo-100 bg-white/92'
         }`}
       >
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-2">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-2.5">
           <button
             type="button"
             onClick={() => {
               setIsMobileFilterSheetOpen(false)
               setIsMobileSortSheetOpen(true)
             }}
-            className={`flex-1 cursor-pointer rounded-lg border px-3 py-2.5 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+            className={`flex-1 cursor-pointer rounded-lg border px-4 py-3 text-base font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
               isDark
                 ? 'border-slate-700 bg-slate-900 text-slate-100'
                 : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
@@ -1184,7 +1225,7 @@ function App() {
               setIsMobileSortSheetOpen(false)
               setIsMobileFilterSheetOpen((value) => !value)
             }}
-            className={`cursor-pointer rounded-lg border px-3 py-2.5 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+            className={`min-h-12 min-w-[6.75rem] cursor-pointer rounded-lg border px-4 py-3 text-base font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
               isDark
                 ? 'border-slate-700 bg-slate-900 text-slate-100'
                 : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'

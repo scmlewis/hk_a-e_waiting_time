@@ -10,6 +10,11 @@ interface FlowStep {
   description: string
 }
 
+interface DataSourceItem {
+  label: string
+  url: string
+}
+
 export interface AeOverviewLabels {
   title: string
   intro: string
@@ -21,6 +26,9 @@ export interface AeOverviewLabels {
   flowTitle: string
   flowIntro: string
   flowSteps: FlowStep[]
+  dataSourcesTitle: string
+  dataSourcesIntro: string
+  dataSources: DataSourceItem[]
   disclaimerTitle: string
   disclaimerBody: string
 }
@@ -98,6 +106,25 @@ export function AeOverview({ isDark, labels }: AeOverviewProps) {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className={`space-y-2 rounded-xl border p-3 md:p-4 ${isDark ? 'border-slate-700 bg-slate-900/90' : 'border-slate-200 bg-slate-50/85'}`}>
+        <h3 className={`text-lg font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{labels.dataSourcesTitle}</h3>
+        <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{labels.dataSourcesIntro}</p>
+        <ul className="space-y-2">
+          {labels.dataSources.map((source) => (
+            <li key={source.url}>
+              <a
+                href={source.url}
+                target="_blank"
+                rel="noreferrer"
+                className={`text-sm font-medium underline-offset-2 hover:underline ${isDark ? 'text-cyan-300' : 'text-cyan-700'}`}
+              >
+                {source.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className={`rounded-xl border p-3 text-sm ${isDark ? 'border-amber-600/40 bg-amber-900/20 text-amber-100' : 'border-amber-200 bg-amber-50 text-amber-900'}`}>

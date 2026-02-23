@@ -136,7 +136,7 @@ export function HospitalTable({
                       <td className={`px-4 py-3 font-medium ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
                         <div>{hospital.hospitalName}</div>
                         {typeof hospital.distanceKm === 'number' && (
-                          <div className={`mt-0.5 inline-flex items-center gap-1 text-xs font-normal ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          <div className={`mt-0.5 inline-flex items-center gap-1 text-xs font-normal ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
                             <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
                               <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11Z" />
                               <circle cx="12" cy="10" r="2.5" />
@@ -149,14 +149,13 @@ export function HospitalTable({
                         {selectedTriage.waitingTimeText}
                         {selectedTriage.upperBoundText && (
                           <>
-                            <span className={`mx-1.5 text-sm font-normal ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                              –
-                            </span>
+                            <span className={`mx-1 text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>(</span>
                             <span
-                              className={`text-base font-semibold ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
+                              className={`text-sm font-medium ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
                             >
                               {selectedTriage.upperBoundText}
                             </span>
+                            <span className={`text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>)</span>
                           </>
                         )}
                       </td>

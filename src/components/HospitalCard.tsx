@@ -42,25 +42,25 @@ export function HospitalCard({
       }}
       aria-expanded={isExpanded}
       aria-controls={detailsId}
-      className={`enter-fade-up group cursor-pointer rounded-2xl border p-3 shadow-sm backdrop-blur transition duration-200 motion-reduce:transition-none hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-        isDark ? 'bg-slate-900/85 focus-visible:ring-slate-500' : 'bg-white/90 focus-visible:ring-slate-400'
+      className={`enter-fade-up group cursor-pointer rounded-2xl border p-3 shadow-sm backdrop-blur transition duration-200 motion-reduce:transition-none hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+        isDark ? 'bg-slate-900/80 focus-visible:ring-slate-500' : 'bg-white/90 focus-visible:ring-slate-400'
       } ${
         isExpanded
           ? isDark
             ? 'border-sky-600 ring-2 ring-sky-900/60'
             : 'border-sky-200 ring-2 ring-sky-100'
           : isDark
-            ? 'border-slate-700'
+            ? 'border-slate-800/90'
             : 'border-slate-200'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-slate-50' : 'text-slate-900'}`}>
             {hospital.hospitalName}
           </h3>
           {typeof hospital.distanceKm === 'number' && (
-            <p className={`mt-1 inline-flex items-center gap-1 text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+            <p className={`mt-1 inline-flex items-center gap-1 text-xs font-medium ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
               <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
                 <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11Z" />
                 <circle cx="12" cy="10" r="2.5" />
@@ -72,14 +72,13 @@ export function HospitalCard({
             {selectedTriage.waitingTimeText}
             {selectedTriage.upperBoundText && (
               <>
-                <span className={`mx-1.5 text-sm font-normal ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                  –
-                </span>
+                <span className={`mx-1 text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>(</span>
                 <span
-                  className={`text-base font-semibold md:text-lg ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
+                  className={`text-sm font-medium md:text-base ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
                 >
                   {selectedTriage.upperBoundText}
                 </span>
+                <span className={`text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>)</span>
               </>
             )}
           </p>
