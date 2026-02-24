@@ -115,8 +115,8 @@ export function HospitalTable({
         <tbody>
           {groups.map((group) => (
             <Fragment key={group.cluster}>
-              <tr className={`border-t ${isDark ? 'border-slate-700 bg-slate-800/60' : 'border-slate-200 bg-slate-100'}`}>
-                <td colSpan={3} className={`px-4 py-2 font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+              <tr className={`border-t ${isDark ? 'border-slate-600 bg-slate-700/80' : 'border-slate-300 bg-slate-200'}`}>
+                <td colSpan={3} className={`px-4 py-2.5 font-bold ${isDark ? 'text-slate-50' : 'text-slate-900'}`}>
                   {group.displayCluster} ({group.hospitals.length})
                 </td>
               </tr>
@@ -129,11 +129,12 @@ export function HospitalTable({
                 return (
                   <Fragment key={hospital.hospitalName}>
                     <tr
-                      className={`border-t transition-colors duration-200 motion-reduce:transition-none ${
+                      onClick={() => onToggleExpanded(hospital.hospitalName)}
+                      className={`group cursor-pointer border-t transition-colors duration-200 motion-reduce:transition-none ${
                         isDark ? 'border-slate-800 hover:bg-slate-800/60' : 'border-slate-100 hover:bg-slate-50/90'
                       }`}
                     >
-                      <td className={`px-4 py-3 font-medium ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                      <td className={`px-4 py-4 font-medium ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
                         <div>{hospital.hospitalName}</div>
                         {typeof hospital.distanceKm === 'number' && (
                           <div className={`mt-0.5 inline-flex items-center gap-1 text-xs font-normal ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
@@ -145,11 +146,11 @@ export function HospitalTable({
                           </div>
                         )}
                       </td>
-                      <td className={`px-4 py-3 text-base font-semibold tracking-tight ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
+                      <td className={`px-4 py-4 text-base font-semibold tracking-tight ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
                         {selectedTriage.waitingTimeText}
                         {selectedTriage.upperBoundText && (
                           <>
-                            <span className={`mx-1 text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>(</span>
+                            <span className={`ml-1.5 text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>(</span>
                             <span
                               className={`text-sm font-medium ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
                             >
@@ -159,16 +160,19 @@ export function HospitalTable({
                           </>
                         )}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-4">
                         <button
                           type="button"
-                          onClick={() => onToggleExpanded(hospital.hospitalName)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleExpanded(hospital.hospitalName);
+                          }}
                           aria-expanded={isExpanded}
                           aria-controls={detailsId}
-                          className={`cursor-pointer rounded-md border px-2 py-1 text-xs transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+                          className={`cursor-pointer rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 group-hover:shadow-sm ${
                             isDark
-                              ? 'border-slate-600 text-slate-200 hover:bg-slate-800'
-                              : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                              ? 'border-slate-600 bg-slate-800/50 text-slate-200 hover:bg-slate-700'
+                              : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
                           }`}
                         >
                           {isExpanded ? labels.hide : labels.view}

@@ -1,83 +1,73 @@
-# A&E Waiting Time Web App (MVP)
+# Hong Kong A&E Waiting Time Monitor
 
-Mobile-first React + TypeScript app for Hong Kong A&E waiting time data.
+A professional, high-performance web application providing live visibility into Accident & Emergency (A&E) waiting times across all public hospitals in Hong Kong. Built with a focus on speed, clarity, and mobile-first accessibility.
 
-## Current UX
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
-- Default triage view on Category III, with quick switch to Category I / II / III / IV&V
-- Official HA cluster grouping (Hong Kong, Kowloon, New Territories clusters)
-- Search + cluster filter
-- Per-hospital expandable details with:
-  - All triage category wait times
-  - Location, cluster info
-  - **Call Hospital CTA** (tel link, dialable on phone)
-  - **View on Maps CTA** (eye-catching button aligned with call)
-  - Website link removed (redirected to generic HA homepage)
+## ✨ Key Features
 
-## Stack
+- **🔴 Live Data Synchronization:** Real-time updates from official Hospital Authority open data endpoints.
+- **⚡ Proactive Performance:** Ultra-lightweight bundle and optimized rendering for instant load times.
+- **📍 Smart Location Services:** Optional GPS integration to automatically surface the nearest medical facilities.
+- **📊 Comprehensive Triage View:** Detailed breakdown of waiting times across all five triage categories (Critical to Non-urgent).
+- **🌓 Adaptive Interface:** Full support for System Light/Dark modes with high-contrast accessibility optimizations.
+- **📱 Responsive by Design:** Engineered for seamless performance across mobile devices, tablets, and desktops.
 
-- React + Vite + TypeScript (strict mode)
-- Tailwind CSS
-- Native fetch with endpoint fallback
-- Vitest + Testing Library
+## 🛠 Tech Stack
 
-## Development
+- **Frontend:** React 19 + TypeScript
+- **Styling:** Tailwind CSS (Modern Grid layouts & custom design system)
+- **Build Tooling:** Vite for near-instant HMR and optimized production builds
+- **Testing:** Vitest + React Testing Library (TDD-driven implementation)
+- **Quality:** ESLint + TypeScript Strict Mode
 
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/ae-waiting-time.git
+
+# Install dependencies
 npm install
+
+# Launch development server
 npm run dev
 ```
 
-## Testing and Quality
+### Environment Configuration
+The application supports primary and fallback data sources for maximum reliability. Configure these in your `.env` file:
+```env
+VITE_AE_PRIMARY_ENDPOINT=https://your-api-endpoint.com/data
+VITE_AE_FALLBACK_ENDPOINT=https://fallback-endpoint.com/data
+```
+
+## 🧪 Testing & Quality Assurance
+The project maintains high reliability through a comprehensive test suite covering core logic and UI components.
 
 ```bash
+# Run unit and integration tests
 npm test
+
+# Execute linting checks
 npm run lint
+
+# Build for production
 npm run build
 ```
 
-## API Configuration
+## 📈 Observability & Telemetry
+Designed for production-level monitoring, the app includes:
+- **Health Tracking:** Automated source staleness detection and refresh error logging.
+- **Interaction Analytics:** Anonymous telemetry for feature engagement (sorting, filtering, search behavior).
+- **Error Reporting:** Global exception tracking and unhandled promise rejection monitoring.
 
-Copy `.env.example` to `.env` and override endpoints if needed:
-
-```bash
-VITE_AE_PRIMARY_ENDPOINT=...
-VITE_AE_FALLBACK_ENDPOINT=...
-VITE_TELEMETRY_ENDPOINT=...
-```
-
-`VITE_TELEMETRY_ENDPOINT` is optional. If provided, the app sends lightweight JSON telemetry events and client errors to this endpoint.
-
-## Observability (Sprint 2)
-
-- App lifecycle event: `app_page_view`
-- Data health event: `wait_data_loaded` (count, unknown waits, source staleness, refresh type)
-- Interaction events: `sort_mode_changed`, `cluster_filter_changed`, `search_started`, `search_cleared`
-- Error tracking: request failures in data loading plus global `window.error` and `unhandledrejection`
-
-Telemetry transport uses `navigator.sendBeacon` when available and falls back to `fetch(..., { keepalive: true })`.
-
-Telemetry schema, KPI definitions, and starter SQL-like queries are documented in [docs/telemetry-dashboard-guide.md](docs/telemetry-dashboard-guide.md).
-
-## CI/CD Scaffold
-
-GitHub Actions workflow is defined in [.github/workflows/ci-cd.yml](.github/workflows/ci-cd.yml):
-
-- Pull requests to `main`: `npm ci`, `npm test`, `npm run lint`, `npm run build`
-- Push to `main`: same quality gates + deploy `dist` to GitHub Pages
-
-### One-time GitHub Pages setup
-
-In your repository settings:
-
-- Go to **Settings → Pages**
-- Under **Build and deployment**, set **Source** to **Deploy from a branch**
-- Set **Branch** to `gh-pages` and folder to `/ (root)`
-- Go to **Settings → Actions → General → Workflow permissions**
-- Set **Read and write permissions** and save
-
-After that, each push to `main` automatically publishes the latest build.
-
-## MVP Documentation
-
-Project requirements and acceptance criteria are tracked in [plan.md](plan.md).
+---
+*Disclaimer: This application is a monitoring tool based on open data. For life-threatening emergencies, always dial 999 directly.*

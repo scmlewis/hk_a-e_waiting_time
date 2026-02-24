@@ -11,7 +11,17 @@ node_modules
 dist
 dist-ssr
 *.local
-legacy/
+# AI Agents and Skills
+.gemini/
+.agents/
+.agent/
+_agents/
+_agent/
+.braintrust/
+
+# Test output & coverage
+test_output.txt
+test-results/
 coverage/
 *.tsbuildinfo
 
