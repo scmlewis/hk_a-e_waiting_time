@@ -464,47 +464,47 @@ function App() {
       : 'Half of waiting patients can be seen within the following time, and most can be seen within the time shown in brackets.'
   const shouldShowLocationPrompt = locationStatus === 'idle' && userLocation === null
 
-  const locationControls = (
+  const locationControls = (userLocation !== null || locationStatus !== 'idle') && (
     <div
       className={`mt-2.5 flex flex-wrap items-center gap-2.5 rounded-xl border p-3 text-sm md:gap-2 md:p-2.5 md:text-sm ${isDark
         ? 'border-sky-900/50 bg-sky-950/20 text-slate-300 md:bg-slate-950'
         : 'border-sky-100/80 bg-sky-50/70 text-slate-600 md:bg-white'
         }`}
     >
-      <button
-        type="button"
-        onClick={() => void handleUseMyLocation()}
-        disabled={locationStatus === 'locating'}
-        className={`inline-flex min-h-11 cursor-pointer items-center rounded-md px-3.5 py-2 text-sm font-semibold shadow-sm transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${isDark
-          ? 'bg-sky-600 text-white hover:bg-sky-500 active:scale-[0.98]'
-          : 'bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]'
-          }`}
-      >
-        <svg viewBox="0 0 24 24" className="mr-1.5 h-4 w-4 md:h-3.5 md:w-3.5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-          <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11Z" />
-          <circle cx="12" cy="10" r="2.5" />
-        </svg>
-        {locationStatus === 'locating' ? labels.locating : labels.useMyLocation}
-      </button>
+      {userLocation === null && (
+        <button
+          type="button"
+          onClick={() => void handleUseMyLocation()}
+          disabled={locationStatus === 'locating'}
+          className={`inline-flex min-h-11 cursor-pointer items-center rounded-md px-3.5 py-2 text-sm font-semibold shadow-sm transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${isDark
+            ? 'bg-sky-600 text-white hover:bg-sky-500 active:scale-[0.98]'
+            : 'bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]'
+            }`}
+        >
+          <svg viewBox="0 0 24 24" className="mr-1.5 h-4 w-4 md:h-3.5 md:w-3.5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+          {locationStatus === 'locating' ? labels.locating : labels.useMyLocation}
+        </button>
+      )}
 
-      {
-        userLocation && (
-          <button
-            type="button"
-            onClick={handleClearLocation}
-            className={`inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3.5 py-2 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${isDark
-              ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
-              : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-              }`}
-          >
-            {labels.clearLocation}
-          </button>
-        )
-      }
+      {userLocation && (
+        <button
+          type="button"
+          onClick={handleClearLocation}
+          className={`inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3.5 py-2 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${isDark
+            ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
+            : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+        >
+          {labels.clearLocation}
+        </button>
+      )}
 
       {locationStatusMessage && <span>{locationStatusMessage}</span>}
       <span className={isDark ? 'text-slate-500' : 'text-slate-500'}>{labels.distanceEstimateHint}</span>
-    </div >
+    </div>
   )
 
   useEffect(() => {
