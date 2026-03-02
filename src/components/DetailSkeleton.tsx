@@ -1,17 +1,5 @@
 import React from 'react'
 
-export function DetailSkeleton() {
-  return (
-    <div className="space-y-2">
-      <div className="h-3 w-1/3 rounded bg-slate-200" />
-      <div className="h-2 w-2/3 rounded bg-slate-100" />
-    </div>
-  )
-}
-
-export default DetailSkeleton
-import React from 'react'
-
 interface DetailSkeletonProps {
   isDark: boolean
 }
