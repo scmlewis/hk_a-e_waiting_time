@@ -15,6 +15,7 @@ dist-ssr
 .gemini/
 .agents/
 .agent/
+.github/
 _agents/
 _agent/
 .braintrust/
@@ -35,3 +36,7 @@ coverage/
 *.njsproj
 *.sln
 *.sw?
+dev_response.html
+
+# Ensure .github folder is ignored (CI/workflows kept out of repo clone if desired)
+.github/
