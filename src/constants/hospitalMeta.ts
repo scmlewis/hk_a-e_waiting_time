@@ -53,6 +53,17 @@ export const CLUSTER_ORDER = [
   'New Territories West',
 ] as const
 
+export const CLUSTER_NAME_ZH_HK: Record<string, string> = {
+  'Hong Kong East': '港島東聯網',
+  'Hong Kong West': '港島西聯網',
+  'Kowloon Central': '九龍中聯網',
+  'Kowloon East': '九龍東聯網',
+  'Kowloon West': '九龍西聯網',
+  'New Territories East': '新界東聯網',
+  'New Territories West': '新界西聯網',
+  Other: '其他',
+}
+
 export const TRIAGE_CATEGORY_LABELS = {
   I: 'Triage Category I',
   II: 'Triage Category II',

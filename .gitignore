@@ -40,3 +40,12 @@ dev_response.html
 
 # Ensure .github folder is ignored (CI/workflows kept out of repo clone if desired)
 .github/
+
+
+# Intermediate files and temporary scripts
+refactor.js
+eslint-report.json
+dev_response.html
+
+# Testing suite
+src/**/*.test.ts

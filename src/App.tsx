@@ -4,83 +4,36 @@ import { AeOverview } from './components/AeOverview'
 import { HospitalCard } from './components/HospitalCard'
 import { HospitalTable } from './components/HospitalTable'
 import { LastUpdated } from './components/LastUpdated'
-import { CLUSTER_ORDER } from './constants/hospitalMeta'
-import { getLabels, type LanguageMode } from './constants/labels'
-import { REFRESH_INTERVAL_SECONDS } from './constants/thresholds'
+import { CLUSTER_ORDER, CLUSTER_NAME_ZH_HK } from './constants/hospitalMeta'
+import { getLabels } from './constants/labels'
 import { TRIAGE_KEYS } from './constants/triage'
-import { fetchWaitingTimes } from './services/aeService'
-import { trackError, trackEvent } from './services/telemetry'
+import { trackEvent } from './services/telemetry'
 import type { HospitalWaitingTime, TriageCategory } from './types/ae'
-import type { Coordinate } from './utils/distance'
 import { haversineDistanceKm } from './utils/distance'
 import { localizeWaitTimeText } from './utils/localizeWaitTime'
 import { sortHospitals, type SortMode } from './utils/sort'
-import { isSourceDataStale } from './utils/time'
 
-type ThemeMode = 'light' | 'dark' | 'auto'
-type LocationStatus = 'idle' | 'locating' | 'ready' | 'unsupported' | 'denied' | 'error'
+import { useSettings } from './hooks/useSettings'
+import { useLocation } from './hooks/useLocation'
+import { useWaitingTimes } from './hooks/useWaitingTimes'
+
 type AppView = 'wait-times' | 'overview'
 
-const THEME_STORAGE_KEY = 'ewt_theme_mode'
-const LANGUAGE_STORAGE_KEY = 'ewt_language_mode'
-
-const CLUSTER_NAME_ZH_HK: Record<string, string> = {
-  'Hong Kong East': '港島東聯網',
-  'Hong Kong West': '港島西聯網',
-  'Kowloon Central': '九龍中聯網',
-  'Kowloon East': '九龍東聯網',
-  'Kowloon West': '九龍西聯網',
-  'New Territories East': '新界東聯網',
-  'New Territories West': '新界西聯網',
-  Other: '其他',
-}
-
 function App() {
-  const [hospitals, setHospitals] = useState<HospitalWaitingTime[]>([])
-  const [loading, setLoading] = useState(true)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [refreshError, setRefreshError] = useState<string | null>(null)
-  const [isStale, setIsStale] = useState(false)
-  const [isSourceStale, setIsSourceStale] = useState(false)
-  const [countdown, setCountdown] = useState(REFRESH_INTERVAL_SECONDS)
+  const { languageMode, resolvedTheme, isDark, toggleThemeMode, toggleLanguageMode } = useSettings()
+  const { userLocation, locationStatus, handleUseMyLocation, handleClearLocation } = useLocation()
+  const { hospitals, loading, isRefreshing, error, refreshError, isStale, isSourceStale, countdown, sourceUpdateTime, loadData } = useWaitingTimes()
+
   const [searchValue, setSearchValue] = useState('')
   const [selectedCluster, setSelectedCluster] = useState('')
   const [selectedTriageCategory, setSelectedTriageCategory] = useState<TriageCategory>('III')
-  const [systemPrefersDark, setSystemPrefersDark] = useState(() =>
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches,
-  )
-  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
-    if (typeof window === 'undefined') {
-      return 'auto'
-    }
-
-    const savedValue = window.localStorage.getItem(THEME_STORAGE_KEY)
-    if (savedValue === 'light' || savedValue === 'dark' || savedValue === 'auto') {
-      return savedValue
-    }
-
-    return 'auto'
-  })
-  const [languageMode, setLanguageMode] = useState<LanguageMode>(() => {
-    if (typeof window === 'undefined') {
-      return 'en'
-    }
-
-    const savedValue = window.localStorage.getItem(LANGUAGE_STORAGE_KEY)
-    return savedValue === 'zh-HK' ? 'zh-HK' : 'en'
-  })
   const [sortMode, setSortMode] = useState<SortMode>('waiting')
-  const [userLocation, setUserLocation] = useState<Coordinate | null>(null)
-  const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle')
   const [activeView, setActiveView] = useState<AppView>('wait-times')
   const [expandedHospitalName, setExpandedHospitalName] = useState<string | null>(null)
   const [isLegendExpanded, setIsLegendExpanded] = useState(false)
   const [isMobileFilterSheetOpen, setIsMobileFilterSheetOpen] = useState(false)
   const [isMobileSortSheetOpen, setIsMobileSortSheetOpen] = useState(false)
-  const hasDataRef = useRef(false)
+  
   const hasTrackedPageViewRef = useRef(false)
   const hadSearchValueRef = useRef(false)
   const filterSheetTitleId = 'mobile-filter-sheet-title'
@@ -99,66 +52,12 @@ function App() {
     })
   }, [])
 
-  const toggleLanguageMode = useCallback(() => {
-    setLanguageMode((currentMode) => (currentMode === 'en' ? 'zh-HK' : 'en'))
-  }, [])
-
-  const toggleThemeMode = useCallback(() => {
-    setThemeMode((currentMode) => {
-      if (currentMode === 'auto') {
-        return systemPrefersDark ? 'light' : 'dark'
-      }
-
-      return currentMode === 'dark' ? 'light' : 'dark'
-    })
-  }, [systemPrefersDark])
 
   const handleViewChange = useCallback((nextView: AppView) => {
     setActiveView(nextView)
     void trackEvent('view_changed', { view: nextView })
   }, [])
 
-  const handleUseMyLocation = useCallback(() => {
-    if (typeof navigator === 'undefined' || !('geolocation' in navigator)) {
-      setLocationStatus('unsupported')
-      void trackEvent('location_permission_result', { result: 'unsupported' })
-      return
-    }
-
-    setLocationStatus('locating')
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const nextLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        }
-
-        setUserLocation(nextLocation)
-        setLocationStatus('ready')
-        void trackEvent('location_permission_result', { result: 'granted' })
-      },
-      (geoError) => {
-        setLocationStatus(geoError.code === geoError.PERMISSION_DENIED ? 'denied' : 'error')
-        void trackEvent('location_permission_result', {
-          result: geoError.code === geoError.PERMISSION_DENIED ? 'denied' : 'error',
-          code: geoError.code,
-        })
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 10000,
-        maximumAge: 300000,
-      },
-    )
-  }, [])
-
-  const handleClearLocation = useCallback(() => {
-    setUserLocation(null)
-    setLocationStatus('idle')
-
-    setSortMode((currentMode) => (currentMode === 'nearest' ? 'waiting' : currentMode))
-  }, [])
 
   const handleClusterChange = useCallback((value: string) => {
     setSelectedCluster((previousValue) => {
@@ -202,57 +101,6 @@ function App() {
     setSearchValue(value)
   }, [])
 
-  const loadData = useCallback(async () => {
-    const hasCachedData = hasDataRef.current
-
-    if (hasCachedData) {
-      setIsRefreshing(true)
-    } else {
-      setLoading(true)
-    }
-
-    try {
-      const data = await fetchWaitingTimes()
-      setHospitals(data)
-      hasDataRef.current = data.length > 0
-      setError(null)
-      setRefreshError(null)
-      setIsStale(false)
-
-      const sourceUpdateTime = data[0]?.updateTime ?? ''
-      void trackEvent('wait_data_loaded', {
-        hospitalCount: data.length,
-        hasUnknownWait: data.some((hospital) =>
-          Object.values(hospital.triage).some((triage) => triage.waitStatus === 'unknown'),
-        ),
-        sourceStale: isSourceDataStale(sourceUpdateTime),
-        refreshType: hasCachedData ? 'background' : 'initial',
-      })
-    } catch (fetchError) {
-      const message = fetchError instanceof Error ? fetchError.message : 'Unable to load data'
-      setIsStale(hasCachedData)
-
-      void trackError(fetchError, {
-        area: 'wait_data_load',
-        refreshType: hasCachedData ? 'background' : 'initial',
-        hasCachedData,
-      })
-
-      if (!hasCachedData) {
-        setError(message)
-      } else {
-        setRefreshError(message)
-      }
-    } finally {
-      setLoading(false)
-      setIsRefreshing(false)
-      setCountdown(REFRESH_INTERVAL_SECONDS)
-    }
-  }, [])
-
-  useEffect(() => {
-    void loadData()
-  }, [loadData])
 
   useEffect(() => {
     if (hasTrackedPageViewRef.current) {
@@ -263,22 +111,6 @@ function App() {
     void trackEvent('app_page_view')
   }, [])
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setCountdown((current) => {
-        if (current <= 1) {
-          void loadData()
-          return REFRESH_INTERVAL_SECONDS
-        }
-
-        return current - 1
-      })
-    }, 1000)
-
-    return () => {
-      window.clearInterval(timer)
-    }
-  }, [loadData])
 
   const displayHospitals = useMemo(() => {
     if (languageMode !== 'zh-HK') {
@@ -368,11 +200,8 @@ function App() {
       .filter((group) => group.hospitals.length > 0)
   }, [availableClusters, languageMode, visibleHospitals])
 
-  const sourceUpdateTime = displayHospitals[0]?.updateTime ?? ''
   const hasActiveFilters = searchValue.trim().length > 0 || selectedCluster.length > 0
   const isNearestSortAvailable = userLocation !== null && locationStatus === 'ready'
-  const resolvedTheme = themeMode === 'auto' ? (systemPrefersDark ? 'dark' : 'light') : themeMode
-  const isDark = resolvedTheme === 'dark'
 
   const labels = useMemo(() => getLabels(languageMode), [languageMode])
 
@@ -396,12 +225,14 @@ function App() {
 
   useEffect(() => {
     if (sortMode === 'nearest' && !isNearestSortAvailable) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSortMode('waiting')
     }
   }, [isNearestSortAvailable, sortMode])
 
   useEffect(() => {
     if (!isNearestSortAvailable && isMobileSortSheetOpen && sortMode === 'nearest') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsMobileSortSheetOpen(false)
     }
   }, [isMobileSortSheetOpen, isNearestSortAvailable, sortMode])
@@ -508,46 +339,11 @@ function App() {
   )
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setExpandedHospitalName(null)
   }, [selectedCluster, selectedTriageCategory, searchValue])
 
-  useEffect(() => {
-    setIsSourceStale(isSourceDataStale(sourceUpdateTime))
-  }, [sourceUpdateTime])
 
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    window.localStorage.setItem(THEME_STORAGE_KEY, themeMode)
-  }, [themeMode])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, languageMode)
-  }, [languageMode])
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return
-    }
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleThemeChange = (event: MediaQueryListEvent) => {
-      setSystemPrefersDark(event.matches)
-    }
-
-    setSystemPrefersDark(mediaQuery.matches)
-    mediaQuery.addEventListener('change', handleThemeChange)
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleThemeChange)
-    }
-  }, [])
 
   useEffect(() => {
     if (!isMobileFilterSheetOpen) {
@@ -970,7 +766,7 @@ function App() {
 
         {activeView === 'overview' && <AeOverview isDark={isDark} labels={labels.overview} />}
 
-        {loading && (
+        {activeView === 'wait-times' && loading && (
           <section
             className={`hidden animate-pulse space-y-2 rounded-2xl border p-3 motion-reduce:animate-none md:block ${isDark ? 'border-slate-700 bg-slate-900/80' : 'border-slate-200 bg-white/90'
               }`}
@@ -983,7 +779,7 @@ function App() {
           </section>
         )}
 
-        {!loading && !error && groupedHospitals.length > 0 && (
+        {activeView === 'wait-times' && !loading && !error && groupedHospitals.length > 0 && (
           <HospitalTable
             isDark={isDark}
             labels={labels.hospitalTable}
@@ -999,7 +795,7 @@ function App() {
           />
         )}
 
-        {!loading && !error && hospitals.length > 0 && groupedHospitals.length === 0 && (
+        {activeView === 'wait-times' && !loading && !error && hospitals.length > 0 && groupedHospitals.length === 0 && (
           <div
             className={`hidden space-y-3 rounded-lg border p-4 text-sm shadow-sm md:block ${isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white text-slate-600'
               }`}
@@ -1020,7 +816,7 @@ function App() {
           </div>
         )}
 
-        {!loading && error && hospitals.length === 0 && (
+        {activeView === 'wait-times' && !loading && error && hospitals.length === 0 && (
           <p
             className={`hidden rounded-lg border p-4 text-sm md:block ${isDark ? 'border-rose-700/60 bg-rose-900/30 text-rose-200' : 'border-rose-200 bg-rose-50 text-rose-700'
               }`}

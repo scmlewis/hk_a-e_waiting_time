@@ -82,18 +82,34 @@ export function FilterBar({
           <label className={`block text-sm font-medium md:text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`} htmlFor="hospital-search">
             {labels.searchHospital}
           </label>
-          <input
-            id="hospital-search"
-            type="text"
-            value={searchValue}
-            onChange={(event) => onSearchChange(event.target.value)}
-            placeholder={labels.searchPlaceholder}
-            className={`w-full rounded-lg border px-3 py-3 text-base transition-colors duration-200 motion-reduce:transition-none focus-visible:border-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/30 md:py-2 md:text-sm ${
-              isDark
-                ? 'border-slate-600 bg-slate-900 text-slate-100 placeholder:text-slate-400'
-                : 'border-slate-300 bg-white text-slate-800 placeholder:text-slate-400'
-            }`}
-          />
+          <div className="relative">
+            <input
+              id="hospital-search"
+              type="text"
+              value={searchValue}
+              onChange={(event) => onSearchChange(event.target.value)}
+              placeholder={labels.searchPlaceholder}
+              className={`w-full rounded-lg border px-3 py-3 pr-10 text-base transition-colors duration-200 motion-reduce:transition-none focus-visible:border-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/30 md:py-2 md:text-sm ${
+                isDark
+                  ? 'border-slate-600 bg-slate-900 text-slate-100 placeholder:text-slate-400'
+                  : 'border-slate-300 bg-white text-slate-800 placeholder:text-slate-400'
+              }`}
+            />
+            {searchValue.length > 0 && (
+              <button
+                type="button"
+                onClick={() => onSearchChange('')}
+                className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 ${
+                  isDark ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-200' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
+                }`}
+                aria-label="Clear search"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
 
         {clusterOptions.length > 0 && (
