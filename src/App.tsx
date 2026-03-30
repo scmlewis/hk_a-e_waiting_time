@@ -324,11 +324,14 @@ function App() {
         <button
           type="button"
           onClick={handleClearLocation}
-          className={`inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3.5 py-2 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${isDark
+          className={`inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-md border px-3.5 py-2 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${isDark
             ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
             : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
             }`}
         >
+          <svg viewBox="0 0 24 24" className="h-4 w-4 md:h-3.5 md:w-3.5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
           {labels.clearLocation}
         </button>
       )}
@@ -442,11 +445,14 @@ function App() {
                 type="button"
                 onClick={() => void loadData()}
                 disabled={loading || isRefreshing}
-                className={`hidden cursor-pointer items-center rounded-lg border px-3 py-2 text-sm font-medium shadow-sm transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:inline-flex ${isDark
+                className={`hidden cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium shadow-sm transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:inline-flex ${isDark
                   ? 'border-sky-700 bg-sky-600 text-white hover:bg-sky-500'
                   : 'border-sky-700 bg-sky-600 text-white hover:bg-sky-700'
                   }`}
               >
+                <svg viewBox="0 0 24 24" className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
                 {isRefreshing ? labels.refreshing : labels.refreshNow}
               </button>
             </div>
@@ -908,6 +914,7 @@ function App() {
           <button
             type="button"
             onClick={() => applyMobileSortMode('waiting')}
+            aria-pressed={sortMode === 'waiting'}
             className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium ${sortMode === 'waiting'
               ? isDark
                 ? 'border-slate-600 bg-slate-100 text-slate-900'
@@ -922,6 +929,7 @@ function App() {
           <button
             type="button"
             onClick={() => applyMobileSortMode('name')}
+            aria-pressed={sortMode === 'name'}
             className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium ${sortMode === 'name'
               ? isDark
                 ? 'border-slate-600 bg-slate-100 text-slate-900'
@@ -937,6 +945,7 @@ function App() {
             type="button"
             onClick={() => applyMobileSortMode('nearest')}
             disabled={!isNearestSortAvailable}
+            aria-pressed={sortMode === 'nearest'}
             className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium disabled:cursor-not-allowed disabled:opacity-50 ${sortMode === 'nearest'
               ? isDark
                 ? 'border-slate-600 bg-slate-100 text-slate-900'

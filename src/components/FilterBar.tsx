@@ -5,6 +5,7 @@ interface FilterBarLabels {
   triageCategory: string
   searchHospital: string
   searchPlaceholder: string
+  clearSearch: string
   cluster: string
   allClusters: string
 }
@@ -102,7 +103,7 @@ export function FilterBar({
                 className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 ${
                   isDark ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-200' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
                 }`}
-                aria-label="Clear search"
+                aria-label={labels.clearSearch}
               >
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

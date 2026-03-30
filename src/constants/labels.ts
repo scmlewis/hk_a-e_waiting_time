@@ -9,6 +9,7 @@ interface FilterLabels {
   triageCategory: string
   searchHospital: string
   searchPlaceholder: string
+  clearSearch: string
   cluster: string
   allClusters: string
 }
@@ -136,6 +137,7 @@ const EN_LABELS: AppLabels = {
     triageCategory: 'Triage category',
     searchHospital: 'Search hospital',
     searchPlaceholder: 'Type hospital name',
+    clearSearch: 'Clear search',
     cluster: 'Cluster',
     allClusters: 'All clusters',
   },
@@ -298,6 +300,7 @@ const ZH_HK_LABELS: AppLabels = {
     triageCategory: '分流類別',
     searchHospital: '搜尋醫院',
     searchPlaceholder: '輸入醫院名稱',
+    clearSearch: '清除搜尋',
     cluster: '聯網',
     allClusters: '所有聯網',
   },

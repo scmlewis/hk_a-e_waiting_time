@@ -55,6 +55,7 @@ export function HospitalTable({
         <button
           type="button"
           onClick={() => onSortModeChange('waiting')}
+          aria-pressed={sortMode === 'waiting'}
           className={`cursor-pointer rounded-md px-3 py-1.5 text-sm transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
             sortMode === 'waiting'
               ? isDark
@@ -70,6 +71,7 @@ export function HospitalTable({
         <button
           type="button"
           onClick={() => onSortModeChange('name')}
+          aria-pressed={sortMode === 'name'}
           className={`cursor-pointer rounded-md px-3 py-1.5 text-sm transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
             sortMode === 'name'
               ? isDark
@@ -86,6 +88,7 @@ export function HospitalTable({
           type="button"
           onClick={() => onSortModeChange('nearest')}
           disabled={!isNearestSortAvailable}
+          aria-pressed={sortMode === 'nearest'}
           className={`cursor-pointer rounded-md px-3 py-1.5 text-sm transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 ${
             sortMode === 'nearest'
               ? isDark
