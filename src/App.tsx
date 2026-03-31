@@ -578,15 +578,17 @@ function App() {
           )}
         </header>
 
-        {activeView === 'wait-times' && <LastUpdated
+        {activeView === 'wait-times' && (
+          <>
+        <LastUpdated
           sourceUpdateTime={sourceUpdateTime}
           countdownSeconds={countdown}
           isStale={isStale}
           isDark={isDark}
           labels={labels.lastUpdated}
-        />}
+        />
 
-        {activeView === 'wait-times' && shouldShowLocationPrompt && (
+        {shouldShowLocationPrompt && (
           <section
             className={`rounded-xl border p-3 md:p-4 ${isDark ? 'border-sky-900/50 bg-sky-950/25' : 'border-sky-100 bg-sky-50/70'
               }`}
@@ -615,8 +617,7 @@ function App() {
         )}
 
 
-
-        {activeView === 'wait-times' && !loading && isRefreshing && (
+        {!loading && isRefreshing && (
           <p
             className={`rounded-lg border p-3 text-sm ${isDark ? 'border-sky-600/50 bg-sky-900/35 text-sky-200' : 'border-sky-200 bg-sky-50 text-sky-700'
               }`}
@@ -627,7 +628,7 @@ function App() {
           </p>
         )}
 
-        {activeView === 'wait-times' && !loading && refreshError && hospitals.length > 0 && (
+        {!loading && refreshError && hospitals.length > 0 && (
           <p
             className={`rounded-lg border p-3 text-sm ${isDark ? 'border-amber-600/50 bg-amber-900/25 text-amber-200' : 'border-amber-200 bg-amber-50 text-amber-800'
               }`}
@@ -638,7 +639,7 @@ function App() {
           </p>
         )}
 
-        {activeView === 'wait-times' && !loading && isSourceStale && hospitals.length > 0 && (
+        {!loading && isSourceStale && hospitals.length > 0 && (
           <p
             className={`rounded-lg border p-3 text-sm ${isDark ? 'border-amber-600/50 bg-amber-900/25 text-amber-200' : 'border-amber-200 bg-amber-50 text-amber-800'
               }`}
@@ -649,7 +650,7 @@ function App() {
           </p>
         )}
 
-        {activeView === 'wait-times' && <div className="enter-fade-up md:sticky md:top-4 md:z-20">
+        <div className="enter-fade-up md:sticky md:top-4 md:z-20">
           <div className="hidden md:block">
             <FilterBar
               isDark={isDark}
@@ -664,9 +665,9 @@ function App() {
             />
             {locationControls}
           </div>
-        </div>}
+        </div>
 
-        {activeView === 'wait-times' && <section className="space-y-3 md:hidden">
+        <section className="space-y-3 md:hidden">
           <div className="flex flex-wrap items-center gap-2">
             <span
               className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white/90 text-slate-600'
@@ -761,8 +762,10 @@ function App() {
                   ))}
                 </div>
               </section>
-            ))}
-        </section>}
+              ))}
+            </section>
+            </>
+            )}
 
         {activeView === 'overview' && <AeOverview isDark={isDark} labels={labels.overview} />}
 
