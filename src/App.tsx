@@ -398,7 +398,7 @@ function App() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <h1 className={`flex items-center text-2xl font-bold tracking-tight md:text-3xl ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                <img src="/emergency-icon.svg" alt="" aria-hidden="true" className="mr-3 h-8 w-8 rounded-md" />
+                <img src={`${import.meta.env.BASE_URL}emergency-icon.svg`} alt="" aria-hidden="true" className="mr-3 h-8 w-8 rounded-md" />
                 <span>{labels.title}</span>
               </h1>
             </div>
