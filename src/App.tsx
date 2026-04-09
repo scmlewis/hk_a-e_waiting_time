@@ -397,8 +397,9 @@ function App() {
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h1 className={`text-2xl font-bold tracking-tight md:text-3xl ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                {labels.title}
+              <h1 className={`flex items-center text-2xl font-bold tracking-tight md:text-3xl ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                <img src="/emergency-icon.svg" alt="" aria-hidden="true" className="mr-3 h-8 w-8 rounded-md" />
+                <span>{labels.title}</span>
               </h1>
             </div>
             <div className="flex shrink-0 items-center gap-2">
@@ -452,9 +453,7 @@ function App() {
             </div>
           </div>
 
-          <p className={`max-w-3xl text-[15px] leading-6 md:text-base ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-            {labels.subtitle}
-          </p>
+          
 
           <div
             className={`grid w-full grid-cols-2 items-center gap-1 rounded-xl border p-1 md:inline-flex md:w-auto ${isDark ? 'border-slate-700 bg-slate-900/85' : 'border-slate-200 bg-white/90'
