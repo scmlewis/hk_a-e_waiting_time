@@ -38,8 +38,7 @@ coverage/
 *.sw?
 dev_response.html
 
-# Ensure .github folder is ignored (CI/workflows kept out of repo clone if desired)
-.github/
+# (Keep .github tracked so workflows and skills are included)
 
 
 # Intermediate files and temporary scripts
