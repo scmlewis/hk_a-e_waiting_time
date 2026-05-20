@@ -784,7 +784,7 @@ function App() {
       </div>}
 
       {activeView === 'wait-times' && <div
-        className={`fixed inset-x-0 bottom-0 z-30 border-t p-3 backdrop-blur transition-transform duration-300 motion-reduce:transition-none md:hidden ${hasMobileOverlayOpen ? 'translate-y-full' : 'translate-y-0'
+        className={`fixed inset-x-0 bottom-0 z-30 border-t px-4 pt-3 pb-8 backdrop-blur transition-transform duration-300 motion-reduce:transition-none md:hidden ${hasMobileOverlayOpen ? 'translate-y-full' : 'translate-y-0'
           } ${isDark ? 'border-slate-800/80 bg-slate-900/82' : 'border-indigo-100 bg-white/92'
           }`}
       >

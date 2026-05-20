@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import type { HospitalWaitingTime, TriageCategory } from '../types/ae'
 import type { LanguageMode } from '../constants/labels'
 import { HospitalDetails, type HospitalDetailsLabels } from './HospitalDetails'
@@ -28,9 +29,20 @@ export function HospitalCard({
 }: HospitalCardProps) {
   const selectedTriage = hospital.triage[selectedCategory]
   const detailsId = `hospital-details-${hospital.hospitalName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+  const cardRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (isExpanded && cardRef.current) {
+      // Slight delay to allow CSS transitions to calculate layout
+      setTimeout(() => {
+        cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 150)
+    }
+  }, [isExpanded])
 
   return (
     <article
+      ref={cardRef}
       onClick={onToggleExpanded}
       role="button"
       tabIndex={0}
