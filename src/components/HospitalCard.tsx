@@ -42,14 +42,14 @@ export function HospitalCard({
       }}
       aria-expanded={isExpanded}
       aria-controls={detailsId}
-      className={`enter-fade-up group cursor-pointer rounded-2xl border p-3 shadow-sm backdrop-blur transition duration-200 motion-reduce:transition-none hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${isDark ? 'bg-slate-900/80 focus-visible:ring-slate-500' : 'bg-white/90 focus-visible:ring-slate-400'
+      className={`enter-fade-up group cursor-pointer rounded-2xl border p-4 shadow-sm backdrop-blur-xl transition-all duration-300 motion-reduce:transition-none hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${isDark ? 'bg-slate-900/60 focus-visible:ring-indigo-500' : 'bg-white/70 focus-visible:ring-indigo-400'
         } ${isExpanded
           ? isDark
-            ? 'border-sky-600 ring-2 ring-sky-900/60'
-            : 'border-sky-200 ring-2 ring-sky-100'
+            ? 'border-indigo-500/50 ring-2 ring-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
+            : 'border-indigo-400/50 ring-2 ring-indigo-400/20 shadow-[0_0_15px_rgba(129,140,248,0.2)]'
           : isDark
-            ? 'border-slate-800/90'
-            : 'border-slate-200'
+            ? 'border-slate-700/80 hover:border-slate-600'
+            : 'border-slate-200/80 hover:border-slate-300'
         }`}
     >
       <div className="flex items-start justify-between gap-3">

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { AppHeader } from './components/AppHeader'
 import { FilterBar } from './components/FilterBar'
 import { AeOverview } from './components/AeOverview'
 import { HospitalCard } from './components/HospitalCard'
@@ -389,193 +390,22 @@ function App() {
       </div>
 
       <main className="mx-auto min-h-screen w-full max-w-6xl space-y-6 px-4 py-4 md:space-y-7 md:px-6 md:py-6 lg:px-8">
-        <header
-          className={`enter-fade-up space-y-5 rounded-2xl border p-5 backdrop-blur md:space-y-6 md:p-6 ${isDark
-            ? 'border-slate-700/70 bg-slate-900/80 shadow-[0_8px_30px_rgba(2,6,23,0.45)]'
-            : 'border-white/60 bg-white/85 shadow-[0_8px_30px_rgba(2,6,23,0.08)]'
-            }`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h1 className={`flex items-center text-2xl font-bold tracking-tight md:text-3xl ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                <img src={`${import.meta.env.BASE_URL}emergency-icon.svg`} alt="" aria-hidden="true" className="mr-3 h-8 w-8 rounded-md" />
-                <span>{labels.title}</span>
-              </h1>
-            </div>
-            <div className="flex shrink-0 items-center gap-2">
-              <button
-                type="button"
-                onClick={toggleLanguageMode}
-                className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${isDark
-                  ? 'border-slate-700 bg-slate-900 text-slate-100 hover:bg-slate-800'
-                  : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-                  }`}
-                aria-label={`${labels.languageTraditionalChinese} / ${labels.languageEnglish}`}
-                aria-pressed={languageMode === 'zh-HK'}
-              >
-                <span className="font-bold">語</span>
-                <span>{languageMode === 'en' ? 'EN' : '繁'}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={toggleThemeMode}
-                className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border px-3 py-2 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${isDark
-                  ? 'border-slate-700 bg-slate-900 text-slate-100 hover:bg-slate-800'
-                  : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-                  }`}
-                aria-label={resolvedTheme === 'dark' ? labels.themeLight : labels.themeDark}
-                aria-pressed={resolvedTheme === 'dark'}
-              >
-                {resolvedTheme === 'dark' ? (
-                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3c.27 0 .54.02.8.05A7 7 0 0 0 21 12.79Z" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <circle cx="12" cy="12" r="4" />
-                    <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41" />
-                  </svg>
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => void loadData()}
-                disabled={loading || isRefreshing}
-                className={`hidden cursor-pointer items-center rounded-lg border px-3 py-2 text-sm font-medium shadow-sm transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:inline-flex ${isDark
-                  ? 'border-sky-700 bg-sky-600 text-white hover:bg-sky-500'
-                  : 'border-sky-700 bg-sky-600 text-white hover:bg-sky-700'
-                  }`}
-              >
-                {isRefreshing ? labels.refreshing : labels.refreshNow}
-              </button>
-            </div>
-          </div>
-
-          
-
-          <div
-            className={`grid w-full grid-cols-2 items-center gap-1 rounded-xl border p-1 md:inline-flex md:w-auto ${isDark ? 'border-slate-700 bg-slate-900/85' : 'border-slate-200 bg-white/90'
-              }`}
-            role="tablist"
-            aria-label="Main views"
-          >
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeView === 'wait-times'}
-              onClick={() => handleViewChange('wait-times')}
-              className={`w-full rounded-lg px-3 py-2 text-[15px] font-medium transition-colors duration-200 motion-reduce:transition-none md:w-auto md:py-1.5 md:text-sm ${activeView === 'wait-times'
-                ? isDark
-                  ? 'bg-slate-100 text-slate-900'
-                  : 'bg-slate-900 text-white'
-                : isDark
-                  ? 'text-slate-300 hover:bg-slate-800'
-                  : 'text-slate-700 hover:bg-slate-100'
-                }`}
-            >
-              {labels.viewWaitTimes}
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeView === 'overview'}
-              onClick={() => handleViewChange('overview')}
-              className={`w-full rounded-lg px-3 py-2 text-[15px] font-medium transition-colors duration-200 motion-reduce:transition-none md:w-auto md:py-1.5 md:text-sm ${activeView === 'overview'
-                ? isDark
-                  ? 'bg-slate-100 text-slate-900'
-                  : 'bg-slate-900 text-white'
-                : isDark
-                  ? 'text-slate-300 hover:bg-slate-800'
-                  : 'text-slate-700 hover:bg-slate-100'
-                }`}
-            >
-              {labels.viewOverview}
-            </button>
-          </div>
-
-          {activeView === 'wait-times' && <div className="md:hidden">
-            <button
-              type="button"
-              onClick={() => setIsLegendExpanded(!isLegendExpanded)}
-              className={`flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${isDark ? 'border-slate-700 bg-slate-900/50 text-slate-300 hover:bg-slate-800' : 'border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100'}`}
-            >
-              <span className="flex items-center gap-2">
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16v-4M12 8h.01" />
-                </svg>
-                {labels.legendTitle}
-              </span>
-              <svg
-                viewBox="0 0 24 24"
-                className={`h-4 w-4 transition-transform ${isLegendExpanded ? 'rotate-180' : ''}`}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div
-              className={`grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-300 motion-reduce:transition-none ${isLegendExpanded ? 'mt-2 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
-                }`}
-            >
-              <div className="min-h-0">
-                <div className="flex flex-wrap gap-2 px-1">
-                  <span className="inline-flex items-center gap-1 text-sm font-medium text-emerald-300">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                    {labels.shortWait}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-sm font-medium text-amber-300">
-                    <span className="h-2 w-2 rounded-full bg-amber-500" />
-                    {labels.moderateWait}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-sm font-medium text-rose-300">
-                    <span className="h-2 w-2 rounded-full bg-rose-500" />
-                    {labels.longWait}
-                  </span>
-                  <span className={`inline-flex items-center gap-1 text-sm font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    <span className="h-2 w-2 rounded-full bg-slate-400" />
-                    {labels.unknownWait}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>}
-
-          {activeView === 'wait-times' && <div className="hidden flex-wrap items-center gap-3 md:flex">
-            <span className={`text-xs font-semibold uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              {labels.legendTitle}
-            </span>
-            <span className="inline-flex items-center gap-1 text-xs font-medium md:text-sm md:text-emerald-700">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-              {labels.shortWait}
-            </span>
-            <span className="inline-flex items-center gap-1 text-xs font-medium md:text-sm md:text-amber-700">
-              <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
-              {labels.moderateWait}
-            </span>
-            <span className="inline-flex items-center gap-1 text-xs font-medium md:text-sm md:text-rose-700">
-              <span className="h-2.5 w-2.5 rounded-full bg-rose-500" />
-              {labels.longWait}
-            </span>
-            <span className={`inline-flex items-center gap-1 text-xs font-medium md:text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-              <span className="h-2.5 w-2.5 rounded-full bg-slate-400" />
-              {labels.unknownWait}
-            </span>
-          </div>}
-          {activeView === 'wait-times' && (
-            <div
-              className={`rounded-lg border px-3 py-2 text-xs leading-5 ${isDark ? 'border-sky-900/50 bg-sky-950/25 text-slate-100' : 'border-sky-100 bg-sky-50/70 text-slate-700'
-                }`}
-              role="note"
-            >
-              {waitSemanticsHint}
-            </div>
-          )}
-        </header>
+        <AppHeader
+          isDark={isDark}
+          labels={labels}
+          languageMode={languageMode}
+          resolvedTheme={resolvedTheme}
+          loading={loading}
+          isRefreshing={isRefreshing}
+          activeView={activeView}
+          isLegendExpanded={isLegendExpanded}
+          waitSemanticsHint={waitSemanticsHint}
+          toggleLanguageMode={toggleLanguageMode}
+          toggleThemeMode={toggleThemeMode}
+          loadData={loadData}
+          handleViewChange={handleViewChange}
+          setIsLegendExpanded={setIsLegendExpanded}
+        />
 
         {activeView === 'wait-times' && (
           <>

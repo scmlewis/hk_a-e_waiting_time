@@ -47,8 +47,8 @@ export function HospitalTable({
 }: HospitalTableProps) {
   return (
     <section
-      className={`hidden overflow-hidden rounded-2xl border shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur md:block ${
-        isDark ? 'border-indigo-900/40 bg-slate-900/85' : 'border-slate-200 bg-white/90'
+      className={`hidden overflow-hidden rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl md:block transition-all duration-300 ${
+        isDark ? 'border-indigo-900/30 bg-slate-900/70' : 'border-indigo-100/50 bg-white/70'
       }`}
     >
       <div className={`flex items-center gap-2 border-b p-3 ${isDark ? 'border-indigo-900/40 bg-indigo-950/20' : 'border-indigo-100 bg-indigo-50/55'}`}>
@@ -130,8 +130,8 @@ export function HospitalTable({
                   <Fragment key={hospital.hospitalName}>
                     <tr
                       onClick={() => onToggleExpanded(hospital.hospitalName)}
-                      className={`group cursor-pointer border-t transition-colors duration-200 motion-reduce:transition-none ${
-                        isDark ? 'border-slate-800 hover:bg-slate-800/60' : 'border-slate-100 hover:bg-slate-50/90'
+                      className={`group cursor-pointer border-t transition-all duration-300 motion-reduce:transition-none ${
+                        isDark ? 'border-slate-800/60 hover:bg-slate-800/80' : 'border-slate-100 hover:bg-indigo-50/60'
                       }`}
                     >
                       <td className={`px-4 py-4 font-medium ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
