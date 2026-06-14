@@ -6,7 +6,12 @@ import { initGlobalErrorTracking } from './services/telemetry'
 
 initGlobalErrorTracking()
 
-createRoot(document.getElementById('root')!).render(
+const rootElement = document.getElementById('root')
+if (!rootElement) {
+  throw new Error('Root element #root not found in the DOM')
+}
+
+createRoot(rootElement).render(
   <StrictMode>
     <App />
   </StrictMode>,

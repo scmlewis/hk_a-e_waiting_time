@@ -1,11 +1,12 @@
 
+import type { AppLabels, LanguageMode } from '../constants/labels'
 
 export type AppView = 'wait-times' | 'overview'
 
 interface AppHeaderProps {
   isDark: boolean
-  labels: any
-  languageMode: string
+  labels: AppLabels
+  languageMode: LanguageMode
   resolvedTheme: string
   loading: boolean
   isRefreshing: boolean
