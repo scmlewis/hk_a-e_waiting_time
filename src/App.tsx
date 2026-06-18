@@ -302,9 +302,9 @@ function App() {
 
   const locationControls = (userLocation !== null || locationStatus !== 'idle') && (
     <div
-      className={`mt-2.5 flex flex-wrap items-center gap-2.5 rounded-xl border p-3 text-sm md:gap-2 md:p-2.5 md:text-sm ${isDark
-        ? 'border-sky-900/50 bg-sky-950/20 text-slate-300 md:bg-slate-950'
-        : 'border-sky-100/80 bg-sky-50/70 text-slate-600 md:bg-white'
+      className={`mt-2 flex flex-wrap items-center gap-2 border p-3 text-sm md:gap-2 md:p-2.5 md:text-sm ${isDark
+        ? 'border-neutral-800 text-neutral-400'
+        : 'border-neutral-200 text-neutral-600'
         }`}
     >
       {userLocation === null && (
@@ -312,12 +312,12 @@ function App() {
           type="button"
           onClick={() => void handleUseMyLocation()}
           disabled={locationStatus === 'locating'}
-          className={`inline-flex min-h-11 cursor-pointer items-center rounded-md px-3.5 py-2 text-sm font-semibold shadow-sm transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${isDark
-            ? 'bg-sky-600 text-white hover:bg-sky-500 active:scale-[0.98]'
-            : 'bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]'
+          className={`inline-flex min-h-11 cursor-pointer items-center px-3.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 ${isDark
+            ? 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200'
+            : 'bg-neutral-900 text-neutral-50 hover:bg-neutral-800'
             }`}
         >
-          <Icon name="map-pin" className="mr-1.5 h-4 w-4 md:h-3.5 md:w-3.5" strokeWidth={2} />
+          <Icon name="map-pin" className="mr-1.5 h-3.5 w-3.5" strokeWidth={2.5} />
           {locationStatus === 'locating' ? labels.locating : labels.useMyLocation}
         </button>
       )}
@@ -326,9 +326,9 @@ function App() {
         <button
           type="button"
           onClick={handleClearLocation}
-          className={`inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3.5 py-2 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 md:text-xs ${isDark
-            ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
-            : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+          className={`inline-flex min-h-11 cursor-pointer items-center border px-3.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 ${isDark
+            ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
+            : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'
             }`}
         >
           {labels.clearLocation}
@@ -336,7 +336,7 @@ function App() {
       )}
 
       {locationStatusMessage && <span>{locationStatusMessage}</span>}
-      <span className={isDark ? 'text-slate-500' : 'text-slate-500'}>{labels.distanceEstimateHint}</span>
+      <span className={isDark ? 'text-neutral-600' : 'text-neutral-400'}>{labels.distanceEstimateHint}</span>
     </div>
   )
 
@@ -395,19 +395,8 @@ function App() {
   }, [hospitals])
 
   return (
-    <div className={`relative isolate overflow-x-clip pb-28 md:pb-10 ${isDark ? 'bg-slate-950 text-slate-100' : 'text-slate-900'} ${refreshPulse ? 'refresh-pulse' : ''}`}>
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className={`absolute left-1/2 top-[-220px] h-[420px] w-[420px] -translate-x-1/2 rounded-full blur-3xl ${isDark ? 'bg-cyan-500/15' : 'bg-cyan-200/35'
-            }`}
-        />
-        <div
-          className={`absolute right-[-140px] top-[180px] h-[280px] w-[280px] rounded-full blur-3xl ${isDark ? 'bg-indigo-500/15' : 'bg-sky-200/35'
-            }`}
-        />
-      </div>
-
-      <main className="mx-auto min-h-screen w-full max-w-6xl space-y-6 px-4 py-4 md:space-y-7 md:px-6 md:py-6 lg:px-8">
+    <div className={`relative overflow-x-clip pb-28 md:pb-10 ${isDark ? 'text-neutral-100' : 'text-neutral-900'} ${refreshPulse ? 'refresh-pulse' : ''}`}>
+      <main className="mx-auto min-h-screen w-full max-w-6xl space-y-4 px-4 py-4 md:space-y-5 md:px-6 md:py-6 lg:px-8">
         <AppHeader
           isDark={isDark}
           labels={labels}
@@ -438,23 +427,23 @@ function App() {
 
         {shouldShowLocationPrompt && (
           <section
-            className={`rounded-xl border p-3 md:p-4 ${isDark ? 'border-sky-900/50 bg-sky-950/25' : 'border-sky-100 bg-sky-50/70'
+            className={`border p-3 md:p-4 ${isDark ? 'border-neutral-800' : 'border-neutral-200'
               }`}
             aria-live="polite"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className={`text-sm md:text-base ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
-                {labels.sortNearest} • {labels.distanceEstimateHint}
+              <p className={`text-sm md:text-base ${isDark ? 'text-neutral-300' : 'text-neutral-700'}`}>
+                {labels.sortNearest} &bull; {labels.distanceEstimateHint}
               </p>
               <button
                 type="button"
                 onClick={() => void handleUseMyLocation()}
-                className={`inline-flex min-h-11 items-center rounded-lg px-4 py-2.5 text-sm font-bold shadow-md transition-all duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 active:scale-[0.98] ${isDark
-                  ? 'bg-sky-600 text-white hover:bg-sky-500'
-                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                className={`inline-flex min-h-11 items-center px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
+                  ? 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200'
+                  : 'bg-neutral-900 text-neutral-50 hover:bg-neutral-800'
                   }`}
               >
-                <Icon name="map-pin" className="mr-2 h-4 w-4" strokeWidth={2.5} />
+                <Icon name="map-pin" className="mr-2 h-3.5 w-3.5" strokeWidth={2.5} />
                 {labels.useMyLocation}
               </button>
             </div>
@@ -464,7 +453,7 @@ function App() {
 
         {!loading && isRefreshing && (
           <p
-            className={`rounded-lg border p-3 text-sm ${isDark ? 'border-sky-600/50 bg-sky-900/35 text-sky-200' : 'border-sky-200 bg-sky-50 text-sky-700'
+            className={`border p-3 text-xs font-medium uppercase tracking-wider ${isDark ? 'border-neutral-800 text-neutral-400' : 'border-neutral-200 text-neutral-500'
               }`}
             role="status"
             aria-live="polite"
@@ -475,7 +464,7 @@ function App() {
 
         {!loading && refreshError && hospitals.length > 0 && (
           <p
-            className={`rounded-lg border p-3 text-sm ${isDark ? 'border-amber-600/50 bg-amber-900/25 text-amber-200' : 'border-amber-200 bg-amber-50 text-amber-800'
+            className={`border border-red-800/50 p-3 text-sm ${isDark ? 'text-red-300' : 'text-red-700'
               }`}
             role="status"
             aria-live="polite"
@@ -486,7 +475,7 @@ function App() {
 
         {!loading && isSourceStale && hospitals.length > 0 && (
           <p
-            className={`rounded-lg border p-3 text-sm ${isDark ? 'border-amber-600/50 bg-amber-900/25 text-amber-200' : 'border-amber-200 bg-amber-50 text-amber-800'
+            className={`border border-amber-700/50 p-3 text-sm ${isDark ? 'text-amber-300' : 'text-amber-700'
               }`}
             role="status"
             aria-live="polite"
@@ -515,19 +504,19 @@ function App() {
         <section className="space-y-3 md:hidden">
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white/90 text-slate-600'
+              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-400' : 'border-neutral-300 text-neutral-500'
                 }`}
             >
               {labels.triageCategoryLabels[selectedTriageCategory]}
             </span>
             <span
-              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white/90 text-slate-600'
+              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-400' : 'border-neutral-300 text-neutral-500'
                 }`}
             >
               {activeClusterLabel}
             </span>
             <span
-              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white/90 text-slate-600'
+              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-400' : 'border-neutral-300 text-neutral-500'
                 }`}
             >
               {mobileSortLabel}
@@ -538,18 +527,18 @@ function App() {
             Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={index}
-                className={`animate-pulse rounded-lg border p-4 motion-reduce:animate-none ${isDark ? 'border-slate-700 bg-slate-900/80' : 'border-slate-200 bg-white'
+                className={`animate-pulse border p-4 motion-reduce:animate-none ${isDark ? 'border-neutral-800' : 'border-neutral-200'
                   }`}
               >
-                <div className={`h-4 w-2/3 rounded ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`} />
-                <div className={`mt-3 h-6 w-1/3 rounded ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`} />
-                <div className={`mt-2 h-3 w-1/4 rounded ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`} />
+                <div className={`h-3 w-2/3 ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
+                <div className={`mt-3 h-5 w-1/3 ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
+                <div className={`mt-2 h-2.5 w-1/4 ${isDark ? 'bg-neutral-800' : 'bg-neutral-100'}`} />
               </div>
             ))}
 
           {!loading && error && (
             <p
-              className={`rounded-lg border p-4 text-sm ${isDark ? 'border-rose-700/60 bg-rose-900/30 text-rose-200' : 'border-rose-200 bg-rose-50 text-rose-700'
+              className={`border border-red-800/50 p-4 text-sm ${isDark ? 'text-red-300' : 'text-red-700'
                 }`}
               role="alert"
             >
@@ -558,21 +547,21 @@ function App() {
           )}
 
           {!loading && !error && hospitals.length === 0 && (
-            <p className={`rounded-lg p-4 text-sm ${isDark ? 'bg-slate-900/80 text-slate-300' : 'bg-white text-slate-600'}`}>
+            <p className={`p-4 text-sm ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
               {labels.noDataFromSource}
             </p>
           )}
 
           {!loading && !error && hospitals.length > 0 && groupedHospitals.length === 0 && (
-            <div className={`space-y-3 rounded-lg p-4 text-sm ${isDark ? 'bg-slate-900/80 text-slate-300' : 'bg-white text-slate-600'}`}>
+            <div className={`space-y-3 p-4 text-sm ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
               <p>{hasActiveFilters ? labels.noMatch : labels.noHospitals}</p>
               {hasActiveFilters && (
                 <button
                   type="button"
                   onClick={handleClearFilters}
-                  className={`inline-flex cursor-pointer items-center rounded-md border px-3 py-1.5 text-xs font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${isDark
-                    ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
-                    : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                  className={`inline-flex cursor-pointer items-center border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
+                    ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
+                    : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'
                     }`}
                 >
                   {labels.clearFilters}
@@ -585,9 +574,9 @@ function App() {
             groupedHospitals.map((group) => (
               <section key={group.cluster} className="space-y-2">
                 <h2
-                  className={`rounded-lg border-l-4 border-y border-r px-3 py-2 text-sm font-semibold tracking-tight shadow-md backdrop-blur ${isDark
-                    ? 'border-l-sky-500 border-y-slate-700 border-r-slate-700 bg-slate-900 text-slate-100'
-                    : 'border-l-sky-500 border-y-slate-200 border-r-slate-200 bg-slate-50 text-slate-900'
+                  className={`border-l-4 border-y border-r px-3 py-2 text-[11px] font-bold uppercase tracking-wider ${isDark
+                    ? 'border-l-neutral-400 border-y-neutral-800 border-r-neutral-800 text-neutral-300'
+                    : 'border-l-neutral-900 border-y-neutral-200 border-r-neutral-200 text-neutral-600'
                     }`}
                 >
                   {group.displayCluster} ({group.hospitals.length})
@@ -616,13 +605,13 @@ function App() {
 
         {activeView === 'wait-times' && loading && (
           <section
-            className={`hidden animate-pulse space-y-2 rounded-2xl border p-3 motion-reduce:animate-none md:block ${isDark ? 'border-slate-700 bg-slate-900/80' : 'border-slate-200 bg-white/90'
+            className={`hidden animate-pulse space-y-2 border p-3 motion-reduce:animate-none md:block ${isDark ? 'border-neutral-800' : 'border-neutral-200'
               }`}
             aria-hidden
           >
-            <div className={`h-9 w-72 rounded ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`} />
+            <div className={`h-8 w-72 ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
             {Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className={`h-12 rounded ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`} />
+              <div key={index} className={`h-10 ${isDark ? 'bg-neutral-800' : 'bg-neutral-100'}`} />
             ))}
           </section>
         )}
@@ -645,7 +634,7 @@ function App() {
 
         {activeView === 'wait-times' && !loading && !error && hospitals.length > 0 && groupedHospitals.length === 0 && (
           <div
-            className={`hidden space-y-3 rounded-lg border p-4 text-sm shadow-sm md:block ${isDark ? 'border-slate-700 bg-slate-900/80 text-slate-300' : 'border-slate-200 bg-white text-slate-600'
+            className={`hidden space-y-3 border p-4 text-sm md:block ${isDark ? 'border-neutral-800 text-neutral-400' : 'border-neutral-200 text-neutral-500'
               }`}
           >
             <p>{hasActiveFilters ? labels.noMatch : labels.noHospitals}</p>
@@ -653,9 +642,9 @@ function App() {
               <button
                 type="button"
                 onClick={handleClearFilters}
-                className={`inline-flex cursor-pointer items-center rounded-md border px-3 py-1.5 text-xs font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${isDark
-                  ? 'border-slate-600 bg-slate-900 text-slate-200 hover:bg-slate-800'
-                  : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                className={`inline-flex cursor-pointer items-center border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
+                  ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
+                  : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'
                   }`}
               >
                 {labels.clearFilters}
@@ -666,7 +655,7 @@ function App() {
 
         {activeView === 'wait-times' && !loading && error && hospitals.length === 0 && (
           <p
-            className={`hidden rounded-lg border p-4 text-sm md:block ${isDark ? 'border-rose-700/60 bg-rose-900/30 text-rose-200' : 'border-rose-200 bg-rose-50 text-rose-700'
+            className={`hidden border border-red-800/50 p-4 text-sm md:block ${isDark ? 'text-red-300' : 'text-red-700'
               }`}
             role="alert"
           >
@@ -677,7 +666,7 @@ function App() {
 
       {activeView === 'wait-times' && hasMobileOverlayOpen && (
         <div
-          className="fixed inset-0 z-20 bg-slate-950/40 md:hidden"
+          className="fixed inset-0 z-20 bg-black/40 md:hidden"
           onClick={() => {
             setIsMobileFilterSheetOpen(false)
             setIsMobileSortSheetOpen(false)
@@ -687,8 +676,8 @@ function App() {
       )}
 
       {activeView === 'wait-times' && <div
-        className={`fixed inset-x-0 bottom-0 z-30 rounded-t-2xl border-x border-t p-4 shadow-2xl backdrop-blur transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileFilterSheetOpen ? 'translate-y-0' : 'translate-y-full'
-          } ${isDark ? 'border-sky-900/50 bg-slate-900/95' : 'border-sky-100 bg-white/98'}`}
+        className={`fixed inset-x-0 bottom-0 z-30 border-x border-t p-4 transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileFilterSheetOpen ? 'translate-y-0' : 'translate-y-full'
+          } ${isDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-200 bg-white'}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={filterSheetTitleId}
@@ -700,12 +689,12 @@ function App() {
         }}
       >
         <div className="mb-3 flex items-center justify-between">
-          <p id={filterSheetTitleId} className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{labels.showFiltersSettings}</p>
+          <p id={filterSheetTitleId} className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-neutral-300' : 'text-neutral-600'}`}>{labels.showFiltersSettings}</p>
           <button
             ref={filterSheetCloseButtonRef}
             type="button"
             onClick={() => setIsMobileFilterSheetOpen(false)}
-            className={`rounded-md border px-3 py-1.5 text-sm font-semibold ${isDark ? 'border-slate-700 bg-slate-900 text-slate-200' : 'border-slate-300 bg-white text-slate-700'
+            className={`border px-3 py-1.5 text-xs font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-300' : 'border-neutral-300 text-neutral-700'
               }`}
           >
             {labels.hospitalTable.hide}
@@ -728,8 +717,8 @@ function App() {
       </div>}
 
       {activeView === 'wait-times' && <div
-        className={`fixed inset-x-0 bottom-0 z-30 rounded-t-2xl border-x border-t p-4 shadow-2xl backdrop-blur transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileSortSheetOpen ? 'translate-y-0' : 'translate-y-full'
-          } ${isDark ? 'border-indigo-900/50 bg-slate-900/95' : 'border-indigo-100 bg-white/98'}`}
+        className={`fixed inset-x-0 bottom-0 z-30 border-x border-t p-4 transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileSortSheetOpen ? 'translate-y-0' : 'translate-y-full'
+          } ${isDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-200 bg-white'}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={sortSheetTitleId}
@@ -741,12 +730,12 @@ function App() {
         }}
       >
         <div className="mb-3 flex items-center justify-between">
-          <p id={sortSheetTitleId} className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{labels.quickSort}</p>
+          <p id={sortSheetTitleId} className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-neutral-300' : 'text-neutral-600'}`}>{labels.quickSort}</p>
           <button
             ref={sortSheetCloseButtonRef}
             type="button"
             onClick={() => setIsMobileSortSheetOpen(false)}
-            className={`rounded-md border px-3 py-1.5 text-sm font-semibold ${isDark ? 'border-slate-700 bg-slate-900 text-slate-200' : 'border-slate-300 bg-white text-slate-700'
+            className={`border px-3 py-1.5 text-xs font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-300' : 'border-neutral-300 text-neutral-700'
               }`}
           >
             {labels.hospitalTable.hide}
@@ -756,13 +745,13 @@ function App() {
           <button
             type="button"
             onClick={() => applyMobileSortMode('waiting')}
-            className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium ${sortMode === 'waiting'
+            className={`w-full border px-4 py-3 text-left text-sm font-medium ${sortMode === 'waiting'
               ? isDark
-                ? 'border-slate-600 bg-slate-100 text-slate-900'
-                : 'border-slate-900 bg-slate-900 text-white'
+                ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
+                : 'border-neutral-900 bg-neutral-900 text-white'
               : isDark
-                ? 'border-slate-700 bg-slate-900 text-slate-200'
-                : 'border-slate-300 bg-white text-slate-700'
+                ? 'border-neutral-800 text-neutral-300'
+                : 'border-neutral-200 text-neutral-700'
               }`}
           >
             {labels.sortWaiting}
@@ -770,13 +759,13 @@ function App() {
           <button
             type="button"
             onClick={() => applyMobileSortMode('name')}
-            className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium ${sortMode === 'name'
+            className={`w-full border px-4 py-3 text-left text-sm font-medium ${sortMode === 'name'
               ? isDark
-                ? 'border-slate-600 bg-slate-100 text-slate-900'
-                : 'border-slate-900 bg-slate-900 text-white'
+                ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
+                : 'border-neutral-900 bg-neutral-900 text-white'
               : isDark
-                ? 'border-slate-700 bg-slate-900 text-slate-200'
-                : 'border-slate-300 bg-white text-slate-700'
+                ? 'border-neutral-800 text-neutral-300'
+                : 'border-neutral-200 text-neutral-700'
               }`}
           >
             {labels.sortAZ}
@@ -785,13 +774,13 @@ function App() {
             type="button"
             onClick={() => applyMobileSortMode('nearest')}
             disabled={!isNearestSortAvailable}
-            className={`w-full rounded-lg border px-4 py-3 text-left text-base font-medium disabled:cursor-not-allowed disabled:opacity-50 ${sortMode === 'nearest'
+            className={`w-full border px-4 py-3 text-left text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40 ${sortMode === 'nearest'
               ? isDark
-                ? 'border-slate-600 bg-slate-100 text-slate-900'
-                : 'border-slate-900 bg-slate-900 text-white'
+                ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
+                : 'border-neutral-900 bg-neutral-900 text-white'
               : isDark
-                ? 'border-slate-700 bg-slate-900 text-slate-200'
-                : 'border-slate-300 bg-white text-slate-700'
+                ? 'border-neutral-800 text-neutral-300'
+                : 'border-neutral-200 text-neutral-700'
               }`}
           >
             {labels.sortNearest}
@@ -800,22 +789,22 @@ function App() {
       </div>}
 
       {activeView === 'wait-times' && <div
-        className={`fixed inset-x-0 bottom-0 z-30 border-t px-4 pt-3 pb-8 backdrop-blur transition-transform duration-300 motion-reduce:transition-none md:hidden ${hasMobileOverlayOpen ? 'translate-y-full' : 'translate-y-0'
-          } ${isDark ? 'border-slate-800/80 bg-slate-900/82' : 'border-indigo-100 bg-white/92'
+        className={`fixed inset-x-0 bottom-0 z-30 border-t px-4 pt-3 pb-8 transition-transform duration-300 motion-reduce:transition-none md:hidden ${hasMobileOverlayOpen ? 'translate-y-full' : 'translate-y-0'
+          } ${isDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-200 bg-white'
           }`}
       >
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-2.5">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-2">
           <button
             type="button"
             onClick={() => void loadData()}
             disabled={loading || isRefreshing}
-            className={`min-h-12 min-w-[3.5rem] flex items-center justify-center rounded-lg border transition-all duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 active:scale-[0.98] ${isDark
-              ? 'border-slate-700 bg-slate-900 text-slate-100'
-              : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+            className={`min-h-12 min-w-[3.5rem] flex items-center justify-center border transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
+              ? 'border-neutral-800 text-neutral-300'
+              : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
               }`}
             aria-label={labels.refreshNow}
           >
-            <Icon name="refresh" className={`h-6 w-6 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <Icon name="refresh" className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
           <button
             type="button"
@@ -823,13 +812,13 @@ function App() {
               setIsMobileFilterSheetOpen(false)
               setIsMobileSortSheetOpen(true)
             }}
-            className={`flex-1 min-h-12 cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${isDark
-              ? 'border-slate-700 bg-slate-900 text-slate-100'
-              : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+            className={`flex-1 min-h-12 cursor-pointer border px-3 py-1.5 text-left text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
+              ? 'border-neutral-800 text-neutral-300'
+              : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
               }`}
           >
-            <div className="text-[10px] uppercase tracking-wider opacity-60 mb-0.5">{labels.quickSort}</div>
-            <div className="truncate">{mobileSortLabel}</div>
+            <div className="text-[9px] opacity-50 mb-0.5">{labels.quickSort}</div>
+            <div className="truncate text-xs font-semibold normal-case tracking-normal">{mobileSortLabel}</div>
           </button>
           <button
             type="button"
@@ -837,13 +826,13 @@ function App() {
               setIsMobileSortSheetOpen(false)
               setIsMobileFilterSheetOpen((value) => !value)
             }}
-            className={`flex-1 min-h-12 cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-semibold transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${isDark
-              ? 'border-slate-700 bg-slate-900 text-slate-100'
-              : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+            className={`flex-1 min-h-12 cursor-pointer border px-3 py-1.5 text-left text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
+              ? 'border-neutral-800 text-neutral-300'
+              : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
               }`}
           >
-            <div className="text-[10px] uppercase tracking-wider opacity-60 mb-0.5">{labels.quickFilter}</div>
-            <div className="truncate">{activeClusterLabel}</div>
+            <div className="text-[9px] opacity-50 mb-0.5">{labels.quickFilter}</div>
+            <div className="truncate text-xs font-semibold normal-case tracking-normal">{activeClusterLabel}</div>
           </button>
         </div>
       </div>}
@@ -853,11 +842,11 @@ function App() {
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Scroll to top"
-          className={`fixed bottom-24 right-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border shadow-lg backdrop-blur transition-all duration-300 hover:scale-110 active:scale-95 md:hidden ${
+          className={`fixed bottom-24 right-4 z-40 flex h-10 w-10 items-center justify-center border transition-all duration-200 md:hidden ${
             showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'
-          } ${isDark ? 'border-slate-700 bg-slate-900/90 text-slate-200 hover:bg-slate-800' : 'border-slate-300 bg-white/90 text-slate-700 hover:bg-slate-100'}`}
+          } ${isDark ? 'border-neutral-700 bg-neutral-950 text-neutral-400 hover:bg-neutral-800' : 'border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-100'}`}
         >
-          <Icon name="chevron-down" className="h-5 w-5 -rotate-180" />
+          <Icon name="chevron-down" className="h-4 w-4 -rotate-180" />
         </button>
       )}
     </div>

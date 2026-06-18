@@ -5,7 +5,7 @@ import { HospitalDetails, type HospitalDetailsLabels } from './HospitalDetails'
 import type { SortMode } from '../utils/sort'
 import { formatDistanceKm } from '../utils/distance'
 import { deriveWaitStatusFromText } from '../utils/parseWaitTime'
-import { getWaitingTimeTone } from '../utils/waitTone'
+import { getWaitingTimeTone, getWaitingTimeDot } from '../utils/waitTone'
 import { Icon } from './Icon'
 
 interface HospitalTableLabels extends HospitalDetailsLabels {
@@ -48,22 +48,22 @@ export function HospitalTable({
 }: HospitalTableProps) {
   return (
     <section
-      className={`hidden overflow-hidden rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl md:block transition-all duration-300 ${
-        isDark ? 'border-indigo-900/30 bg-slate-900/70' : 'border-indigo-100/50 bg-white/70'
+      className={`hidden overflow-hidden border md:block transition-colors duration-200 ${
+        isDark ? 'border-neutral-800' : 'border-neutral-200'
       }`}
     >
-      <div className={`flex items-center gap-2 border-b p-3 ${isDark ? 'border-indigo-900/40 bg-indigo-950/20' : 'border-indigo-100 bg-indigo-50/55'}`}>
+      <div className={`flex items-center gap-2 border-b p-3 ${isDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-200 bg-neutral-50'}`}>
         <button
           type="button"
           onClick={() => onSortModeChange('waiting')}
-          className={`cursor-pointer rounded-md px-3 py-1.5 text-sm transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+          className={`cursor-pointer px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${
             sortMode === 'waiting'
               ? isDark
-                ? 'bg-slate-100 text-slate-900 shadow-sm'
-                : 'bg-slate-900 text-white shadow-sm'
+                ? 'bg-neutral-100 text-neutral-900'
+                : 'bg-neutral-900 text-white'
               : isDark
-                ? 'bg-slate-800 text-slate-200 hover:bg-slate-700'
-                : 'bg-white text-slate-800 hover:bg-slate-100'
+                ? 'text-neutral-500 hover:text-neutral-300'
+                : 'text-neutral-500 hover:text-neutral-700'
           }`}
         >
           {labels.sortByWaitingTime}
@@ -71,14 +71,14 @@ export function HospitalTable({
         <button
           type="button"
           onClick={() => onSortModeChange('name')}
-          className={`cursor-pointer rounded-md px-3 py-1.5 text-sm transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 ${
+          className={`cursor-pointer px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${
             sortMode === 'name'
               ? isDark
-                ? 'bg-slate-100 text-slate-900 shadow-sm'
-                : 'bg-slate-900 text-white shadow-sm'
+                ? 'bg-neutral-100 text-neutral-900'
+                : 'bg-neutral-900 text-white'
               : isDark
-                ? 'bg-slate-800 text-slate-200 hover:bg-slate-700'
-                : 'bg-white text-slate-800 hover:bg-slate-100'
+                ? 'text-neutral-500 hover:text-neutral-300'
+                : 'text-neutral-500 hover:text-neutral-700'
           }`}
         >
           {labels.sortAlphabetically}
@@ -87,14 +87,14 @@ export function HospitalTable({
           type="button"
           onClick={() => onSortModeChange('nearest')}
           disabled={!isNearestSortAvailable}
-          className={`cursor-pointer rounded-md px-3 py-1.5 text-sm transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 ${
+          className={`cursor-pointer px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-40 ${
             sortMode === 'nearest'
               ? isDark
-                ? 'bg-slate-100 text-slate-900 shadow-sm'
-                : 'bg-slate-900 text-white shadow-sm'
+                ? 'bg-neutral-100 text-neutral-900'
+                : 'bg-neutral-900 text-white'
               : isDark
-                ? 'bg-slate-800 text-slate-200 hover:bg-slate-700'
-                : 'bg-white text-slate-800 hover:bg-slate-100'
+                ? 'text-neutral-500 hover:text-neutral-300'
+                : 'text-neutral-500 hover:text-neutral-700'
           }`}
         >
           {labels.sortByNearest}
@@ -103,21 +103,21 @@ export function HospitalTable({
 
       <table className="w-full border-collapse text-sm">
         <thead
-          className={`text-left text-xs uppercase tracking-wide ${
-            isDark ? 'bg-slate-900 text-slate-400' : 'bg-slate-50 text-slate-600'
+          className={`border-b text-left text-[10px] font-bold uppercase tracking-widest ${
+            isDark ? 'border-neutral-800 text-neutral-500' : 'border-neutral-200 text-neutral-400'
           }`}
         >
           <tr>
-            <th className="px-4 py-3 font-medium">{labels.hospital}</th>
-            <th className="px-4 py-3 font-medium">{labels.waitingTime} ({triageCategoryLabels[selectedCategory]})</th>
-            <th className="px-4 py-3 font-medium">{labels.details}</th>
+            <th className="px-4 py-3 font-inherit">{labels.hospital}</th>
+            <th className="px-4 py-3 font-inherit">{labels.waitingTime} ({triageCategoryLabels[selectedCategory]})</th>
+            <th className="px-4 py-3 font-inherit">{labels.details}</th>
           </tr>
         </thead>
         <tbody>
           {groups.map((group) => (
             <Fragment key={group.cluster}>
-              <tr className={`border-t ${isDark ? 'border-slate-600 bg-slate-700/80' : 'border-slate-300 bg-slate-200'}`}>
-                <td colSpan={3} className={`px-4 py-2.5 font-bold ${isDark ? 'text-slate-50' : 'text-slate-900'}`}>
+              <tr className={`border-t border-b ${isDark ? 'border-neutral-800 bg-neutral-900' : 'border-neutral-200 bg-neutral-100'}`}>
+                <td colSpan={3} className={`px-4 py-2 text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-neutral-300' : 'text-neutral-600'}`}>
                   {group.displayCluster} ({group.hospitals.length})
                 </td>
               </tr>
@@ -131,37 +131,40 @@ export function HospitalTable({
                   <Fragment key={hospital.hospitalName}>
                     <tr
                       onClick={() => onToggleExpanded(hospital.hospitalName)}
-                      className={`group cursor-pointer border-t transition-all duration-300 motion-reduce:transition-none ${
-                        isDark ? 'border-slate-800/60 hover:bg-slate-800/80' : 'border-slate-100 hover:bg-indigo-50/60'
+                      className={`group cursor-pointer border-t transition-colors duration-100 motion-reduce:transition-none ${
+                        isDark ? 'border-neutral-800/60 hover:bg-neutral-900' : 'border-neutral-100 hover:bg-neutral-50'
                       }`}
                     >
-                      <td className={`px-4 py-4 font-medium ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                        <div>{hospital.hospitalName}</div>
+                      <td className={`px-4 py-3 font-medium ${isDark ? 'text-neutral-100' : 'text-neutral-900'}`}>
+                        <div className="text-sm font-semibold">{hospital.hospitalName}</div>
                         {typeof hospital.distanceKm === 'number' && (
-                          <div className={`mt-0.5 inline-flex items-center gap-1 text-xs font-normal ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
-                            <Icon name="map-pin" className="h-3.5 w-3.5" strokeWidth={1.8} />
+                          <div className={`mt-0.5 inline-flex items-center gap-1 text-[11px] font-normal ${isDark ? 'text-neutral-600' : 'text-neutral-400'}`}>
+                            <Icon name="map-pin" className="h-3 w-3" strokeWidth={2} />
                             {formatDistanceKm(hospital.distanceKm, languageMode)}
                           </div>
                         )}
                       </td>
-                      <td className={`px-4 py-4 text-base font-semibold tracking-tight ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
-                        <span className={`mr-2 inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold uppercase leading-none ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'}`}>
-                          {selectedTriage.waitStatus === 'short' ? labels.shortWait : selectedTriage.waitStatus === 'moderate' ? labels.moderateWait : selectedTriage.waitStatus === 'long' ? labels.longWait : labels.unknownWait}
+                      <td className={`px-4 py-3 text-base font-bold font-mono tracking-tight ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
+                        <span className="flex items-center gap-2">
+                          <span className={`inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`}>
+                            <span className={`h-1.5 w-1.5 rounded-full ${getWaitingTimeDot(selectedTriage.waitStatus)}`} />
+                            {selectedTriage.waitStatus === 'short' ? labels.shortWait : selectedTriage.waitStatus === 'moderate' ? labels.moderateWait : selectedTriage.waitStatus === 'long' ? labels.longWait : labels.unknownWait}
+                          </span>
+                          <span>{selectedTriage.waitingTimeText}</span>
                         </span>
-                        {selectedTriage.waitingTimeText}
                         {selectedTriage.upperBoundText && (
-                          <>
-                            <span className={`ml-1.5 text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>(</span>
+                          <span className="ml-2 text-sm font-normal">
+                            <span className={isDark ? 'text-neutral-600' : 'text-neutral-400'}>(</span>
                             <span
-                              className={`text-sm font-medium ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
+                              className={`font-semibold font-mono ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
                             >
                               {selectedTriage.upperBoundText}
                             </span>
-                            <span className={`text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>)</span>
-                          </>
+                            <span className={isDark ? 'text-neutral-600' : 'text-neutral-400'}>)</span>
+                          </span>
                         )}
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-3">
                         <button
                           type="button"
                           onClick={(e) => {
@@ -170,10 +173,10 @@ export function HospitalTable({
                           }}
                           aria-expanded={isExpanded}
                           aria-controls={detailsId}
-                          className={`cursor-pointer rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 group-hover:shadow-sm ${
+                          className={`cursor-pointer border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${
                             isDark
-                              ? 'border-slate-600 bg-slate-800/50 text-slate-200 hover:bg-slate-700'
-                              : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
+                              ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
+                              : 'border-neutral-300 text-neutral-600 hover:bg-neutral-100'
                           }`}
                         >
                           {isExpanded ? labels.hide : labels.view}
@@ -181,14 +184,14 @@ export function HospitalTable({
                       </td>
                     </tr>
 
-                    <tr className={`border-t ${isDark ? 'border-slate-800 bg-slate-900' : 'border-slate-100 bg-slate-50'}`}>
-                      <td colSpan={3} className={`px-4 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    <tr className={`border-t ${isDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-100 bg-neutral-50'}`}>
+                      <td colSpan={3} className={`px-4 ${isDark ? 'text-neutral-300' : 'text-neutral-700'}`}>
                         <div
                           id={detailsId}
                           role="region"
                           aria-label={`${hospital.hospitalName} details`}
                           aria-hidden={!isExpanded}
-                          className={`grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-300 motion-reduce:transition-none ${
+                          className={`grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-200 motion-reduce:transition-none ${
                             isExpanded ? 'my-3 grid-rows-[1fr] opacity-100' : 'my-0 grid-rows-[0fr] opacity-0'
                           }`}
                         >

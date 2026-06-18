@@ -4,7 +4,7 @@ import type { LanguageMode } from '../constants/labels'
 import { HospitalDetails, type HospitalDetailsLabels } from './HospitalDetails'
 import { deriveWaitStatusFromText } from '../utils/parseWaitTime'
 import { formatDistanceKm } from '../utils/distance'
-import { getWaitingTimeTone } from '../utils/waitTone'
+import { getWaitingTimeTone, getWaitingTimeBorder, getWaitingTimeDot } from '../utils/waitTone'
 import { Icon } from './Icon'
 
 type HospitalCardLabels = HospitalDetailsLabels
@@ -34,7 +34,6 @@ export function HospitalCard({
 
   useEffect(() => {
     if (isExpanded && cardRef.current) {
-      // Slight delay to allow CSS transitions to calculate layout
       setTimeout(() => {
         cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }, 150)
@@ -55,48 +54,49 @@ export function HospitalCard({
       }}
       aria-expanded={isExpanded}
       aria-controls={detailsId}
-      className={`enter-fade-up group cursor-pointer rounded-2xl border p-4 shadow-sm backdrop-blur-xl transition-all duration-300 motion-reduce:transition-none hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${isDark ? 'bg-slate-900/60 focus-visible:ring-indigo-500' : 'bg-white/70 focus-visible:ring-indigo-400'
-        } ${isExpanded
+      className={`enter-fade-up group cursor-pointer border-l-[3px] border-r border-y border-t-transparent border-b-transparent p-4 transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${getWaitingTimeBorder(selectedTriage.waitStatus, isDark)} ${
+        isExpanded
           ? isDark
-            ? 'border-indigo-500/50 ring-2 ring-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
-            : 'border-indigo-400/50 ring-2 ring-indigo-400/20 shadow-[0_0_15px_rgba(129,140,248,0.2)]'
+            ? 'bg-neutral-900'
+            : 'bg-neutral-50'
           : isDark
-            ? 'border-slate-700/80 hover:border-slate-600'
-            : 'border-slate-200/80 hover:border-slate-300'
-        }`}
+            ? 'bg-transparent hover:bg-neutral-900/50'
+            : 'bg-transparent hover:bg-neutral-50'
+      }`}
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="flex-1">
-          <h3 className={`text-lg font-bold tracking-tight ${isDark ? 'text-slate-50' : 'text-slate-900'}`}>
+        <div className="flex-1 min-w-0">
+          <h3 className={`text-sm font-semibold tracking-tight truncate ${isDark ? 'text-neutral-100' : 'text-neutral-900'}`}>
             {hospital.hospitalName}
           </h3>
           {typeof hospital.distanceKm === 'number' && (
-            <p className={`mt-1 inline-flex items-center gap-1 text-xs font-medium ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
-              <Icon name="map-pin" className="h-3.5 w-3.5" strokeWidth={1.8} />
+            <p className={`mt-1 inline-flex items-center gap-1 text-[11px] font-medium ${isDark ? 'text-neutral-600' : 'text-neutral-400'}`}>
+              <Icon name="map-pin" className="h-3 w-3" strokeWidth={2} />
               {formatDistanceKm(hospital.distanceKm, languageMode)}
             </p>
           )}
-          <p className={`mt-1.5 text-base font-semibold tracking-tight md:text-lg ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
-            <span className={`mr-2 inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold uppercase leading-none ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'}`}>
+          <p className={`mt-2 flex items-center gap-2 text-base font-bold font-mono tracking-tight ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
+            <span className={`inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${getWaitingTimeDot(selectedTriage.waitStatus)}`} />
               {selectedTriage.waitStatus === 'short' ? labels.shortWait : selectedTriage.waitStatus === 'moderate' ? labels.moderateWait : selectedTriage.waitStatus === 'long' ? labels.longWait : labels.unknownWait}
             </span>
-            {selectedTriage.waitingTimeText}
+            <span>{selectedTriage.waitingTimeText}</span>
             {selectedTriage.upperBoundText && (
               <>
-                <span className={`ml-1.5 text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>(</span>
+                <span className={`text-sm font-normal ${isDark ? 'text-neutral-600' : 'text-neutral-400'}`}>(</span>
                 <span
-                  className={`text-sm font-medium md:text-base ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
+                  className={`text-sm font-semibold font-mono ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
                 >
                   {selectedTriage.upperBoundText}
                 </span>
-                <span className={`text-sm font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>)</span>
+                <span className={`text-sm font-normal ${isDark ? 'text-neutral-600' : 'text-neutral-400'}`}>)</span>
               </>
             )}
           </p>
         </div>
         <Icon
           name="chevron-down"
-          className={`h-5 w-5 flex-shrink-0 transition-transform duration-200 ${isDark ? 'text-slate-400' : 'text-slate-500'
+          className={`h-4 w-4 flex-shrink-0 transition-transform duration-150 ${isDark ? 'text-neutral-600' : 'text-neutral-400'
             } ${isExpanded ? 'rotate-180' : ''}`}
         />
       </div>
@@ -106,12 +106,12 @@ export function HospitalCard({
         role="region"
         aria-label={`${hospital.hospitalName} details`}
         aria-hidden={!isExpanded}
-        className={`grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-300 motion-reduce:transition-none ${isExpanded ? 'mt-2.5 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
+        className={`grid overflow-hidden transition-[grid-template-rows,opacity,margin] duration-200 motion-reduce:transition-none ${isExpanded ? 'mt-3 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
           }`}
       >
         <div className="min-h-0 overflow-hidden">
           <div
-            className={`space-y-2.5 rounded-xl border p-3 text-sm ${isDark ? 'border-slate-700 bg-slate-900' : 'border-slate-200 bg-slate-50/90'
+            className={`space-y-3 border-t pt-3 text-sm ${isDark ? 'border-neutral-800' : 'border-neutral-200'
               }`}
           >
             <HospitalDetails

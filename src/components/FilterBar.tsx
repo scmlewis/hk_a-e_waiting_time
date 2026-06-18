@@ -35,18 +35,16 @@ export function FilterBar({
 }: FilterBarProps) {
   return (
     <section
-      className={`space-y-4 rounded-2xl border p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur md:space-y-4 md:p-5 md:backdrop-blur-none ${
-        isDark ? 'border-sky-900/50 bg-sky-950/25 md:bg-slate-950' : 'border-sky-100/80 bg-sky-50/70 md:bg-white'
+      className={`space-y-4 border p-4 md:space-y-4 md:p-5 ${
+        isDark ? 'border-neutral-800' : 'border-neutral-200'
       }`}
     >
-      <div className="space-y-1.5">
-        <p className={`text-xs font-semibold uppercase tracking-wide md:text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+      <div className="space-y-2">
+        <p className={`text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`}>
           {labels.defaultTriageView}
         </p>
         <div
-          className={`grid w-full grid-cols-4 gap-2 rounded-xl border p-1.5 md:inline-flex md:w-auto md:flex-wrap md:gap-1.5 md:p-1 ${
-            isDark ? 'border-sky-900/50 bg-slate-900/80' : 'border-sky-100 bg-white/90'
-          }`}
+          className={`flex w-full gap-1 border-b ${isDark ? 'border-neutral-800' : 'border-neutral-200'}`}
           role="radiogroup"
           aria-label={labels.triageCategory}
         >
@@ -61,17 +59,20 @@ export function FilterBar({
                 role="radio"
                 aria-checked={selected}
                 onClick={() => onTriageCategoryChange(category)}
-                className={`min-h-11 w-full cursor-pointer rounded-lg px-2 py-2 text-sm font-semibold tracking-tight transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 sm:px-3 sm:text-base md:min-h-0 md:w-auto md:px-3 md:py-1.5 md:text-sm ${
+                className={`relative min-h-11 flex-1 cursor-pointer px-2 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 sm:px-3 sm:text-sm md:min-h-0 md:flex-none md:px-4 md:py-2 ${
                   selected
                     ? isDark
-                      ? 'bg-slate-100 text-slate-900 shadow-sm'
-                      : 'bg-slate-900 text-white shadow-sm'
+                      ? 'text-neutral-100'
+                      : 'text-neutral-900'
                     : isDark
-                      ? 'bg-transparent text-slate-300 hover:bg-slate-800'
-                      : 'bg-transparent text-slate-700 hover:bg-white'
+                      ? 'text-neutral-600 hover:text-neutral-400'
+                      : 'text-neutral-400 hover:text-neutral-600'
                 }`}
               >
                 {label}
+                {selected && (
+                  <span className={`absolute bottom-0 left-0 right-0 h-0.5 -mb-px ${isDark ? 'bg-neutral-100' : 'bg-neutral-900'}`} />
+                )}
               </button>
             )
           })}
@@ -79,8 +80,8 @@ export function FilterBar({
       </div>
 
       <div className="grid gap-3 md:grid-cols-2 md:gap-3">
-        <div className="space-y-1">
-          <label className={`block text-sm font-medium md:text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`} htmlFor="hospital-search">
+        <div className="space-y-1.5">
+          <label className={`block text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`} htmlFor="hospital-search">
             {labels.searchHospital}
           </label>
           <div className="relative">
@@ -90,30 +91,30 @@ export function FilterBar({
               value={searchValue}
               onChange={(event) => onSearchChange(event.target.value)}
               placeholder={labels.searchPlaceholder}
-              className={`w-full rounded-lg border px-3 py-3 pr-10 text-base transition-colors duration-200 motion-reduce:transition-none focus-visible:border-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/30 md:py-2 md:text-sm ${
+              className={`w-full border-b bg-transparent px-1 py-2.5 pr-10 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:border-neutral-500 focus-visible:outline-none md:py-2 ${
                 isDark
-                  ? 'border-slate-600 bg-slate-900 text-slate-100 placeholder:text-slate-400'
-                  : 'border-slate-300 bg-white text-slate-800 placeholder:text-slate-400'
+                  ? 'border-neutral-700 text-neutral-100 placeholder:text-neutral-600'
+                  : 'border-neutral-300 text-neutral-900 placeholder:text-neutral-400'
               }`}
             />
             {searchValue.length > 0 && (
                 <button
                   type="button"
                   onClick={() => onSearchChange('')}
-                  className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 ${
-                    isDark ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-200' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
+                  className={`absolute right-1 top-1/2 -translate-y-1/2 p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 ${
+                    isDark ? 'text-neutral-500 hover:text-neutral-300' : 'text-neutral-400 hover:text-neutral-600'
                   }`}
                   aria-label="Clear search"
                 >
-                  <Icon name="close" className="h-4 w-4" />
+                  <Icon name="close" className="h-3.5 w-3.5" />
                 </button>
             )}
           </div>
         </div>
 
         {clusterOptions.length > 0 && (
-          <div className="space-y-1">
-            <label className={`block text-sm font-medium md:text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`} htmlFor="cluster-filter">
+          <div className="space-y-1.5">
+            <label className={`block text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`} htmlFor="cluster-filter">
               {labels.cluster}
             </label>
             <select
@@ -121,8 +122,8 @@ export function FilterBar({
               value={selectedCluster}
               onChange={(event) => onClusterChange(event.target.value)}
               style={{ colorScheme: isDark ? 'dark' : 'light' }}
-              className={`w-full cursor-pointer rounded-lg border px-3 py-3 text-base transition-colors duration-200 motion-reduce:transition-none focus-visible:border-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/30 md:py-2 md:text-sm ${
-                isDark ? 'border-slate-600 bg-slate-900 text-slate-100' : 'border-slate-300 bg-white text-slate-800'
+              className={`w-full cursor-pointer border-b bg-transparent px-1 py-2.5 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:border-neutral-500 focus-visible:outline-none md:py-2 ${
+                isDark ? 'border-neutral-700 text-neutral-100' : 'border-neutral-300 text-neutral-900'
               }`}
             >
               <option value="">{labels.allClusters}</option>
