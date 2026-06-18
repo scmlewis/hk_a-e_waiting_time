@@ -6,6 +6,7 @@ import type { SortMode } from '../utils/sort'
 import { formatDistanceKm } from '../utils/distance'
 import { deriveWaitStatusFromText } from '../utils/parseWaitTime'
 import { getWaitingTimeTone } from '../utils/waitTone'
+import { Icon } from './Icon'
 
 interface HospitalTableLabels extends HospitalDetailsLabels {
   sortByWaitingTime: string
@@ -138,15 +139,15 @@ export function HospitalTable({
                         <div>{hospital.hospitalName}</div>
                         {typeof hospital.distanceKm === 'number' && (
                           <div className={`mt-0.5 inline-flex items-center gap-1 text-xs font-normal ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
-                            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                              <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11Z" />
-                              <circle cx="12" cy="10" r="2.5" />
-                            </svg>
+                            <Icon name="map-pin" className="h-3.5 w-3.5" strokeWidth={1.8} />
                             {formatDistanceKm(hospital.distanceKm, languageMode)}
                           </div>
                         )}
                       </td>
                       <td className={`px-4 py-4 text-base font-semibold tracking-tight ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
+                        <span className={`mr-2 inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold uppercase leading-none ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'}`}>
+                          {selectedTriage.waitStatus === 'short' ? labels.shortWait : selectedTriage.waitStatus === 'moderate' ? labels.moderateWait : selectedTriage.waitStatus === 'long' ? labels.longWait : labels.unknownWait}
+                        </span>
                         {selectedTriage.waitingTimeText}
                         {selectedTriage.upperBoundText && (
                           <>

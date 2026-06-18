@@ -227,6 +227,10 @@ const EN_LABELS: AppLabels = {
     contact: 'Contact',
     callHospital: 'Call Hospital',
     viewOnMaps: 'View on Maps',
+    shortWait: 'Short',
+    moderateWait: 'Moderate',
+    longWait: 'Long',
+    unknownWait: 'Unknown',
   },
   hospitalTable: {
     sortByWaitingTime: 'Sort by waiting time',
@@ -244,6 +248,10 @@ const EN_LABELS: AppLabels = {
     contact: 'Contact',
     callHospital: 'Call Hospital',
     viewOnMaps: 'View on Maps',
+    shortWait: 'Short',
+    moderateWait: 'Moderate',
+    longWait: 'Long',
+    unknownWait: 'Unknown',
   },
 }
 
@@ -389,6 +397,10 @@ const ZH_HK_LABELS: AppLabels = {
     contact: '聯絡方式',
     callHospital: '致電醫院',
     viewOnMaps: '在地圖查看',
+    shortWait: '較短',
+    moderateWait: '中等',
+    longWait: '較長',
+    unknownWait: '未有資料',
   },
   hospitalTable: {
     sortByWaitingTime: '按輪候時間排序',
@@ -406,6 +418,10 @@ const ZH_HK_LABELS: AppLabels = {
     contact: '聯絡方式',
     callHospital: '致電醫院',
     viewOnMaps: '在地圖查看',
+    shortWait: '較短',
+    moderateWait: '中等',
+    longWait: '較長',
+    unknownWait: '未有資料',
   },
 }
 

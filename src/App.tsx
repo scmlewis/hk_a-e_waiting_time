@@ -13,6 +13,7 @@ import type { HospitalWaitingTime, TriageCategory } from './types/ae'
 import { haversineDistanceKm } from './utils/distance'
 import { localizeWaitTimeText } from './utils/localizeWaitTime'
 import { sortHospitals, type SortMode } from './utils/sort'
+import { Icon } from './components/Icon'
 
 import { useSettings } from './hooks/useSettings'
 import { useLocation } from './hooks/useLocation'
@@ -34,6 +35,9 @@ function App() {
   const [isLegendExpanded, setIsLegendExpanded] = useState(false)
   const [isMobileFilterSheetOpen, setIsMobileFilterSheetOpen] = useState(false)
   const [isMobileSortSheetOpen, setIsMobileSortSheetOpen] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [refreshPulse, setRefreshPulse] = useState(false)
+  const prevHospitalCountRef = useRef(0)
   
   const hasTrackedPageViewRef = useRef(false)
   const hadSearchValueRef = useRef(false)
@@ -313,10 +317,7 @@ function App() {
             : 'bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]'
             }`}
         >
-          <svg viewBox="0 0 24 24" className="mr-1.5 h-4 w-4 md:h-3.5 md:w-3.5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11Z" />
-            <circle cx="12" cy="10" r="2.5" />
-          </svg>
+          <Icon name="map-pin" className="mr-1.5 h-4 w-4 md:h-3.5 md:w-3.5" strokeWidth={2} />
           {locationStatus === 'locating' ? labels.locating : labels.useMyLocation}
         </button>
       )}
@@ -376,8 +377,25 @@ function App() {
     lastFocusedElementBeforeSheetRef.current?.focus()
   }, [hasMobileOverlayOpen])
 
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const currentCount = hospitals.length
+    if (prevHospitalCountRef.current > 0 && currentCount > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRefreshPulse(true)
+      const timer = setTimeout(() => setRefreshPulse(false), 1500)
+      return () => clearTimeout(timer)
+    }
+    prevHospitalCountRef.current = currentCount
+  }, [hospitals])
+
   return (
-    <div className={`relative isolate overflow-x-clip pb-28 md:pb-10 ${isDark ? 'bg-slate-950 text-slate-100' : 'text-slate-900'}`}>
+    <div className={`relative isolate overflow-x-clip pb-28 md:pb-10 ${isDark ? 'bg-slate-950 text-slate-100' : 'text-slate-900'} ${refreshPulse ? 'refresh-pulse' : ''}`}>
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div
           className={`absolute left-1/2 top-[-220px] h-[420px] w-[420px] -translate-x-1/2 rounded-full blur-3xl ${isDark ? 'bg-cyan-500/15' : 'bg-cyan-200/35'
@@ -415,6 +433,7 @@ function App() {
           isStale={isStale}
           isDark={isDark}
           labels={labels.lastUpdated}
+          languageMode={languageMode}
         />
 
         {shouldShowLocationPrompt && (
@@ -435,10 +454,7 @@ function App() {
                   : 'bg-indigo-600 text-white hover:bg-indigo-700'
                   }`}
               >
-                <svg viewBox="0 0 24 24" className="mr-2 h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-                  <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11Z" />
-                  <circle cx="12" cy="10" r="2.5" />
-                </svg>
+                <Icon name="map-pin" className="mr-2 h-4 w-4" strokeWidth={2.5} />
                 {labels.useMyLocation}
               </button>
             </div>
@@ -799,9 +815,7 @@ function App() {
               }`}
             aria-label={labels.refreshNow}
           >
-            <svg viewBox="0 0 24 24" className={`h-6 w-6 ${isRefreshing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
+            <Icon name="refresh" className={`h-6 w-6 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
           <button
             type="button"
@@ -833,6 +847,19 @@ function App() {
           </button>
         </div>
       </div>}
+
+      {activeView === 'wait-times' && (
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Scroll to top"
+          className={`fixed bottom-24 right-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border shadow-lg backdrop-blur transition-all duration-300 hover:scale-110 active:scale-95 md:hidden ${
+            showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'
+          } ${isDark ? 'border-slate-700 bg-slate-900/90 text-slate-200 hover:bg-slate-800' : 'border-slate-300 bg-white/90 text-slate-700 hover:bg-slate-100'}`}
+        >
+          <Icon name="chevron-down" className="h-5 w-5 -rotate-180" />
+        </button>
+      )}
     </div>
   )
 }

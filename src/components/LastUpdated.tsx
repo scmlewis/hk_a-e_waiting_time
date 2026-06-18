@@ -1,4 +1,4 @@
-import { formatCountdown } from '../utils/time'
+import { formatCountdown, formatRelativeTime } from '../utils/time'
 
 interface LastUpdatedLabels {
   lastSourceUpdate: string
@@ -13,9 +13,11 @@ interface LastUpdatedProps {
   isStale: boolean
   isDark: boolean
   labels: LastUpdatedLabels
+  languageMode?: 'en' | 'zh-HK'
 }
 
-export function LastUpdated({ sourceUpdateTime, countdownSeconds, isStale, isDark, labels }: LastUpdatedProps) {
+export function LastUpdated({ sourceUpdateTime, countdownSeconds, isStale, isDark, labels, languageMode = 'en' }: LastUpdatedProps) {
+  const relativeTime = formatRelativeTime(sourceUpdateTime, languageMode)
   return (
     <section
       className={`space-y-2 rounded-xl border p-4 text-sm shadow-sm md:p-5 ${
@@ -25,7 +27,14 @@ export function LastUpdated({ sourceUpdateTime, countdownSeconds, isStale, isDar
     >
       <p className={`flex flex-wrap items-baseline justify-between gap-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
         <span className="font-medium">{labels.lastSourceUpdate}</span>
-        <span className={`font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{sourceUpdateTime || labels.unknownTimestamp}</span>
+        <span className={`flex items-center gap-2 font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+          {sourceUpdateTime || labels.unknownTimestamp}
+          {relativeTime && (
+            <span className={`text-xs font-normal ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              ({relativeTime})
+            </span>
+          )}
+        </span>
       </p>
       <p className={`flex flex-wrap items-baseline justify-between gap-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
         <span className="font-medium">{labels.nextRefreshIn}</span>

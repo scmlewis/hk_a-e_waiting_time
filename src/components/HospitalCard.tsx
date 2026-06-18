@@ -5,6 +5,7 @@ import { HospitalDetails, type HospitalDetailsLabels } from './HospitalDetails'
 import { deriveWaitStatusFromText } from '../utils/parseWaitTime'
 import { formatDistanceKm } from '../utils/distance'
 import { getWaitingTimeTone } from '../utils/waitTone'
+import { Icon } from './Icon'
 
 type HospitalCardLabels = HospitalDetailsLabels
 
@@ -71,14 +72,14 @@ export function HospitalCard({
           </h3>
           {typeof hospital.distanceKm === 'number' && (
             <p className={`mt-1 inline-flex items-center gap-1 text-xs font-medium ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                <path d="M12 21s7-5.33 7-11a7 7 0 1 0-14 0c0 5.67 7 11 7 11Z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
+              <Icon name="map-pin" className="h-3.5 w-3.5" strokeWidth={1.8} />
               {formatDistanceKm(hospital.distanceKm, languageMode)}
             </p>
           )}
           <p className={`mt-1.5 text-base font-semibold tracking-tight md:text-lg ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
+            <span className={`mr-2 inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold uppercase leading-none ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'}`}>
+              {selectedTriage.waitStatus === 'short' ? labels.shortWait : selectedTriage.waitStatus === 'moderate' ? labels.moderateWait : selectedTriage.waitStatus === 'long' ? labels.longWait : labels.unknownWait}
+            </span>
             {selectedTriage.waitingTimeText}
             {selectedTriage.upperBoundText && (
               <>
@@ -93,16 +94,11 @@ export function HospitalCard({
             )}
           </p>
         </div>
-        <svg
-          viewBox="0 0 24 24"
+        <Icon
+          name="chevron-down"
           className={`h-5 w-5 flex-shrink-0 transition-transform duration-200 ${isDark ? 'text-slate-400' : 'text-slate-500'
             } ${isExpanded ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M19 9l-7 7-7-7" />
-        </svg>
+        />
       </div>
 
       <div
