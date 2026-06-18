@@ -14,6 +14,7 @@ import { haversineDistanceKm } from './utils/distance'
 import { localizeWaitTimeText } from './utils/localizeWaitTime'
 import { sortHospitals, type SortMode } from './utils/sort'
 import { Icon } from './components/Icon'
+import { Snackbar, type SnackbarType } from './components/Snackbar'
 
 import { useSettings } from './hooks/useSettings'
 import { useLocation } from './hooks/useLocation'
@@ -37,6 +38,9 @@ function App() {
   const [isMobileSortSheetOpen, setIsMobileSortSheetOpen] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [refreshPulse, setRefreshPulse] = useState(false)
+  const [snackVisible, setSnackVisible] = useState(false)
+  const [snackMessage, setSnackMessage] = useState('')
+  const [snackType, setSnackType] = useState<SnackbarType>('info')
   const prevHospitalCountRef = useRef(0)
   
   const hasTrackedPageViewRef = useRef(false)
@@ -301,21 +305,13 @@ function App() {
   const shouldShowLocationPrompt = locationStatus === 'idle' && userLocation === null
 
   const locationControls = (userLocation !== null || locationStatus !== 'idle') && (
-    <div
-      className={`mt-2 flex flex-wrap items-center gap-2 border p-3 text-sm md:gap-2 md:p-2.5 md:text-sm ${isDark
-        ? 'border-neutral-700 text-neutral-300'
-        : 'border-neutral-200 text-neutral-600'
-        }`}
-    >
+    <div className="mt-2 flex flex-wrap items-center gap-2 border border-m3-outline-variant p-3 text-sm md:gap-2 md:p-2.5 md:text-sm text-m3-on-surface-variant">
       {userLocation === null && (
         <button
           type="button"
           onClick={() => void handleUseMyLocation()}
           disabled={locationStatus === 'locating'}
-          className={`inline-flex min-h-11 cursor-pointer items-center px-3.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 ${isDark
-            ? 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200'
-            : 'bg-neutral-900 text-neutral-50 hover:bg-neutral-800'
-            }`}
+          className="inline-flex min-h-11 cursor-pointer items-center bg-m3-primary px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-m3-on-primary transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface md:min-h-0 md:px-2.5 md:py-1.5"
         >
           <Icon name="map-pin" className="mr-1.5 h-3.5 w-3.5" strokeWidth={2.5} />
           {locationStatus === 'locating' ? labels.locating : labels.useMyLocation}
@@ -326,17 +322,14 @@ function App() {
         <button
           type="button"
           onClick={handleClearLocation}
-          className={`inline-flex min-h-11 cursor-pointer items-center border px-3.5 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 md:min-h-0 md:px-2.5 md:py-1.5 ${isDark
-            ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
-            : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'
-            }`}
+          className="inline-flex min-h-11 cursor-pointer items-center border border-m3-outline px-3.5 py-2 text-xs font-medium text-m3-on-surface-variant transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface md:min-h-0 md:px-2.5 md:py-1.5"
         >
           {labels.clearLocation}
         </button>
       )}
 
       {locationStatusMessage && <span>{locationStatusMessage}</span>}
-      <span className={isDark ? 'text-neutral-600' : 'text-neutral-400'}>{labels.distanceEstimateHint}</span>
+      <span className="text-m3-on-surface-variant/60">{labels.distanceEstimateHint}</span>
     </div>
   )
 
@@ -394,8 +387,34 @@ function App() {
     prevHospitalCountRef.current = currentCount
   }, [hospitals])
 
+  useEffect(() => {
+    if (!loading && isRefreshing) {
+      setSnackMessage(labels.refreshingData)
+      setSnackType('info')
+      setSnackVisible(true)
+    }
+  }, [loading, isRefreshing, labels.refreshingData])
+
+  useEffect(() => {
+    if (!loading && refreshError && hospitals.length > 0) {
+      setSnackMessage(`${refreshError}. ${labels.refreshErrorSuffix}`)
+      setSnackType('error')
+      setSnackVisible(true)
+    }
+  }, [loading, refreshError, hospitals.length, labels.refreshErrorSuffix])
+
+  useEffect(() => {
+    if (!loading && isSourceStale && hospitals.length > 0) {
+      setSnackMessage(labels.staleTimestamp)
+      setSnackType('warning')
+      setSnackVisible(true)
+    }
+  }, [loading, isSourceStale, hospitals.length, labels.staleTimestamp])
+
+  const handleSnackDismiss = useCallback(() => setSnackVisible(false), [])
+
   return (
-    <div className={`relative overflow-x-clip pb-28 md:pb-10 text-white ${refreshPulse ? 'refresh-pulse' : ''}`}>
+    <div className={`relative overflow-x-clip pb-28 md:pb-10 text-m3-on-surface ${refreshPulse ? 'refresh-pulse' : ''}`}>
       <main className="mx-auto min-h-screen w-full max-w-6xl space-y-4 px-4 py-4 md:space-y-5 md:px-6 md:py-6 lg:px-8">
         <AppHeader
           isDark={isDark}
@@ -425,21 +444,17 @@ function App() {
 
         {shouldShowLocationPrompt && (
           <section
-            className={`border p-3 md:p-4 ${isDark ? 'border-neutral-800' : 'border-neutral-200'
-              }`}
+            className="border border-m3-outline-variant p-3 md:p-4"
             aria-live="polite"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className={`text-sm md:text-base ${isDark ? 'text-neutral-300' : 'text-neutral-700'}`}>
+              <p className="text-sm text-m3-on-surface-variant md:text-base">
                 {labels.sortNearest} &bull; {labels.distanceEstimateHint}
               </p>
               <button
                 type="button"
                 onClick={() => void handleUseMyLocation()}
-                className={`inline-flex min-h-11 items-center px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-                  ? 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200'
-                  : 'bg-neutral-900 text-neutral-50 hover:bg-neutral-800'
-                  }`}
+                className="inline-flex min-h-11 items-center bg-m3-primary px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-m3-on-primary transition-colors duration-200 hover:bg-m3-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
               >
                 <Icon name="map-pin" className="mr-2 h-3.5 w-3.5" strokeWidth={2.5} />
                 {labels.useMyLocation}
@@ -448,41 +463,7 @@ function App() {
           </section>
         )}
 
-
-        {!loading && isRefreshing && (
-          <p
-            className={`border p-3 text-xs font-medium uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-300' : 'border-neutral-200 text-neutral-500'
-              }`}
-            role="status"
-            aria-live="polite"
-          >
-            {labels.refreshingData}
-          </p>
-        )}
-
-        {!loading && refreshError && hospitals.length > 0 && (
-          <p
-            className={`border border-red-800/50 p-3 text-sm ${isDark ? 'text-red-300' : 'text-red-700'
-              }`}
-            role="status"
-            aria-live="polite"
-          >
-            {refreshError}. {labels.refreshErrorSuffix}
-          </p>
-        )}
-
-        {!loading && isSourceStale && hospitals.length > 0 && (
-          <p
-            className={`border border-amber-700/50 p-3 text-sm ${isDark ? 'text-amber-300' : 'text-amber-700'
-              }`}
-            role="status"
-            aria-live="polite"
-          >
-            {labels.staleTimestamp}
-          </p>
-        )}
-
-        <div className="enter-fade-up md:sticky md:top-0 md:z-20 md:bg-neutral-950 md:backdrop-blur-md">
+        <div className="enter-fade-up md:sticky md:top-0 md:z-20 md:bg-m3-surface-container md:backdrop-blur-md">
           <div className="hidden md:block">
             <FilterBar
               isDark={isDark}
@@ -501,22 +482,13 @@ function App() {
 
         <section className="space-y-3 md:hidden">
           <div className="flex flex-wrap items-center gap-2">
-            <span
-              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-600 text-neutral-300' : 'border-neutral-300 text-neutral-500'
-                }`}
-            >
+            <span className="inline-flex items-center border border-m3-outline bg-m3-surface-container-high px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
               {labels.triageCategoryLabels[selectedTriageCategory]}
             </span>
-            <span
-              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-600 text-neutral-300' : 'border-neutral-300 text-neutral-500'
-                }`}
-            >
+            <span className="inline-flex items-center border border-m3-outline bg-m3-surface-container-high px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
               {activeClusterLabel}
             </span>
-            <span
-              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-600 text-neutral-300' : 'border-neutral-300 text-neutral-500'
-                }`}
-            >
+            <span className="inline-flex items-center border border-m3-outline bg-m3-surface-container-high px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
               {mobileSortLabel}
             </span>
           </div>
@@ -525,42 +497,32 @@ function App() {
             Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={index}
-                className={`animate-pulse border p-4 motion-reduce:animate-none ${isDark ? 'border-neutral-800' : 'border-neutral-200'
-                  }`}
+                className="animate-pulse border border-m3-outline-variant p-4 motion-reduce:animate-none"
               >
-                <div className={`h-3 w-2/3 ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
-                <div className={`mt-3 h-5 w-1/3 ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
-                <div className={`mt-2 h-2.5 w-1/4 ${isDark ? 'bg-neutral-800' : 'bg-neutral-100'}`} />
+                <div className="h-3 w-2/3 bg-m3-surface-container-high" />
+                <div className="mt-3 h-5 w-1/3 bg-m3-surface-container-high" />
+                <div className="mt-2 h-2.5 w-1/4 bg-m3-surface-container" />
               </div>
             ))}
 
           {!loading && error && (
-            <p
-              className={`border border-red-800/50 p-4 text-sm ${isDark ? 'text-red-300' : 'text-red-700'
-                }`}
-              role="alert"
-            >
+            <p className="border border-m3-error/50 p-4 text-sm text-m3-error" role="alert">
               {error}
             </p>
           )}
 
           {!loading && !error && hospitals.length === 0 && (
-            <p className={`p-4 text-sm ${isDark ? 'text-neutral-300' : 'text-neutral-500'}`}>
-              {labels.noDataFromSource}
-            </p>
+            <p className="p-4 text-sm text-m3-on-surface-variant">{labels.noDataFromSource}</p>
           )}
 
           {!loading && !error && hospitals.length > 0 && groupedHospitals.length === 0 && (
-            <div className={`space-y-3 p-4 text-sm ${isDark ? 'text-neutral-300' : 'text-neutral-500'}`}>
+            <div className="space-y-3 p-4 text-sm text-m3-on-surface-variant">
               <p>{hasActiveFilters ? labels.noMatch : labels.noHospitals}</p>
               {hasActiveFilters && (
                 <button
                   type="button"
                   onClick={handleClearFilters}
-                  className={`inline-flex cursor-pointer items-center border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-                    ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
-                    : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'
-                    }`}
+                  className="inline-flex cursor-pointer items-center border border-m3-outline px-3 py-1.5 text-xs font-medium text-m3-on-surface-variant transition-colors duration-200 hover:bg-m3-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
                 >
                   {labels.clearFilters}
                 </button>
@@ -571,12 +533,7 @@ function App() {
           {!loading &&
             groupedHospitals.map((group) => (
               <section key={group.cluster} className="space-y-2">
-                <h2
-                  className={`border-l-4 border-y border-r px-3 py-2 text-[11px] font-bold uppercase tracking-wider ${isDark
-                    ? 'border-l-neutral-400 border-y-neutral-800 border-r-neutral-800 text-neutral-300'
-                    : 'border-l-neutral-900 border-y-neutral-200 border-r-neutral-200 text-neutral-600'
-                    }`}
-                >
+                <h2 className="border-l-4 border-y border-r border-l-m3-primary border-y-m3-outline-variant border-r-m3-outline-variant bg-m3-surface-container px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-m3-on-surface-variant">
                   {group.displayCluster} ({group.hospitals.length})
                 </h2>
                 <div className="space-y-2">
@@ -603,13 +560,12 @@ function App() {
 
         {activeView === 'wait-times' && loading && (
           <section
-            className={`hidden animate-pulse space-y-2 border p-3 motion-reduce:animate-none md:block ${isDark ? 'border-neutral-800' : 'border-neutral-200'
-              }`}
+            className="hidden animate-pulse space-y-2 border border-m3-outline-variant p-3 motion-reduce:animate-none md:block"
             aria-hidden
           >
-            <div className={`h-8 w-72 ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
+            <div className="h-8 w-72 bg-m3-surface-container-high" />
             {Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className={`h-10 ${isDark ? 'bg-neutral-800' : 'bg-neutral-100'}`} />
+              <div key={index} className="h-10 bg-m3-surface-container" />
             ))}
           </section>
         )}
@@ -631,19 +587,13 @@ function App() {
         )}
 
         {activeView === 'wait-times' && !loading && !error && hospitals.length > 0 && groupedHospitals.length === 0 && (
-          <div
-            className={`hidden space-y-3 border p-4 text-sm md:block ${isDark ? 'border-neutral-700 text-neutral-300' : 'border-neutral-200 text-neutral-500'
-              }`}
-          >
+          <div className="hidden space-y-3 border border-m3-outline-variant p-4 text-sm text-m3-on-surface-variant md:block">
             <p>{hasActiveFilters ? labels.noMatch : labels.noHospitals}</p>
             {hasActiveFilters && (
               <button
                 type="button"
                 onClick={handleClearFilters}
-                className={`inline-flex cursor-pointer items-center border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-                  ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
-                  : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'
-                  }`}
+                className="inline-flex cursor-pointer items-center border border-m3-outline px-3 py-1.5 text-xs font-medium text-m3-on-surface-variant transition-colors duration-200 hover:bg-m3-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
               >
                 {labels.clearFilters}
               </button>
@@ -652,11 +602,7 @@ function App() {
         )}
 
         {activeView === 'wait-times' && !loading && error && hospitals.length === 0 && (
-          <p
-            className={`hidden border border-red-800/50 p-4 text-sm md:block ${isDark ? 'text-red-300' : 'text-red-700'
-              }`}
-            role="alert"
-          >
+          <p className="hidden border border-m3-error/50 p-4 text-sm text-m3-error md:block" role="alert">
             {error}
           </p>
         )}
@@ -674,8 +620,8 @@ function App() {
       )}
 
       {activeView === 'wait-times' && <div
-        className={`fixed inset-x-0 bottom-0 z-30 border-x border-t p-4 transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileFilterSheetOpen ? 'translate-y-0' : 'translate-y-full'
-          } ${isDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-200 bg-white'}`}
+        className={`fixed inset-x-0 bottom-0 z-30 border-x border-t border-m3-outline-variant bg-m3-surface-container-low p-4 transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileFilterSheetOpen ? 'translate-y-0' : 'translate-y-full'
+          }`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={filterSheetTitleId}
@@ -687,13 +633,12 @@ function App() {
         }}
       >
         <div className="mb-3 flex items-center justify-between">
-          <p id={filterSheetTitleId} className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-neutral-300' : 'text-neutral-600'}`}>{labels.showFiltersSettings}</p>
+          <p id={filterSheetTitleId} className="text-xs font-medium tracking-wide text-m3-on-surface-variant">{labels.showFiltersSettings}</p>
           <button
             ref={filterSheetCloseButtonRef}
             type="button"
             onClick={() => setIsMobileFilterSheetOpen(false)}
-            className={`border px-3 py-1.5 text-xs font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-300' : 'border-neutral-300 text-neutral-700'
-              }`}
+            className="border border-m3-outline px-3 py-1.5 text-xs font-medium text-m3-on-surface-variant transition-colors hover:bg-m3-surface-container-high"
           >
             {labels.hospitalTable.hide}
           </button>
@@ -715,8 +660,8 @@ function App() {
       </div>}
 
       {activeView === 'wait-times' && <div
-        className={`fixed inset-x-0 bottom-0 z-30 border-x border-t p-4 transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileSortSheetOpen ? 'translate-y-0' : 'translate-y-full'
-          } ${isDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-200 bg-white'}`}
+        className={`fixed inset-x-0 bottom-0 z-30 border-x border-t border-m3-outline-variant bg-m3-surface-container-low p-4 transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileSortSheetOpen ? 'translate-y-0' : 'translate-y-full'
+          }`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={sortSheetTitleId}
@@ -728,13 +673,12 @@ function App() {
         }}
       >
         <div className="mb-3 flex items-center justify-between">
-          <p id={sortSheetTitleId} className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-neutral-300' : 'text-neutral-600'}`}>{labels.quickSort}</p>
+          <p id={sortSheetTitleId} className="text-xs font-medium tracking-wide text-m3-on-surface-variant">{labels.quickSort}</p>
           <button
             ref={sortSheetCloseButtonRef}
             type="button"
             onClick={() => setIsMobileSortSheetOpen(false)}
-            className={`border px-3 py-1.5 text-xs font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-300' : 'border-neutral-300 text-neutral-700'
-              }`}
+            className="border border-m3-outline px-3 py-1.5 text-xs font-medium text-m3-on-surface-variant transition-colors hover:bg-m3-surface-container-high"
           >
             {labels.hospitalTable.hide}
           </button>
@@ -743,13 +687,9 @@ function App() {
           <button
             type="button"
             onClick={() => applyMobileSortMode('waiting')}
-            className={`w-full border px-4 py-3 text-left text-sm font-medium ${sortMode === 'waiting'
-              ? isDark
-                ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
-                : 'border-neutral-900 bg-neutral-900 text-white'
-              : isDark
-                ? 'border-neutral-700 text-neutral-200'
-                : 'border-neutral-200 text-neutral-700'
+            className={`w-full border px-4 py-3 text-left text-sm font-medium transition-colors ${sortMode === 'waiting'
+              ? 'border-m3-primary bg-m3-primary-container text-m3-on-primary-container'
+              : 'border-m3-outline-variant text-m3-on-surface hover:bg-m3-surface-container-high'
               }`}
           >
             {labels.sortWaiting}
@@ -757,13 +697,9 @@ function App() {
           <button
             type="button"
             onClick={() => applyMobileSortMode('name')}
-            className={`w-full border px-4 py-3 text-left text-sm font-medium ${sortMode === 'name'
-              ? isDark
-                ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
-                : 'border-neutral-900 bg-neutral-900 text-white'
-              : isDark
-                ? 'border-neutral-700 text-neutral-200'
-                : 'border-neutral-200 text-neutral-700'
+            className={`w-full border px-4 py-3 text-left text-sm font-medium transition-colors ${sortMode === 'name'
+              ? 'border-m3-primary bg-m3-primary-container text-m3-on-primary-container'
+              : 'border-m3-outline-variant text-m3-on-surface hover:bg-m3-surface-container-high'
               }`}
           >
             {labels.sortAZ}
@@ -772,13 +708,9 @@ function App() {
             type="button"
             onClick={() => applyMobileSortMode('nearest')}
             disabled={!isNearestSortAvailable}
-            className={`w-full border px-4 py-3 text-left text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40 ${sortMode === 'nearest'
-              ? isDark
-                ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
-                : 'border-neutral-900 bg-neutral-900 text-white'
-              : isDark
-                ? 'border-neutral-700 text-neutral-200'
-                : 'border-neutral-200 text-neutral-700'
+            className={`w-full border px-4 py-3 text-left text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${sortMode === 'nearest'
+              ? 'border-m3-primary bg-m3-primary-container text-m3-on-primary-container'
+              : 'border-m3-outline-variant text-m3-on-surface hover:bg-m3-surface-container-high'
               }`}
           >
             {labels.sortNearest}
@@ -787,8 +719,7 @@ function App() {
       </div>}
 
       {activeView === 'wait-times' && <div
-        className={`fixed inset-x-0 bottom-0 z-30 border-t px-4 pt-3 pb-8 transition-transform duration-300 motion-reduce:transition-none md:hidden ${hasMobileOverlayOpen ? 'translate-y-full' : 'translate-y-0'
-          } ${isDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-200 bg-white'
+        className={`fixed inset-x-0 bottom-0 z-30 border-t border-m3-outline-variant bg-m3-surface-container-low px-4 pt-3 pb-8 transition-transform duration-300 motion-reduce:transition-none md:hidden ${hasMobileOverlayOpen ? 'translate-y-full' : 'translate-y-0'
           }`}
       >
         <div className="mx-auto flex w-full max-w-6xl items-center gap-2">
@@ -796,10 +727,7 @@ function App() {
             type="button"
             onClick={() => void loadData()}
             disabled={loading || isRefreshing}
-            className={`min-h-12 min-w-[3.5rem] flex items-center justify-center border transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-              ? 'border-neutral-700 text-neutral-200'
-              : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
-              }`}
+            className="min-h-12 min-w-[3.5rem] flex items-center justify-center border border-m3-outline text-m3-on-surface transition-colors duration-200 hover:bg-m3-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
             aria-label={labels.refreshNow}
           >
             <Icon name="refresh" className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
@@ -810,13 +738,10 @@ function App() {
               setIsMobileFilterSheetOpen(false)
               setIsMobileSortSheetOpen(true)
             }}
-            className={`flex-1 min-h-12 cursor-pointer border px-3 py-1.5 text-left text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-              ? 'border-neutral-700 text-neutral-200'
-              : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
-              }`}
+            className="flex-1 min-h-12 cursor-pointer border border-m3-outline px-3 py-1.5 text-left transition-colors duration-200 hover:bg-m3-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
           >
-            <div className="text-[9px] opacity-50 mb-0.5">{labels.quickSort}</div>
-            <div className="truncate text-xs font-semibold normal-case tracking-normal">{mobileSortLabel}</div>
+            <div className="text-[9px] font-medium uppercase tracking-widest text-m3-on-surface-variant">{labels.quickSort}</div>
+            <div className="truncate text-xs font-medium text-m3-on-surface">{mobileSortLabel}</div>
           </button>
           <button
             type="button"
@@ -824,13 +749,10 @@ function App() {
               setIsMobileSortSheetOpen(false)
               setIsMobileFilterSheetOpen((value) => !value)
             }}
-            className={`flex-1 min-h-12 cursor-pointer border px-3 py-1.5 text-left text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-              ? 'border-neutral-700 text-neutral-200'
-              : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
-              }`}
+            className="flex-1 min-h-12 cursor-pointer border border-m3-outline px-3 py-1.5 text-left transition-colors duration-200 hover:bg-m3-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
           >
-            <div className="text-[9px] opacity-50 mb-0.5">{labels.quickFilter}</div>
-            <div className="truncate text-xs font-semibold normal-case tracking-normal">{activeClusterLabel}</div>
+            <div className="text-[9px] font-medium uppercase tracking-widest text-m3-on-surface-variant">{labels.quickFilter}</div>
+            <div className="truncate text-xs font-medium text-m3-on-surface">{activeClusterLabel}</div>
           </button>
         </div>
       </div>}
@@ -840,13 +762,20 @@ function App() {
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Scroll to top"
-          className={`fixed bottom-24 right-4 z-40 flex h-10 w-10 items-center justify-center border transition-all duration-200 md:hidden ${
+          className={`fixed bottom-24 right-4 z-40 flex h-10 w-10 items-center justify-center bg-m3-surface-container-high border border-m3-outline-variant text-m3-on-surface-variant transition-all duration-200 hover:bg-m3-surface-container-highest md:hidden ${
             showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'
-          } ${isDark ? 'border-neutral-700 bg-neutral-950 text-neutral-400 hover:bg-neutral-800' : 'border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-100'}`}
+          }`}
         >
           <Icon name="chevron-down" className="h-4 w-4 -rotate-180" />
         </button>
       )}
+
+      <Snackbar
+        message={snackMessage}
+        type={snackType}
+        visible={snackVisible}
+        onDismiss={handleSnackDismiss}
+      />
     </div>
   )
 }

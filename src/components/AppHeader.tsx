@@ -33,15 +33,11 @@ export function AppHeader({
   setIsLegendExpanded,
 }: AppHeaderProps) {
   return (
-    <header
-      className={`enter-fade-up border-b pb-5 transition-colors duration-200 ${
-        isDark ? 'border-neutral-700' : 'border-neutral-200'
-      }`}
-    >
+    <header className="enter-fade-up border-b border-m3-outline-variant pb-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className={`flex items-center text-2xl font-black tracking-tight md:text-3xl ${isDark ? 'text-white' : 'text-neutral-900'}`}>
-            <span className="mr-3 inline-block h-2.5 w-2.5 rounded-full bg-red-500" />
+          <h1 className="flex items-center text-2xl font-black tracking-tight text-m3-on-surface md:text-3xl">
+            <span className="mr-3 inline-block h-2.5 w-2.5 rounded-full bg-m3-primary" />
             {labels.title}
           </h1>
         </div>
@@ -49,11 +45,7 @@ export function AppHeader({
           <button
             type="button"
             onClick={toggleLanguageMode}
-            className={`inline-flex min-h-10 items-center gap-1 border px-2.5 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${
-              isDark
-                ? 'border-neutral-600 text-neutral-200 hover:bg-neutral-800'
-                : 'border-neutral-300 text-neutral-600 hover:bg-neutral-100'
-            }`}
+            className="inline-flex min-h-10 items-center gap-1 border border-m3-outline px-2.5 py-1.5 text-xs font-medium tracking-wide text-m3-on-surface-variant transition-colors duration-200 hover:bg-m3-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
             aria-label={`${labels.languageTraditionalChinese} / ${labels.languageEnglish}`}
             aria-pressed={languageMode === 'zh-HK'}
           >
@@ -65,11 +57,7 @@ export function AppHeader({
             type="button"
             onClick={() => void loadData()}
             disabled={loading || isRefreshing}
-            className={`hidden cursor-pointer items-center border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-40 md:inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${
-              isDark
-                ? 'border-neutral-100 bg-neutral-100 text-neutral-900 hover:bg-neutral-200'
-                : 'border-neutral-900 bg-neutral-900 text-neutral-50 hover:bg-neutral-800'
-            }`}
+            className="hidden cursor-pointer items-center bg-m3-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-m3-on-primary transition-colors duration-200 hover:bg-m3-primary/90 disabled:cursor-not-allowed disabled:opacity-40 md:inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
           >
             {isRefreshing ? (
               <Icon name="spinner" className="animate-spin -ml-1 mr-1.5 h-3.5 w-3.5" />
@@ -79,25 +67,21 @@ export function AppHeader({
         </div>
       </div>
 
-      <div
-        className={`mt-4 flex w-full gap-0 border-b ${isDark ? 'border-neutral-700' : 'border-neutral-200'}`}
-        role="tablist"
-        aria-label="Main views"
-      >
+      <div className="mt-4 flex w-full gap-0 border-b border-m3-outline-variant" role="tablist" aria-label="Main views">
         <button
           type="button"
           role="tab"
           aria-selected={activeView === 'wait-times'}
           onClick={() => handleViewChange('wait-times')}
-          className={`relative px-4 py-2.5 text-sm font-semibold transition-colors duration-150 ${
+          className={`relative px-4 py-2.5 text-sm font-medium transition-colors duration-200 ${
             activeView === 'wait-times'
-              ? isDark ? 'text-white' : 'text-neutral-900'
-              : isDark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-400 hover:text-neutral-700'
+              ? 'text-m3-primary'
+              : 'text-m3-on-surface-variant hover:text-m3-on-surface'
           }`}
         >
           {labels.viewWaitTimes}
           {activeView === 'wait-times' && (
-            <span className={`absolute bottom-0 left-0 right-0 h-0.5 -mb-px ${isDark ? 'bg-white' : 'bg-neutral-900'}`} />
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 -mb-px bg-m3-primary" />
           )}
         </button>
         <button
@@ -105,15 +89,15 @@ export function AppHeader({
           role="tab"
           aria-selected={activeView === 'overview'}
           onClick={() => handleViewChange('overview')}
-          className={`relative px-4 py-2.5 text-sm font-semibold transition-colors duration-150 ${
+          className={`relative px-4 py-2.5 text-sm font-medium transition-colors duration-200 ${
             activeView === 'overview'
-              ? isDark ? 'text-white' : 'text-neutral-900'
-              : isDark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-400 hover:text-neutral-700'
+              ? 'text-m3-primary'
+              : 'text-m3-on-surface-variant hover:text-m3-on-surface'
           }`}
         >
           {labels.viewOverview}
           {activeView === 'overview' && (
-            <span className={`absolute bottom-0 left-0 right-0 h-0.5 -mb-px ${isDark ? 'bg-white' : 'bg-neutral-900'}`} />
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 -mb-px bg-m3-primary" />
           )}
         </button>
       </div>
@@ -123,9 +107,7 @@ export function AppHeader({
           <button
             type="button"
             onClick={() => setIsLegendExpanded(!isLegendExpanded)}
-            className={`flex w-full items-center justify-between gap-2 border px-3 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 ${
-              isDark ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-900' : 'border-neutral-200 text-neutral-500 hover:bg-neutral-50'
-            }`}
+            className="flex w-full items-center justify-between gap-2 border border-m3-outline-variant px-3 py-2.5 text-xs font-medium tracking-wide text-m3-on-surface-variant transition-colors duration-200 hover:bg-m3-surface-container-high"
           >
             <span className="flex items-center gap-2">
               <Icon name="info" className="h-3.5 w-3.5" strokeWidth={2.5} />
@@ -144,20 +126,20 @@ export function AppHeader({
           >
             <div className="min-h-0">
               <div className="flex flex-wrap gap-3 px-2 py-1">
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-green-400">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-green-400">
                   <span className="h-2 w-2 rounded-full bg-green-500" />
                   {labels.shortWait}
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-400">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-amber-400">
                   <span className="h-2 w-2 rounded-full bg-amber-500" />
                   {labels.moderateWait}
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-red-400">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-red-400">
                   <span className="h-2 w-2 rounded-full bg-red-500" />
                   {labels.longWait}
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-400">
-                  <span className="h-2 w-2 rounded-full bg-neutral-500" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-m3-on-surface-variant">
+                  <span className="h-2 w-2 rounded-full bg-m3-outline" />
                   {labels.unknownWait}
                 </span>
               </div>
@@ -168,23 +150,23 @@ export function AppHeader({
 
       {activeView === 'wait-times' && (
         <div className="hidden flex-wrap items-center gap-4 md:flex mt-4">
-          <span className={`text-[10px] font-bold uppercase tracking-widest ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`}>
+          <span className="text-[10px] font-medium uppercase tracking-widest text-m3-on-surface-variant">
             {labels.legendTitle}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-green-400">
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-green-400">
             <span className="h-2 w-2 rounded-full bg-green-500" />
             {labels.shortWait}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-400">
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-amber-400">
             <span className="h-2 w-2 rounded-full bg-amber-500" />
             {labels.moderateWait}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-red-400">
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-red-400">
             <span className="h-2 w-2 rounded-full bg-red-500" />
             {labels.longWait}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-400">
-            <span className="h-2 w-2 rounded-full bg-neutral-500" />
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-m3-on-surface-variant">
+            <span className="h-2 w-2 rounded-full bg-m3-outline" />
             {labels.unknownWait}
           </span>
         </div>
@@ -192,7 +174,7 @@ export function AppHeader({
 
       {activeView === 'wait-times' && (
         <div
-          className="mt-4 border-l-2 border-neutral-600 pl-3 text-xs leading-relaxed font-medium text-neutral-400"
+          className="mt-4 border-l-2 border-m3-outline pl-3 text-xs leading-relaxed font-medium text-m3-on-surface-variant"
           role="note"
         >
           {waitSemanticsHint}
