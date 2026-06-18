@@ -36,15 +36,15 @@ export function FilterBar({
   return (
     <section
       className={`space-y-4 border p-4 md:space-y-4 md:p-5 ${
-        isDark ? 'border-neutral-800' : 'border-neutral-200'
+        isDark ? 'border-neutral-700' : 'border-neutral-200'
       }`}
     >
       <div className="space-y-2">
-        <p className={`text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`}>
+        <p className={`text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-400' : 'text-neutral-400'}`}>
           {labels.defaultTriageView}
         </p>
         <div
-          className={`flex w-full gap-1 border-b ${isDark ? 'border-neutral-800' : 'border-neutral-200'}`}
+          className={`flex w-full gap-1 border-b ${isDark ? 'border-neutral-700' : 'border-neutral-200'}`}
           role="radiogroup"
           aria-label={labels.triageCategory}
         >
@@ -61,17 +61,13 @@ export function FilterBar({
                 onClick={() => onTriageCategoryChange(category)}
                 className={`relative min-h-11 flex-1 cursor-pointer px-2 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 sm:px-3 sm:text-sm md:min-h-0 md:flex-none md:px-4 md:py-2 ${
                   selected
-                    ? isDark
-                      ? 'text-neutral-100'
-                      : 'text-neutral-900'
-                    : isDark
-                      ? 'text-neutral-600 hover:text-neutral-400'
-                      : 'text-neutral-400 hover:text-neutral-600'
+                    ? isDark ? 'text-white' : 'text-neutral-900'
+                    : isDark ? 'text-neutral-400 hover:text-neutral-200' : 'text-neutral-400 hover:text-neutral-600'
                 }`}
               >
                 {label}
                 {selected && (
-                  <span className={`absolute bottom-0 left-0 right-0 h-0.5 -mb-px ${isDark ? 'bg-neutral-100' : 'bg-neutral-900'}`} />
+                  <span className={`absolute bottom-0 left-0 right-0 h-0.5 -mb-px ${isDark ? 'bg-white' : 'bg-neutral-900'}`} />
                 )}
               </button>
             )
@@ -81,7 +77,7 @@ export function FilterBar({
 
       <div className="grid gap-3 md:grid-cols-2 md:gap-3">
         <div className="space-y-1.5">
-          <label className={`block text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`} htmlFor="hospital-search">
+          <label className={`block text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-400' : 'text-neutral-400'}`} htmlFor="hospital-search">
             {labels.searchHospital}
           </label>
           <div className="relative">
@@ -91,9 +87,9 @@ export function FilterBar({
               value={searchValue}
               onChange={(event) => onSearchChange(event.target.value)}
               placeholder={labels.searchPlaceholder}
-              className={`w-full border-b bg-transparent px-1 py-2.5 pr-10 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:border-neutral-500 focus-visible:outline-none md:py-2 ${
+              className={`w-full border-b bg-transparent px-1 py-2.5 pr-10 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:border-neutral-400 focus-visible:outline-none md:py-2 ${
                 isDark
-                  ? 'border-neutral-700 text-neutral-100 placeholder:text-neutral-600'
+                  ? 'border-neutral-600 text-white placeholder:text-neutral-500'
                   : 'border-neutral-300 text-neutral-900 placeholder:text-neutral-400'
               }`}
             />
@@ -101,9 +97,7 @@ export function FilterBar({
                 <button
                   type="button"
                   onClick={() => onSearchChange('')}
-                  className={`absolute right-1 top-1/2 -translate-y-1/2 p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 ${
-                    isDark ? 'text-neutral-500 hover:text-neutral-300' : 'text-neutral-400 hover:text-neutral-600'
-                  }`}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 hover:text-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500"
                   aria-label="Clear search"
                 >
                   <Icon name="close" className="h-3.5 w-3.5" />
@@ -114,7 +108,7 @@ export function FilterBar({
 
         {clusterOptions.length > 0 && (
           <div className="space-y-1.5">
-            <label className={`block text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`} htmlFor="cluster-filter">
+            <label className={`block text-[10px] font-bold uppercase tracking-widest md:text-[10px] ${isDark ? 'text-neutral-400' : 'text-neutral-400'}`} htmlFor="cluster-filter">
               {labels.cluster}
             </label>
             <select
@@ -122,8 +116,8 @@ export function FilterBar({
               value={selectedCluster}
               onChange={(event) => onClusterChange(event.target.value)}
               style={{ colorScheme: isDark ? 'dark' : 'light' }}
-              className={`w-full cursor-pointer border-b bg-transparent px-1 py-2.5 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:border-neutral-500 focus-visible:outline-none md:py-2 ${
-                isDark ? 'border-neutral-700 text-neutral-100' : 'border-neutral-300 text-neutral-900'
+              className={`w-full cursor-pointer border-b bg-transparent px-1 py-2.5 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:border-neutral-400 focus-visible:outline-none md:py-2 ${
+                isDark ? 'border-neutral-600 text-white' : 'border-neutral-300 text-neutral-900'
               }`}
             >
               <option value="">{labels.allClusters}</option>

@@ -303,7 +303,7 @@ function App() {
   const locationControls = (userLocation !== null || locationStatus !== 'idle') && (
     <div
       className={`mt-2 flex flex-wrap items-center gap-2 border p-3 text-sm md:gap-2 md:p-2.5 md:text-sm ${isDark
-        ? 'border-neutral-800 text-neutral-400'
+        ? 'border-neutral-700 text-neutral-300'
         : 'border-neutral-200 text-neutral-600'
         }`}
     >
@@ -395,7 +395,7 @@ function App() {
   }, [hospitals])
 
   return (
-    <div className={`relative overflow-x-clip pb-28 md:pb-10 ${isDark ? 'text-neutral-100' : 'text-neutral-900'} ${refreshPulse ? 'refresh-pulse' : ''}`}>
+    <div className={`relative overflow-x-clip pb-28 md:pb-10 text-white ${refreshPulse ? 'refresh-pulse' : ''}`}>
       <main className="mx-auto min-h-screen w-full max-w-6xl space-y-4 px-4 py-4 md:space-y-5 md:px-6 md:py-6 lg:px-8">
         <AppHeader
           isDark={isDark}
@@ -451,7 +451,7 @@ function App() {
 
         {!loading && isRefreshing && (
           <p
-            className={`border p-3 text-xs font-medium uppercase tracking-wider ${isDark ? 'border-neutral-800 text-neutral-400' : 'border-neutral-200 text-neutral-500'
+            className={`border p-3 text-xs font-medium uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-300' : 'border-neutral-200 text-neutral-500'
               }`}
             role="status"
             aria-live="polite"
@@ -482,7 +482,7 @@ function App() {
           </p>
         )}
 
-        <div className="enter-fade-up md:sticky md:top-4 md:z-20">
+        <div className="enter-fade-up md:sticky md:top-0 md:z-20 md:bg-neutral-950 md:backdrop-blur-md">
           <div className="hidden md:block">
             <FilterBar
               isDark={isDark}
@@ -502,19 +502,19 @@ function App() {
         <section className="space-y-3 md:hidden">
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-400' : 'border-neutral-300 text-neutral-500'
+              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-600 text-neutral-300' : 'border-neutral-300 text-neutral-500'
                 }`}
             >
               {labels.triageCategoryLabels[selectedTriageCategory]}
             </span>
             <span
-              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-400' : 'border-neutral-300 text-neutral-500'
+              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-600 text-neutral-300' : 'border-neutral-300 text-neutral-500'
                 }`}
             >
               {activeClusterLabel}
             </span>
             <span
-              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-700 text-neutral-400' : 'border-neutral-300 text-neutral-500'
+              className={`inline-flex items-center border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${isDark ? 'border-neutral-600 text-neutral-300' : 'border-neutral-300 text-neutral-500'
                 }`}
             >
               {mobileSortLabel}
@@ -545,13 +545,13 @@ function App() {
           )}
 
           {!loading && !error && hospitals.length === 0 && (
-            <p className={`p-4 text-sm ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
+            <p className={`p-4 text-sm ${isDark ? 'text-neutral-300' : 'text-neutral-500'}`}>
               {labels.noDataFromSource}
             </p>
           )}
 
           {!loading && !error && hospitals.length > 0 && groupedHospitals.length === 0 && (
-            <div className={`space-y-3 p-4 text-sm ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
+            <div className={`space-y-3 p-4 text-sm ${isDark ? 'text-neutral-300' : 'text-neutral-500'}`}>
               <p>{hasActiveFilters ? labels.noMatch : labels.noHospitals}</p>
               {hasActiveFilters && (
                 <button
@@ -632,7 +632,7 @@ function App() {
 
         {activeView === 'wait-times' && !loading && !error && hospitals.length > 0 && groupedHospitals.length === 0 && (
           <div
-            className={`hidden space-y-3 border p-4 text-sm md:block ${isDark ? 'border-neutral-800 text-neutral-400' : 'border-neutral-200 text-neutral-500'
+            className={`hidden space-y-3 border p-4 text-sm md:block ${isDark ? 'border-neutral-700 text-neutral-300' : 'border-neutral-200 text-neutral-500'
               }`}
           >
             <p>{hasActiveFilters ? labels.noMatch : labels.noHospitals}</p>
@@ -748,7 +748,7 @@ function App() {
                 ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
                 : 'border-neutral-900 bg-neutral-900 text-white'
               : isDark
-                ? 'border-neutral-800 text-neutral-300'
+                ? 'border-neutral-700 text-neutral-200'
                 : 'border-neutral-200 text-neutral-700'
               }`}
           >
@@ -762,7 +762,7 @@ function App() {
                 ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
                 : 'border-neutral-900 bg-neutral-900 text-white'
               : isDark
-                ? 'border-neutral-800 text-neutral-300'
+                ? 'border-neutral-700 text-neutral-200'
                 : 'border-neutral-200 text-neutral-700'
               }`}
           >
@@ -777,7 +777,7 @@ function App() {
                 ? 'border-neutral-100 bg-neutral-100 text-neutral-900'
                 : 'border-neutral-900 bg-neutral-900 text-white'
               : isDark
-                ? 'border-neutral-800 text-neutral-300'
+                ? 'border-neutral-700 text-neutral-200'
                 : 'border-neutral-200 text-neutral-700'
               }`}
           >
@@ -797,7 +797,7 @@ function App() {
             onClick={() => void loadData()}
             disabled={loading || isRefreshing}
             className={`min-h-12 min-w-[3.5rem] flex items-center justify-center border transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-              ? 'border-neutral-800 text-neutral-300'
+              ? 'border-neutral-700 text-neutral-200'
               : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
               }`}
             aria-label={labels.refreshNow}
@@ -811,7 +811,7 @@ function App() {
               setIsMobileSortSheetOpen(true)
             }}
             className={`flex-1 min-h-12 cursor-pointer border px-3 py-1.5 text-left text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-              ? 'border-neutral-800 text-neutral-300'
+              ? 'border-neutral-700 text-neutral-200'
               : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
               }`}
           >
@@ -825,7 +825,7 @@ function App() {
               setIsMobileFilterSheetOpen((value) => !value)
             }}
             className={`flex-1 min-h-12 cursor-pointer border px-3 py-1.5 text-left text-xs font-bold uppercase tracking-wider transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${isDark
-              ? 'border-neutral-800 text-neutral-300'
+              ? 'border-neutral-700 text-neutral-200'
               : 'border-neutral-200 text-neutral-700 hover:bg-neutral-50'
               }`}
           >
