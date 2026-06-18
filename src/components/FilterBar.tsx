@@ -11,7 +11,6 @@ interface FilterBarLabels {
 }
 
 interface FilterBarProps {
-  isDark: boolean
   labels: FilterBarLabels
   searchValue: string
   onSearchChange: (value: string) => void
@@ -23,7 +22,6 @@ interface FilterBarProps {
 }
 
 export function FilterBar({
-  isDark,
   labels,
   searchValue,
   onSearchChange,

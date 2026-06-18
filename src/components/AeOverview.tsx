@@ -34,7 +34,6 @@ export interface AeOverviewLabels {
 }
 
 interface AeOverviewProps {
-  isDark: boolean
   labels: AeOverviewLabels
 }
 
@@ -46,7 +45,7 @@ const toneClassMap = {
   blue: 'bg-m3-tertiary',
 } as const
 
-export function AeOverview({ isDark, labels }: AeOverviewProps) {
+export function AeOverview({ labels }: AeOverviewProps) {
   return (
     <section className="enter-fade-up space-y-4 border border-m3-outline-variant p-4 md:p-5">
       <div className="space-y-2">

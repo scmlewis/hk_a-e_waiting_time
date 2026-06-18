@@ -4,7 +4,6 @@ import { Icon } from './Icon'
 export type AppView = 'wait-times' | 'overview'
 
 interface AppHeaderProps {
-  isDark: boolean
   labels: AppLabels
   languageMode: LanguageMode
   loading: boolean
@@ -19,7 +18,6 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({
-  isDark,
   labels,
   languageMode,
   loading,

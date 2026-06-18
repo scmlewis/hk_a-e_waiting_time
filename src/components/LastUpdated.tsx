@@ -11,12 +11,11 @@ interface LastUpdatedProps {
   sourceUpdateTime: string
   countdownSeconds: number
   isStale: boolean
-  isDark: boolean
   labels: LastUpdatedLabels
   languageMode?: 'en' | 'zh-HK'
 }
 
-export function LastUpdated({ sourceUpdateTime, countdownSeconds, isStale, isDark, labels, languageMode = 'en' }: LastUpdatedProps) {
+export function LastUpdated({ sourceUpdateTime, countdownSeconds, isStale, labels, languageMode = 'en' }: LastUpdatedProps) {
   const relativeTime = formatRelativeTime(sourceUpdateTime, languageMode)
   return (
     <section className="space-y-2 border border-m3-outline-variant p-4 text-sm md:p-5" aria-live="polite">

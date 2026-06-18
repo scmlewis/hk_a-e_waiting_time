@@ -417,7 +417,6 @@ function App() {
     <div className={`relative overflow-x-clip pb-28 md:pb-10 text-m3-on-surface ${refreshPulse ? 'refresh-pulse' : ''}`}>
       <main className="mx-auto min-h-screen w-full max-w-6xl space-y-4 px-4 py-4 md:space-y-5 md:px-6 md:py-6 lg:px-8">
         <AppHeader
-          isDark={isDark}
           labels={labels}
           languageMode={languageMode}
           loading={loading}
@@ -437,7 +436,6 @@ function App() {
           sourceUpdateTime={sourceUpdateTime}
           countdownSeconds={countdown}
           isStale={isStale}
-          isDark={isDark}
           labels={labels.lastUpdated}
           languageMode={languageMode}
         />
@@ -466,7 +464,6 @@ function App() {
         <div className="enter-fade-up md:sticky md:top-0 md:z-20 md:bg-m3-surface-container md:backdrop-blur-md">
           <div className="hidden md:block">
             <FilterBar
-              isDark={isDark}
               labels={labels.filter}
               searchValue={searchValue}
               onSearchChange={handleSearchChange}
@@ -556,7 +553,7 @@ function App() {
             </>
             )}
 
-        {activeView === 'overview' && <AeOverview isDark={isDark} labels={labels.overview} />}
+        {activeView === 'overview' && <AeOverview labels={labels.overview} />}
 
         {activeView === 'wait-times' && loading && (
           <section
@@ -645,7 +642,6 @@ function App() {
         </div>
         <div className="max-h-[70vh] overflow-y-auto space-y-2.5 pb-1">
           <FilterBar
-            isDark={isDark}
             labels={labels.filter}
             searchValue={searchValue}
             onSearchChange={handleSearchChange}
