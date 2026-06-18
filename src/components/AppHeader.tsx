@@ -7,14 +7,12 @@ interface AppHeaderProps {
   isDark: boolean
   labels: AppLabels
   languageMode: LanguageMode
-  resolvedTheme: string
   loading: boolean
   isRefreshing: boolean
   activeView: AppView
   isLegendExpanded: boolean
   waitSemanticsHint: string
   toggleLanguageMode: () => void
-  toggleThemeMode: () => void
   loadData: () => Promise<void>
   handleViewChange: (view: AppView) => void
   setIsLegendExpanded: (expanded: boolean) => void
@@ -24,14 +22,12 @@ export function AppHeader({
   isDark,
   labels,
   languageMode,
-  resolvedTheme,
   loading,
   isRefreshing,
   activeView,
   isLegendExpanded,
   waitSemanticsHint,
   toggleLanguageMode,
-  toggleThemeMode,
   loadData,
   handleViewChange,
   setIsLegendExpanded,
@@ -65,24 +61,6 @@ export function AppHeader({
           >
             <span className="font-bold">語</span>
             <span>{languageMode === 'en' ? 'EN' : '繁'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={toggleThemeMode}
-            className={`inline-flex min-h-10 min-w-10 items-center justify-center border px-2.5 py-2 transition-colors duration-150 hover:scale-100 active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-1 ${
-              isDark
-                ? 'border-neutral-700 text-neutral-300 hover:bg-neutral-800'
-                : 'border-neutral-300 text-neutral-600 hover:bg-neutral-100'
-            }`}
-            aria-label={resolvedTheme === 'dark' ? labels.themeLight : labels.themeDark}
-            aria-pressed={resolvedTheme === 'dark'}
-          >
-            {resolvedTheme === 'dark' ? (
-              <Icon name="sun" className="h-4 w-4" strokeWidth={2.5} />
-            ) : (
-              <Icon name="moon" className="h-4 w-4" strokeWidth={2.5} />
-            )}
           </button>
 
           <button

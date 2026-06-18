@@ -22,7 +22,7 @@ import { useWaitingTimes } from './hooks/useWaitingTimes'
 type AppView = 'wait-times' | 'overview'
 
 function App() {
-  const { languageMode, resolvedTheme, isDark, toggleThemeMode, toggleLanguageMode } = useSettings()
+  const { languageMode, isDark, toggleLanguageMode } = useSettings()
   const { userLocation, locationStatus, handleUseMyLocation, handleClearLocation } = useLocation()
   const { hospitals, loading, isRefreshing, error, refreshError, isStale, isSourceStale, countdown, sourceUpdateTime, loadData } = useWaitingTimes()
 
@@ -401,14 +401,12 @@ function App() {
           isDark={isDark}
           labels={labels}
           languageMode={languageMode}
-          resolvedTheme={resolvedTheme}
           loading={loading}
           isRefreshing={isRefreshing}
           activeView={activeView}
           isLegendExpanded={isLegendExpanded}
           waitSemanticsHint={waitSemanticsHint}
           toggleLanguageMode={toggleLanguageMode}
-          toggleThemeMode={toggleThemeMode}
           loadData={loadData}
           handleViewChange={handleViewChange}
           setIsLegendExpanded={setIsLegendExpanded}

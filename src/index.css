@@ -3,15 +3,9 @@
 body {
   margin: 0;
   min-width: 320px;
-  background: #fafafa;
-  color: #0a0a0a;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.dark body {
   background: #0a0a0a;
   color: #fafafa;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 #root {
