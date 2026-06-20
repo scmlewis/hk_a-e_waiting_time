@@ -34,9 +34,9 @@ export interface AeOverviewLabels {
   disclaimerTitle: string
   disclaimerBody: string
   aboutTitle: string
-  authorName: string
   authorBio: string
-  githubLabel: string
+  githubProfileLabel: string
+  githubRepoLabel: string
 }
 
 interface AeOverviewProps {
@@ -128,19 +128,27 @@ export function AeOverview({ labels }: AeOverviewProps) {
 
       <section className="space-y-3 border border-m3-outline-variant p-3 md:p-4">
         <h3 className="text-sm font-bold uppercase tracking-wider text-m3-on-surface">{labels.aboutTitle}</h3>
-        <div className="space-y-1">
-          <p className="text-base font-semibold text-m3-on-surface">{labels.authorName}</p>
-          <p className="text-sm text-m3-on-surface-variant">{labels.authorBio}</p>
+        <p className="text-sm text-m3-on-surface-variant">{labels.authorBio}</p>
+        <div className="flex flex-wrap gap-4">
+          <a
+            href="https://github.com/scmlewis"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-medium text-m3-primary underline-offset-2 hover:underline"
+          >
+            <Icon name="github" className="h-4 w-4" />
+            {labels.githubProfileLabel}
+          </a>
+          <a
+            href="https://github.com/scmlewis/hk_a-e_waiting_time"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-medium text-m3-primary underline-offset-2 hover:underline"
+          >
+            <Icon name="github" className="h-4 w-4" />
+            {labels.githubRepoLabel}
+          </a>
         </div>
-        <a
-          href="https://github.com/scmlewis/hk_a-e_waiting_time"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 text-sm font-medium text-m3-primary underline-offset-2 hover:underline"
-        >
-          <Icon name="github" className="h-4 w-4" />
-          {labels.githubLabel}
-        </a>
       </section>
     </section>
   )

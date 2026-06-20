@@ -213,9 +213,9 @@ const EN_LABELS: AppLabels = {
     disclaimerBody:
       'This web app provides reference information only and does not replace professional medical advice or hospital triage decisions. Waiting times are estimates and may change rapidly. If you have severe symptoms or emergency conditions, seek immediate medical care and call emergency services.',
     aboutTitle: 'About the Author',
-    authorName: 'Lewis Chan',
     authorBio: 'Developer passionate about using open data to help the public make informed healthcare decisions.',
-    githubLabel: 'View on GitHub',
+    githubProfileLabel: 'GitHub Profile',
+    githubRepoLabel: 'Source Code',
   },
   lastUpdated: {
     lastSourceUpdate: 'Last source update',
@@ -387,9 +387,9 @@ const ZH_HK_LABELS: AppLabels = {
     disclaimerBody:
       '本網頁資料僅供參考，不能取代專業醫療意見或醫院分流決定。等候時間為估算，可能因實際情況隨時變動。如出現嚴重症狀或緊急情況，請立即求醫及致電緊急服務。',
     aboutTitle: '關於作者',
-    authorName: 'Lewis Chan',
     authorBio: '熱衷利用開放數據，協助公眾作出更明智的醫療決策。',
-    githubLabel: '在 GitHub 上查看',
+    githubProfileLabel: 'GitHub 個人檔案',
+    githubRepoLabel: '原始碼',
   },
   lastUpdated: {
     lastSourceUpdate: '來源最後更新',
