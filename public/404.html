@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found — HK A&E Waiting Time</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+      }
+      .container { max-width: 480px; }
+      h1 { font-size: 4rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.5rem; }
+      p { font-size: 1.125rem; color: #94a3b8; margin-bottom: 2rem; line-height: 1.6; }
+      a {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: #2563eb;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+      a:hover { background: #1d4ed8; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>404</h1>
+      <p>This page does not exist. If you followed a link, it may be outdated. You can return to the app to check live A&E waiting times.</p>
+      <a href="/hk_a-e_waiting_time/">Go to HK A&E Waiting Time</a>
+    </div>
+    <script>
+      // SPA redirect: try to restore the path the user originally requested
+      (function () {
+        var path = localStorage.getItem('spa-redirect-path');
+        if (path) {
+          localStorage.removeItem('spa-redirect-path');
+          window.location.replace('/hk_a-e_waiting_time/' + path);
+        }
+      })();
+    </script>
+  </body>
+</html>

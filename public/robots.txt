@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://scmlewis.github.io/hk_a-e_waiting_time/sitemap.xml

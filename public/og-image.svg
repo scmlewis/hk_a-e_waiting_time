@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="40" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.5"/>
+
+  <!-- Glowing accent circle (top-left) -->
+  <circle cx="200" cy="180" r="250" fill="#0ea5e9" opacity="0.06" filter="url(#glow)"/>
+  <!-- Glowing accent circle (bottom-right) -->
+  <circle cx="1000" cy="500" r="200" fill="#38bdf8" opacity="0.05" filter="url(#glow)"/>
+
+  <!-- Top accent line -->
+  <rect x="80" y="60" width="120" height="4" rx="2" fill="url(#accent)"/>
+
+  <!-- App icon (hospital cross + clock) -->
+  <g transform="translate(80, 100) scale(1.8)">
+    <!-- Cross background -->
+    <rect width="64" height="64" rx="12" fill="#0ea5e9"/>
+    <!-- Hospital cross -->
+    <g transform="translate(8,6)">
+      <rect x="12" y="6" width="28" height="10" rx="2" fill="#ffffff"/>
+      <rect x="18" y="-0" width="10" height="40" rx="2" fill="#ffffff"/>
+    </g>
+    <!-- Clock -->
+    <g transform="translate(36,36)">
+      <circle cx="12" cy="12" r="12" fill="#ffffff"/>
+      <circle cx="12" cy="12" r="11" fill="none" stroke="#0ea5e9" stroke-width="2"/>
+      <path d="M12 8v6l4 2" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- Main title -->
+  <text x="220" y="160" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="56" font-weight="800" fill="#f8fafc" letter-spacing="-1">
+    Hong Kong A&amp;E
+  </text>
+  <text x="220" y="225" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="56" font-weight="800" fill="#f8fafc" letter-spacing="-1">
+    Waiting Time
+  </text>
+
+  <!-- Subtitle -->
+  <text x="220" y="280" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="#94a3b8">
+    Live emergency department wait times across Hong Kong public hospitals
+  </text>
+
+  <!-- Divider line -->
+  <rect x="80" y="320" width="1040" height="1" fill="#334155" opacity="0.6"/>
+
+  <!-- Feature pills -->
+  <g transform="translate(80, 360)">
+    <!-- Pill 1: Real-time -->
+    <rect x="0" y="0" width="200" height="44" rx="22" fill="#0ea5e9" opacity="0.12"/>
+    <circle cx="30" cy="22" r="6" fill="#0ea5e9"/>
+    <text x="48" y="28" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" fill="#38bdf8">Real-time Data</text>
+
+    <!-- Pill 2: All Hospitals -->
+    <rect x="230" y="0" width="240" height="44" rx="22" fill="#0ea5e9" opacity="0.12"/>
+    <circle cx="260" cy="22" r="6" fill="#0ea5e9"/>
+    <text x="278" y="28" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" fill="#38bdf8">All Public Hospitals</text>
+
+    <!-- Pill 3: 5 Triage Levels -->
+    <rect x="500" y="0" width="240" height="44" rx="22" fill="#0ea5e9" opacity="0.12"/>
+    <circle cx="530" cy="22" r="6" fill="#0ea5e9"/>
+    <text x="548" y="28" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" fill="#38bdf8">5 Triage Categories</text>
+
+    <!-- Pill 4: EN / 中文 -->
+    <rect x="770" y="0" width="180" height="44" rx="22" fill="#0ea5e9" opacity="0.12"/>
+    <circle cx="800" cy="22" r="6" fill="#0ea5e9"/>
+    <text x="818" y="28" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" fill="#38bdf8">EN / 中文</text>
+  </g>
+
+  <!-- Triage color dots -->
+  <g transform="translate(80, 440)">
+    <circle cx="10" cy="10" r="8" fill="#ef4444"/>
+    <text x="26" y="15" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">Critical</text>
+
+    <circle cx="130" cy="10" r="8" fill="#f97316"/>
+    <text x="146" y="15" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">Emergency</text>
+
+    <circle cx="270" cy="10" r="8" fill="#eab308"/>
+    <text x="286" y="15" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">Urgent</text>
+
+    <circle cx="390" cy="10" r="8" fill="#22c55e"/>
+    <text x="406" y="15" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">Semi-urgent</text>
+
+    <circle cx="530" cy="10" r="8" fill="#3b82f6"/>
+    <text x="546" y="15" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">Non-urgent</text>
+  </g>
+
+  <!-- Data source badge -->
+  <g transform="translate(80, 530)">
+    <rect x="0" y="0" width="380" height="36" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="16" y="24" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="13" fill="#64748b">Data: Hospital Authority Open Data</text>
+  </g>
+
+  <!-- Chinese subtitle (bottom-right) -->
+  <text x="1120" y="560" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="18" fill="#475569" text-anchor="end">
+    香港急症室等候時間
+  </text>
+</svg>
