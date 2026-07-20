@@ -36,7 +36,7 @@ export function AppHeader({
         <div>
           <h1 className="flex items-center text-2xl font-black tracking-tight text-m3-on-surface md:text-3xl">
             <img
-              src="/emergency-icon.svg"
+              src={`${import.meta.env.BASE_URL}emergency-icon.svg`}
               alt=""
               aria-hidden="true"
               className="mr-3 h-8 w-8 rounded-lg md:h-9 md:w-9"
