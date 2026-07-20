@@ -35,7 +35,12 @@ export function AppHeader({
       <div className="flex items-start justify-between gap-3">
         <div>
           <h1 className="flex items-center text-2xl font-black tracking-tight text-m3-on-surface md:text-3xl">
-            <span className="mr-3 inline-block h-2.5 w-2.5 rounded-full bg-m3-primary" />
+            <img
+              src="/emergency-icon.svg"
+              alt=""
+              aria-hidden="true"
+              className="mr-3 h-8 w-8 rounded-lg md:h-9 md:w-9"
+            />
             {labels.title}
           </h1>
         </div>
