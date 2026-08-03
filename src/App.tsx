@@ -415,27 +415,26 @@ function App() {
   return (
     <div className={`relative overflow-x-clip pb-28 md:pb-10 text-m3-on-surface ${refreshPulse ? 'refresh-pulse' : ''}`}>
       <main className="mx-auto min-h-screen w-full max-w-6xl space-y-4 px-4 py-4 md:space-y-5 md:px-6 md:py-6 lg:px-8">
-        <AppHeader
-          labels={labels}
-          languageMode={languageMode}
-          loading={loading}
-          isRefreshing={isRefreshing}
-          activeView={activeView}
-          isLegendExpanded={isLegendExpanded}
-          sourceUpdateTime={sourceUpdateTime}
-          countdownSeconds={countdown}
-          isStale={isStale}
-          waitSemanticsHint={waitSemanticsHint}
-          toggleLanguageMode={toggleLanguageMode}
-          loadData={loadData}
-          handleViewChange={handleViewChange}
-          setIsLegendExpanded={setIsLegendExpanded}
-        />
+        <div className="md:sticky md:top-0 md:z-30 md:bg-m3-surface md:-mx-6 md:-mt-6 md:px-6 md:pt-6 lg:-mx-8 lg:px-8">
+          <AppHeader
+            labels={labels}
+            languageMode={languageMode}
+            loading={loading}
+            isRefreshing={isRefreshing}
+            activeView={activeView}
+            isLegendExpanded={isLegendExpanded}
+            sourceUpdateTime={sourceUpdateTime}
+            countdownSeconds={countdown}
+            isStale={isStale}
+            waitSemanticsHint={waitSemanticsHint}
+            toggleLanguageMode={toggleLanguageMode}
+            loadData={loadData}
+            handleViewChange={handleViewChange}
+            setIsLegendExpanded={setIsLegendExpanded}
+          />
 
         {activeView === 'wait-times' && (
-          <>
-        <div className="enter-fade-up md:sticky md:top-0 md:z-20 md:bg-m3-surface-container md:backdrop-blur-md">
-          <div className="hidden md:block">
+          <div className="hidden md:block border-t border-m3-outline-variant">
             <FilterBar
               labels={{
                 searchPlaceholder: labels.filter.searchPlaceholder,
@@ -451,8 +450,11 @@ function App() {
             />
             {locationControls}
           </div>
+        )}
         </div>
 
+        {activeView === 'wait-times' && (
+          <>
         {shouldShowLocationPrompt && (
           <section
             className="border border-m3-outline-variant p-3 md:p-4"
