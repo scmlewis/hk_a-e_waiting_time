@@ -4,7 +4,6 @@ import { FilterBar } from './components/FilterBar'
 import { AeOverview } from './components/AeOverview'
 import { HospitalCard } from './components/HospitalCard'
 import { HospitalTable } from './components/HospitalTable'
-import { LastUpdated } from './components/LastUpdated'
 import { CLUSTER_ORDER, CLUSTER_NAME_ZH_HK } from './constants/hospitalMeta'
 import { getLabels } from './constants/labels'
 import { TRIAGE_KEYS } from './constants/triage'
@@ -423,6 +422,9 @@ function App() {
           isRefreshing={isRefreshing}
           activeView={activeView}
           isLegendExpanded={isLegendExpanded}
+          sourceUpdateTime={sourceUpdateTime}
+          countdownSeconds={countdown}
+          isStale={isStale}
           waitSemanticsHint={waitSemanticsHint}
           toggleLanguageMode={toggleLanguageMode}
           loadData={loadData}
@@ -432,13 +434,24 @@ function App() {
 
         {activeView === 'wait-times' && (
           <>
-        <LastUpdated
-          sourceUpdateTime={sourceUpdateTime}
-          countdownSeconds={countdown}
-          isStale={isStale}
-          labels={labels.lastUpdated}
-          languageMode={languageMode}
-        />
+        <div className="enter-fade-up md:sticky md:top-0 md:z-20 md:bg-m3-surface-container md:backdrop-blur-md">
+          <div className="hidden md:block">
+            <FilterBar
+              labels={{
+                searchPlaceholder: labels.filter.searchPlaceholder,
+                allClusters: labels.filter.allClusters,
+              }}
+              searchValue={searchValue}
+              onSearchChange={handleSearchChange}
+              selectedTriageCategory={selectedTriageCategory}
+              onTriageCategoryChange={handleTriageCategoryChange}
+              clusterOptions={clusterOptions}
+              selectedCluster={selectedCluster}
+              onClusterChange={handleClusterChange}
+            />
+            {locationControls}
+          </div>
+        </div>
 
         {shouldShowLocationPrompt && (
           <section
@@ -460,22 +473,6 @@ function App() {
             </div>
           </section>
         )}
-
-        <div className="enter-fade-up md:sticky md:top-0 md:z-20 md:bg-m3-surface-container md:backdrop-blur-md">
-          <div className="hidden md:block">
-            <FilterBar
-              labels={labels.filter}
-              searchValue={searchValue}
-              onSearchChange={handleSearchChange}
-              selectedTriageCategory={selectedTriageCategory}
-              onTriageCategoryChange={handleTriageCategoryChange}
-              clusterOptions={clusterOptions}
-              selectedCluster={selectedCluster}
-              onClusterChange={handleClusterChange}
-            />
-            {locationControls}
-          </div>
-        </div>
 
         <section className="space-y-3 md:hidden">
           <div className="flex flex-wrap items-center gap-2">
@@ -530,7 +527,7 @@ function App() {
           {!loading &&
             groupedHospitals.map((group) => (
               <section key={group.cluster} className="space-y-2">
-                <h2 className="border-l-4 border-y border-r border-l-m3-primary border-y-m3-outline-variant border-r-m3-outline-variant bg-m3-surface-container px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-m3-on-surface-variant">
+                <h2 className="border-l-2 border-l-m3-primary px-3 pt-4 pb-2 text-[10px] font-bold uppercase tracking-[0.15em] text-m3-on-surface-variant">
                   {group.displayCluster} ({group.hospitals.length})
                 </h2>
                 <div className="space-y-2">
@@ -642,7 +639,10 @@ function App() {
         </div>
         <div className="max-h-[70vh] overflow-y-auto space-y-2.5 pb-1">
           <FilterBar
-            labels={labels.filter}
+            labels={{
+              searchPlaceholder: labels.filter.searchPlaceholder,
+              allClusters: labels.filter.allClusters,
+            }}
             searchValue={searchValue}
             onSearchChange={handleSearchChange}
             selectedTriageCategory={selectedTriageCategory}

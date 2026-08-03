@@ -54,6 +54,24 @@ export function getWaitingTimeBorder(waitStatus: WaitStatus, isDark: boolean): s
   }[waitStatus]
 }
 
+export function getWaitingTimeBorderColor(waitStatus: WaitStatus, isDark: boolean): string {
+  if (isDark) {
+    return {
+      short: 'border-l-green-400',
+      moderate: 'border-l-amber-400',
+      long: 'border-l-red-400',
+      unknown: 'border-l-neutral-500',
+    }[waitStatus]
+  }
+
+  return {
+    short: 'border-l-green-600',
+    moderate: 'border-l-amber-600',
+    long: 'border-l-red-600',
+    unknown: 'border-l-neutral-500',
+  }[waitStatus]
+}
+
 export function getWaitingTimeDot(waitStatus: WaitStatus): string {
   return {
     short: 'bg-green-500',

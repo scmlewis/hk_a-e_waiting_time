@@ -54,7 +54,7 @@ export function HospitalCard({
       }}
       aria-expanded={isExpanded}
       aria-controls={detailsId}
-      className={`enter-fade-up cursor-pointer border-l-[3px] border-r border-y border-t-transparent border-b-transparent p-4 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface ${getWaitingTimeBorder(selectedTriage.waitStatus, isDark)} ${
+      className={`enter-fade-up cursor-pointer border-l-[4px] border-r border-y border-t-transparent border-b-transparent p-4 transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface ${getWaitingTimeBorder(selectedTriage.waitStatus, isDark)} ${
         isExpanded
           ? 'bg-m3-surface-container'
           : 'bg-transparent hover:bg-m3-surface-container-low'

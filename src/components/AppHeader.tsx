@@ -1,4 +1,5 @@
 import type { AppLabels, LanguageMode } from '../constants/labels'
+import { formatCountdown } from '../utils/time'
 import { Icon } from './Icon'
 
 export type AppView = 'wait-times' | 'overview'
@@ -10,6 +11,9 @@ interface AppHeaderProps {
   isRefreshing: boolean
   activeView: AppView
   isLegendExpanded: boolean
+  sourceUpdateTime: string
+  countdownSeconds: number
+  isStale: boolean
   waitSemanticsHint: string
   toggleLanguageMode: () => void
   loadData: () => Promise<void>
@@ -24,6 +28,9 @@ export function AppHeader({
   isRefreshing,
   activeView,
   isLegendExpanded,
+  sourceUpdateTime,
+  countdownSeconds,
+  isStale,
   waitSemanticsHint,
   toggleLanguageMode,
   loadData,
@@ -106,7 +113,7 @@ export function AppHeader({
       </div>
 
       {activeView === 'wait-times' && (
-        <div className="md:hidden mt-4">
+        <div className="mt-4">
           <button
             type="button"
             onClick={() => setIsLegendExpanded(!isLegendExpanded)}
@@ -114,7 +121,16 @@ export function AppHeader({
           >
             <span className="flex items-center gap-2">
               <Icon name="info" className="h-3.5 w-3.5" strokeWidth={2.5} />
-              {labels.legendTitle}
+              <span className="font-mono text-[11px] text-m3-on-surface">
+                {sourceUpdateTime || labels.lastUpdated.unknownTimestamp}
+              </span>
+              <span className="text-m3-on-surface-variant/60">·</span>
+              <span className="text-[10px] text-m3-primary font-mono">
+                {formatCountdown(countdownSeconds)}
+              </span>
+              {isStale && (
+                <span className="text-[10px] text-m3-tertiary">stale</span>
+              )}
             </span>
             <Icon
               name="chevron-down"
@@ -124,11 +140,11 @@ export function AppHeader({
           </button>
           <div
             className={`grid overflow-hidden transition-all duration-200 ${
-              isLegendExpanded ? 'mt-3 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
+              isLegendExpanded ? 'mt-2 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
             }`}
           >
             <div className="min-h-0">
-              <div className="flex flex-wrap gap-3 px-2 py-1">
+              <div className="flex flex-wrap gap-3 border border-m3-outline-variant border-t-0 px-3 py-2.5">
                 <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-green-400">
                   <span className="h-2 w-2 rounded-full bg-green-500" />
                   {labels.shortWait}
@@ -146,41 +162,14 @@ export function AppHeader({
                   {labels.unknownWait}
                 </span>
               </div>
+              <div
+                className="border border-m3-outline-variant border-t-0 border-l-2 border-l-m3-outline pl-3 py-2 text-xs leading-relaxed font-medium text-m3-on-surface-variant"
+                role="note"
+              >
+                {waitSemanticsHint}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {activeView === 'wait-times' && (
-        <div className="hidden flex-wrap items-center gap-4 md:flex mt-4">
-          <span className="text-[10px] font-medium uppercase tracking-widest text-m3-on-surface-variant">
-            {labels.legendTitle}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-green-400">
-            <span className="h-2 w-2 rounded-full bg-green-500" />
-            {labels.shortWait}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-amber-400">
-            <span className="h-2 w-2 rounded-full bg-amber-500" />
-            {labels.moderateWait}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-red-400">
-            <span className="h-2 w-2 rounded-full bg-red-500" />
-            {labels.longWait}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-m3-on-surface-variant">
-            <span className="h-2 w-2 rounded-full bg-m3-outline" />
-            {labels.unknownWait}
-          </span>
-        </div>
-      )}
-
-      {activeView === 'wait-times' && (
-        <div
-          className="mt-4 border-l-2 border-m3-outline pl-3 text-xs leading-relaxed font-medium text-m3-on-surface-variant"
-          role="note"
-        >
-          {waitSemanticsHint}
         </div>
       )}
     </header>

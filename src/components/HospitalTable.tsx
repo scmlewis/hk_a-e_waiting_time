@@ -5,7 +5,7 @@ import { HospitalDetails, type HospitalDetailsLabels } from './HospitalDetails'
 import type { SortMode } from '../utils/sort'
 import { formatDistanceKm } from '../utils/distance'
 import { deriveWaitStatusFromText } from '../utils/parseWaitTime'
-import { getWaitingTimeTone, getWaitingTimeDot } from '../utils/waitTone'
+import { getWaitingTimeTone, getWaitingTimeDot, getWaitingTimeBorderColor } from '../utils/waitTone'
 import { Icon } from './Icon'
 
 interface HospitalTableLabels extends HospitalDetailsLabels {
@@ -96,8 +96,8 @@ export function HospitalTable({
         <tbody>
           {groups.map((group) => (
             <Fragment key={group.cluster}>
-              <tr className="border-y border-m3-outline-variant bg-m3-surface-container">
-                <td colSpan={3} className="px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-m3-on-surface-variant">
+              <tr>
+                <td colSpan={3} className="border-l-2 border-l-m3-primary px-4 pt-5 pb-2 text-[10px] font-bold uppercase tracking-[0.15em] text-m3-on-surface-variant">
                   {group.displayCluster} ({group.hospitals.length})
                 </td>
               </tr>
@@ -111,10 +111,10 @@ export function HospitalTable({
                   <Fragment key={hospital.hospitalName}>
                     <tr
                       onClick={() => onToggleExpanded(hospital.hospitalName)}
-                      className="group cursor-pointer border-t border-m3-outline-variant transition-colors duration-150 hover:bg-m3-surface-container-low"
+                      className={`group cursor-pointer border-t border-m3-outline-variant border-l-[4px] transition-colors duration-150 hover:bg-m3-surface-container-low ${getWaitingTimeBorderColor(selectedTriage.waitStatus, isDark)}`}
                     >
                       <td className="px-4 py-3">
-                        <div className="text-sm font-bold text-m3-on-surface">{hospital.hospitalName}</div>
+                        <div className="text-base font-bold text-m3-on-surface">{hospital.hospitalName}</div>
                         {typeof hospital.distanceKm === 'number' && (
                           <div className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-normal text-m3-on-surface-variant">
                             <Icon name="map-pin" className="h-3 w-3" strokeWidth={2} />
@@ -122,39 +122,29 @@ export function HospitalTable({
                           </div>
                         )}
                       </td>
-                      <td className={`px-4 py-3 text-base font-bold font-mono tracking-tight ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
-                        <span className="flex items-center gap-2">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
                           <span className="inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider text-m3-on-surface-variant">
                             <span className={`h-1.5 w-1.5 rounded-full ${getWaitingTimeDot(selectedTriage.waitStatus)}`} />
                             {selectedTriage.waitStatus === 'short' ? labels.shortWait : selectedTriage.waitStatus === 'moderate' ? labels.moderateWait : selectedTriage.waitStatus === 'long' ? labels.longWait : labels.unknownWait}
                           </span>
-                          <span>{selectedTriage.waitingTimeText}</span>
-                        </span>
-                        {selectedTriage.upperBoundText && (
-                          <span className="ml-2 text-sm font-normal">
-                            <span className="text-m3-on-surface-variant/60">(</span>
-                            <span
-                              className={`font-semibold font-mono ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}
-                            >
-                              {selectedTriage.upperBoundText}
-                            </span>
-                            <span className="text-m3-on-surface-variant/60">)</span>
+                          <span className={`text-lg font-bold font-mono tracking-tight ${getWaitingTimeTone(selectedTriage.waitStatus, isDark)}`}>
+                            {selectedTriage.waitingTimeText}
                           </span>
-                        )}
+                          {selectedTriage.upperBoundText && (
+                            <span className="text-sm font-normal text-m3-on-surface-variant/60">
+                              (<span className={`font-semibold font-mono ${getWaitingTimeTone(selectedTriage.upperBoundWaitStatus ?? deriveWaitStatusFromText(selectedTriage.upperBoundText, selectedTriage.waitStatus), isDark)}`}>
+                                {selectedTriage.upperBoundText}
+                              </span>)
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-4 py-3">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onToggleExpanded(hospital.hospitalName);
-                          }}
-                          aria-expanded={isExpanded}
-                          aria-controls={detailsId}
-                          className="cursor-pointer border border-m3-outline px-3 py-1.5 text-xs font-medium text-m3-on-surface-variant transition-colors duration-200 hover:bg-m3-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-m3-primary focus-visible:ring-offset-2 focus-visible:ring-offset-m3-surface"
-                        >
-                          {isExpanded ? labels.hide : labels.view}
-                        </button>
+                        <Icon
+                          name="chevron-down"
+                          className="h-4 w-4 -rotate-90 text-m3-on-surface-variant group-hover:text-m3-on-surface"
+                        />
                       </td>
                     </tr>
 
