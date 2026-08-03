@@ -415,7 +415,7 @@ function App() {
   return (
     <div className={`relative overflow-x-clip pb-28 md:pb-10 text-m3-on-surface ${refreshPulse ? 'refresh-pulse' : ''}`}>
       <main className="mx-auto min-h-screen w-full max-w-6xl space-y-4 px-4 py-4 md:space-y-5 md:px-6 md:py-6 lg:px-8">
-        <div className="md:sticky md:top-0 md:z-30 md:bg-m3-surface md:-mx-6 md:-mt-6 md:px-6 md:pt-6 lg:-mx-8 lg:px-8">
+        <div className="sticky top-0 z-30 bg-m3-surface -mx-4 -mt-4 px-4 pt-4 pb-2 md:-mx-6 md:-mt-6 md:px-6 md:pt-6 lg:-mx-8 lg:px-8">
           <AppHeader
             labels={labels}
             languageMode={languageMode}
