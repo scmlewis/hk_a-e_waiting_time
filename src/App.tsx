@@ -476,13 +476,13 @@ function App() {
 
         <section className="space-y-3 md:hidden">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center border border-m3-outline bg-m3-surface-container-high px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
+            <span className="inline-flex items-center border border-m3-outline-variant bg-m3-surface-container px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
               {labels.triageCategoryLabels[selectedTriageCategory]}
             </span>
-            <span className="inline-flex items-center border border-m3-outline bg-m3-surface-container-high px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
+            <span className="inline-flex items-center border border-m3-outline-variant bg-m3-surface-container px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
               {activeClusterLabel}
             </span>
-            <span className="inline-flex items-center border border-m3-outline bg-m3-surface-container-high px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
+            <span className="inline-flex items-center border border-m3-outline-variant bg-m3-surface-container px-3 py-1.5 text-[11px] font-medium tracking-wide text-m3-on-surface-variant">
               {mobileSortLabel}
             </span>
           </div>
@@ -527,7 +527,7 @@ function App() {
           {!loading &&
             groupedHospitals.map((group) => (
               <section key={group.cluster} className="space-y-2">
-                <h2 className="border-l-2 border-l-m3-primary px-3 pt-4 pb-2 text-[10px] font-bold uppercase tracking-[0.15em] text-m3-on-surface-variant">
+                <h2 className="border-l-[3px] border-l-m3-primary bg-m3-surface-container/50 px-3 py-2.5 text-[10px] font-bold uppercase tracking-[0.15em] text-m3-on-surface-variant">
                   {group.displayCluster} ({group.hospitals.length})
                 </h2>
                 <div className="space-y-2">
