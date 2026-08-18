@@ -127,7 +127,7 @@ export function HospitalMap({
         />
 
         {/* Simplified HK coastline – rendered behind markers */}
-        <g aria-hidden="true" fill="#1A2220" fillOpacity={0.35} stroke="#6F8A83" strokeWidth={1}>
+        <g aria-hidden="true" fill="#2A3D36" fillOpacity={0.5} stroke="#5A7A72" strokeWidth={1.5}>
           {/* New Territories + Kowloon (mainland) */}
           <path d="M 130 417 L 762 417 L 762 56 L 130 56 Z" />
           {/* Kowloon Peninsula */}
