@@ -4,18 +4,16 @@ import { useSettings } from './useSettings'
 
 describe('useSettings hook', () => {
   beforeEach(() => {
-    // Clear localStorage before each test
     window.localStorage.clear()
 
-    // Mock matchMedia
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation(query => ({
         matches: false,
         media: query,
         onchange: null,
-        addListener: vi.fn(), // deprecated
-        removeListener: vi.fn(), // deprecated
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
@@ -26,9 +24,8 @@ describe('useSettings hook', () => {
   it('should initialize with default states', () => {
     const { result } = renderHook(() => useSettings())
 
-    expect(result.current.themeMode).toBe('auto')
     expect(result.current.languageMode).toBe('en')
-    expect(result.current.isDark).toBe(false)
+    expect(result.current.isDark).toBe(true)
   })
 
   it('should toggle language mode correctly', () => {
@@ -48,36 +45,11 @@ describe('useSettings hook', () => {
     expect(result.current.languageMode).toBe('en')
   })
 
-  it('should toggle theme mode correctly and save to localStorage', () => {
-    const { result } = renderHook(() => useSettings())
-
-    act(() => {
-      result.current.toggleThemeMode()
-    })
-
-    // Auto -> Light (since systemPrefersDark is mocked as false) -> Dark
-    // Wait, the hook says:
-    // if auto, return systemPrefersDark ? 'light' : 'dark' 
-    // since systemPrefersDark is false, it returns 'dark'.
-    expect(result.current.themeMode).toBe('dark')
-    expect(result.current.isDark).toBe(true)
-    expect(window.localStorage.getItem('ewt_theme_mode')).toBe('dark')
-
-    act(() => {
-      result.current.toggleThemeMode()
-    })
-
-    expect(result.current.themeMode).toBe('light')
-    expect(result.current.isDark).toBe(false)
-  })
-
   it('should initialize from localStorage if available', () => {
-    window.localStorage.setItem('ewt_theme_mode', 'dark')
     window.localStorage.setItem('ewt_language_mode', 'zh-HK')
 
     const { result } = renderHook(() => useSettings())
 
-    expect(result.current.themeMode).toBe('dark')
     expect(result.current.languageMode).toBe('zh-HK')
     expect(result.current.isDark).toBe(true)
   })

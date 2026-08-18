@@ -25,10 +25,8 @@ describe('App UI - Modern Enhancements', () => {
             const icon = btn.querySelector('svg')
             expect(icon).toBeInTheDocument()
 
-            // Check for prominent coloring (sky-600 or indigo-600)
-            expect(btn.className).toSatisfy((className: string) =>
-                className.includes('bg-sky-600') || className.includes('bg-indigo-600')
-            )
+            // Check for prominent coloring (M3 primary)
+            expect(btn.className).toContain('bg-m3-primary')
         })
     })
 

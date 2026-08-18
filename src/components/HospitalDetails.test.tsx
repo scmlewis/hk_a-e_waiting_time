@@ -86,9 +86,8 @@ describe('HospitalDetails UI', () => {
         expect(callButton).toHaveAttribute('href', 'tel:12345678')
         expect(mapsButton).toHaveAttribute('href', 'https://maps.google.com')
 
-        // Check for modern button classes
-        expect(callButton).toHaveClass('rounded-xl')
-        expect(callButton).toHaveClass('bg-rose-600')
-        expect(mapsButton).toHaveClass('bg-sky-600')
+        // Check for M3 button classes
+        expect(callButton).toHaveClass('bg-m3-error-container')
+        expect(mapsButton).toHaveClass('bg-transparent')
     })
 })

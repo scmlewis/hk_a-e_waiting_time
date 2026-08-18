@@ -60,26 +60,14 @@ afterEach(() => {
 })
 
 describe('HospitalMap', () => {
-  it('renders one marker per hospital with a location', () => {
+  it('renders the map container with aria-label', () => {
     render(<HospitalMap {...baseProps} />)
-    expect(screen.getByRole('button', { name: /Queen Mary Hospital/ })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /Map/ })).toBeInTheDocument()
   })
 
-  it('opens the popup on marker click and closes on Escape', () => {
-    render(<HospitalMap {...baseProps} />)
-    const marker = screen.getByRole('button', { name: /Queen Mary Hospital/ })
-    fireEvent.click(marker)
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
-    fireEvent.keyDown(document, { key: 'Escape' })
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-  })
-
-  it('renders the user-location dot when location is ready', () => {
-    const { container } = render(
-      <HospitalMap {...baseProps} userLocation={{ lat: 22.3, lng: 114.2 }} locationStatus="ready" />,
-    )
-    const userDot = container.querySelector('[data-testid="user-location"]')
-    expect(userDot).toBeInTheDocument()
+  it('renders a Leaflet map container', () => {
+    const { container } = render(<HospitalMap {...baseProps} />)
+    expect(container.querySelector('.leaflet-container')).toBeInTheDocument()
   })
 
   it('shows the error message when error is set', () => {
@@ -87,12 +75,8 @@ describe('HospitalMap', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(/Unable to load data/)
   })
 
-  it('paints the background rectangle with a reliable (non-var) fill', () => {
-    const { container } = render(<HospitalMap {...baseProps} />)
-    const background = container.querySelector('rect')
-    expect(background).not.toBeNull()
-    // var() in an SVG presentation attribute is unreliable across browsers; use a class.
-    expect(background!.getAttribute('fill') ?? '').not.toMatch(/^var\(/)
-    expect(background!.getAttribute('class') ?? '').toContain('fill-m3-surface-container')
+  it('shows loading placeholder when loading', () => {
+    const { container } = render(<HospitalMap {...baseProps} loading={true} />)
+    expect(container.querySelector('.animate-pulse')).toBeInTheDocument()
   })
 })

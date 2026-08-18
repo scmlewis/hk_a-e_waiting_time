@@ -211,3 +211,68 @@ h1, h2, h3, h4, h5, h6 {
 .snack-exit {
   animation: snack-exit 150ms cubic-bezier(0.2, 0, 0, 1) both;
 }
+
+/* Leaflet popup overrides for dark theme */
+.leaflet-popup-content-wrapper {
+  background: var(--color-m3-surface);
+  color: var(--color-m3-on-surface);
+  border: 1px solid var(--color-m3-outline-variant);
+  border-radius: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  min-width: 280px;
+  max-width: 360px;
+}
+
+.leaflet-popup-tip {
+  background: var(--color-m3-surface);
+  border: 1px solid var(--color-m3-outline-variant);
+  border-top: none;
+  border-left: none;
+}
+
+.leaflet-popup-close-button {
+  display: none;
+}
+
+.leaflet-control-zoom a {
+  background: var(--color-m3-surface-container) !important;
+  color: var(--color-m3-on-surface) !important;
+  border: 1px solid var(--color-m3-outline-variant) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--color-m3-surface-container-high) !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(14, 21, 19, 0.8) !important;
+  color: var(--color-m3-on-surface-variant) !important;
+  font-size: 10px;
+}
+
+.leaflet-control-attribution a {
+  color: var(--color-m3-primary) !important;
+}
+
+.map-tooltip {
+  background: var(--color-m3-surface-container);
+  color: var(--color-m3-on-surface);
+  border: 1px solid var(--color-m3-outline-variant);
+  border-radius: 0;
+  font-size: 12px;
+  padding: 4px 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.map-tooltip::before {
+  border-top-color: var(--color-m3-outline-variant);
+}
+
+.leaflet-interactive {
+  outline: none;
+}
