@@ -9,12 +9,14 @@ A professional, high-performance web application providing live visibility into 
 
 ## ✨ Key Features
 
+- **🗺️ Interactive Map View:** A dependency-free SVG map plotting all 18 public A&E hospitals by real location, colour-coded by the selected triage category, with your GPS position overlaid and tap-for-details popups (wait time, call hospital, open in Maps).
 - **🔴 Live Data Synchronization:** Real-time updates from official Hospital Authority open data endpoints.
 - **⚡ Proactive Performance:** Ultra-lightweight bundle and optimized rendering for instant load times.
-- **📍 Smart Location Services:** Optional GPS integration to automatically surface the nearest medical facilities.
-- **📊 Comprehensive Triage View:** Detailed breakdown of waiting times across all five triage categories (Critical to Non-urgent).
+- **📍 Smart Location Services:** Optional GPS integration to automatically surface the nearest medical facilities and show your position on the map.
+- **📊 Comprehensive Triage View:** Detailed waiting times across all five triage categories (Critical to Non-urgent) plus an at-a-glance Overview summary.
+- **🌐 Bilingual Interface:** Full English and Traditional Chinese (繁體中文) switching.
 - **🌓 Adaptive Interface:** Full support for System Light/Dark modes with high-contrast accessibility optimizations.
-- **📱 Responsive by Design:** Engineered for seamless performance across mobile devices, tablets, and desktops.
+- **📱 Responsive by Design:** Engineered for seamless performance across mobile devices, tablets, and desktops, with three switchable views — Wait Times, Overview, and Map.
 
 ## 🛠 Tech Stack
 
@@ -53,20 +55,23 @@ VITE_AE_FALLBACK_ENDPOINT=https://fallback-endpoint.com/data
 The project maintains high reliability through a comprehensive test suite covering core logic and UI components.
 
 ```bash
-# Run unit and integration tests
+# Run tests in watch mode (default)
 npm test
+
+# Run the full test suite once (CI-friendly)
+npx vitest run
 
 # Execute linting checks
 npm run lint
 
-# Build for production
+# Type-check and build for production
 npm run build
 ```
 
 ## 📈 Observability & Telemetry
 Designed for production-level monitoring, the app includes:
 - **Health Tracking:** Automated source staleness detection and refresh error logging.
-- **Interaction Analytics:** Anonymous telemetry for feature engagement (sorting, filtering, search behavior).
+- **Interaction Analytics:** Anonymous telemetry for feature engagement (view switches, sorting, filtering, search, and map marker taps).
 - **Error Reporting:** Global exception tracking and unhandled promise rejection monitoring.
 
 ---
