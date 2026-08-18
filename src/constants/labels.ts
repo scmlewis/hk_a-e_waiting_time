@@ -62,6 +62,7 @@ export interface AppLabels {
   clearFilters: string
   viewWaitTimes: string
   viewOverview: string
+  viewMap: string
   sortWaiting: string
   sortAZ: string
   sortNearest: string
@@ -116,6 +117,7 @@ const EN_LABELS: AppLabels = {
   clearFilters: 'Clear filters',
   viewWaitTimes: 'Wait Times',
   viewOverview: 'A&E Overview',
+  viewMap: 'Map',
   sortWaiting: 'Waiting time',
   sortAZ: 'A-Z',
   sortNearest: 'Nearest',
@@ -290,6 +292,7 @@ const ZH_HK_LABELS: AppLabels = {
   clearFilters: '清除篩選',
   viewWaitTimes: '輪候時間',
   viewOverview: '急症室簡介',
+  viewMap: '地圖',
   sortWaiting: '按輪候時間排序',
   sortAZ: '按名稱排序',
   sortNearest: '按距離排序',
