@@ -1,6 +1,7 @@
 // src/components/MapPopup.tsx
 import type { HospitalWaitingTime, TriageCategory } from '../types/ae'
-import type { HospitalDetailsLabels, LanguageMode } from '../constants/labels'
+import type { HospitalDetailsLabels } from '../components/HospitalDetails'
+import type { LanguageMode } from '../constants/labels'
 import { Icon } from './Icon'
 
 interface MapPopupProps {

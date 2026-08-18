@@ -76,8 +76,8 @@ export function HospitalMap({
     ? projectToSvg(selected.details.location.lat, selected.details.location.lng)
     : null
 
-  let popupX = HK_MAP_VIEWBOX.padding
-  let popupY = HK_MAP_VIEWBOX.padding
+  let popupX: number = HK_MAP_VIEWBOX.padding
+  let popupY: number = HK_MAP_VIEWBOX.padding
   if (selectedPoint) {
     popupX = selectedPoint.x - POPUP_WIDTH / 2
     popupY = isNarrow

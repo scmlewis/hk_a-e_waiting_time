@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppHeader } from './components/AppHeader'
 import { FilterBar } from './components/FilterBar'
 import { AeOverview } from './components/AeOverview'
+import { HospitalMap } from './components/HospitalMap'
 import { HospitalCard } from './components/HospitalCard'
 import { HospitalTable } from './components/HospitalTable'
 import { CLUSTER_ORDER, CLUSTER_NAME_ZH_HK } from './constants/hospitalMeta'
@@ -19,7 +20,7 @@ import { useSettings } from './hooks/useSettings'
 import { useLocation } from './hooks/useLocation'
 import { useWaitingTimes } from './hooks/useWaitingTimes'
 
-type AppView = 'wait-times' | 'overview'
+type AppView = 'wait-times' | 'overview' | 'map'
 
 function App() {
   const { languageMode, isDark, toggleLanguageMode } = useSettings()
@@ -64,6 +65,9 @@ function App() {
   const handleViewChange = useCallback((nextView: AppView) => {
     setActiveView(nextView)
     void trackEvent('view_changed', { view: nextView })
+    if (nextView === 'map') {
+      void trackEvent('map_view_opened')
+    }
   }, [])
 
 
@@ -433,7 +437,7 @@ function App() {
             setIsLegendExpanded={setIsLegendExpanded}
           />
 
-        {activeView === 'wait-times' && (
+        {(activeView === 'wait-times' || activeView === 'map') && (
           <div className="hidden md:block border-t border-m3-outline-variant">
             <FilterBar
               labels={{
@@ -554,6 +558,19 @@ function App() {
 
         {activeView === 'overview' && <AeOverview labels={labels.overview} />}
 
+        {activeView === 'map' && (
+          <HospitalMap
+            hospitals={visibleHospitals}
+            selectedTriageCategory={selectedTriageCategory}
+            userLocation={userLocation}
+            locationStatus={locationStatus}
+            loading={loading}
+            error={error}
+            labels={labels}
+            languageMode={languageMode}
+          />
+        )}
+
         {activeView === 'wait-times' && loading && (
           <section
             className="hidden animate-pulse space-y-2 border border-m3-outline-variant p-3 motion-reduce:animate-none md:block"
@@ -615,7 +632,7 @@ function App() {
         />
       )}
 
-      {activeView === 'wait-times' && <div
+      {(activeView === 'wait-times' || activeView === 'map') && <div
         className={`fixed inset-x-0 bottom-0 z-30 border-x border-t border-m3-outline-variant bg-m3-surface-container-low p-4 transition-transform duration-300 motion-reduce:transition-none md:hidden ${isMobileFilterSheetOpen ? 'translate-y-0' : 'translate-y-full'
           }`}
         role="dialog"
@@ -716,7 +733,7 @@ function App() {
         </div>
       </div>}
 
-      {activeView === 'wait-times' && <div
+      {(activeView === 'wait-times' || activeView === 'map') && <div
         className={`fixed inset-x-0 bottom-0 z-30 border-t border-m3-outline-variant bg-m3-surface-container-low px-4 pt-3 pb-8 transition-transform duration-300 motion-reduce:transition-none md:hidden ${hasMobileOverlayOpen ? 'translate-y-full' : 'translate-y-0'
           }`}
       >
@@ -730,6 +747,7 @@ function App() {
           >
             <Icon name="refresh" className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
+          {activeView === 'wait-times' && (
           <button
             type="button"
             onClick={() => {
@@ -741,6 +759,7 @@ function App() {
             <div className="text-[9px] font-medium uppercase tracking-widest text-m3-on-surface-variant">{labels.quickSort}</div>
             <div className="truncate text-xs font-medium text-m3-on-surface">{mobileSortLabel}</div>
           </button>
+          )}
           <button
             type="button"
             onClick={() => {
