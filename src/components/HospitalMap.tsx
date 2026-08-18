@@ -245,7 +245,7 @@ export function HospitalMap({
 
   return (
     <div className="relative aspect-[4/3] w-full overflow-hidden border border-m3-outline-variant">
-      <div ref={mapRef} className="h-full w-full" role="img" aria-label={labels.viewMap} />
+      <div ref={mapRef} className="h-full w-full bg-[#0E1513]" role="img" aria-label={labels.viewMap} />
 
       {popupContainer &&
         selected &&
