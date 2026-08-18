@@ -214,36 +214,36 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Leaflet popup overrides for dark theme */
 .leaflet-popup {
-  background: transparent;
-  border: none;
-  box-shadow: none;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .leaflet-popup-content-wrapper {
-  background: var(--color-m3-surface);
-  color: var(--color-m3-on-surface);
-  border: 1px solid var(--color-m3-outline-variant);
-  border-radius: 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  padding: 0;
+  background: var(--color-m3-surface) !important;
+  color: var(--color-m3-on-surface) !important;
+  border: 1px solid var(--color-m3-outline-variant) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  padding: 0 !important;
 }
 
 .leaflet-popup-content {
-  margin: 0;
+  margin: 0 !important;
   min-width: 280px;
   max-width: 360px;
 }
 
 .leaflet-popup-tip-container {
-  background: none;
+  background: none !important;
 }
 
 .leaflet-popup-tip {
-  background: var(--color-m3-surface);
-  border: 1px solid var(--color-m3-outline-variant);
-  border-top: none;
-  border-left: none;
-  box-shadow: none;
+  background: var(--color-m3-surface) !important;
+  border: 1px solid var(--color-m3-outline-variant) !important;
+  border-top: none !important;
+  border-left: none !important;
+  box-shadow: none !important;
 }
 
 .leaflet-popup-close-button {
