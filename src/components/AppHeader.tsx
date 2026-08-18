@@ -2,7 +2,7 @@ import type { AppLabels, LanguageMode } from '../constants/labels'
 import { formatCountdown } from '../utils/time'
 import { Icon } from './Icon'
 
-export type AppView = 'wait-times' | 'overview'
+export type AppView = 'wait-times' | 'overview' | 'map'
 
 interface AppHeaderProps {
   labels: AppLabels
@@ -107,6 +107,22 @@ export function AppHeader({
         >
           {labels.viewOverview}
           {activeView === 'overview' && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 -mb-px bg-m3-primary" />
+          )}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeView === 'map'}
+          onClick={() => handleViewChange('map')}
+          className={`relative px-4 py-2.5 text-sm font-medium transition-colors duration-200 ${
+            activeView === 'map'
+              ? 'text-m3-primary'
+              : 'text-m3-on-surface-variant hover:text-m3-on-surface'
+          }`}
+        >
+          {labels.viewMap}
+          {activeView === 'map' && (
             <span className="absolute bottom-0 left-0 right-0 h-0.5 -mb-px bg-m3-primary" />
           )}
         </button>

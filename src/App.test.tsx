@@ -49,4 +49,9 @@ describe('App UI - Modern Enhancements', () => {
         const quickFilterDivs = screen.getAllByText(/Filter|篩選/i)
         expect(quickFilterDivs.length).toBeGreaterThan(0)
     })
+
+    it('renders a Map view tab', async () => {
+        render(<App />)
+        expect(screen.getByRole('tab', { name: /Map/i })).toBeInTheDocument()
+    })
 })
