@@ -83,7 +83,7 @@ describe('HospitalMap', () => {
   })
 
   it('shows the error message when error is set', () => {
-    render(<HospitalMap {...baseProps} error="Unable to load data" />)
+    render(<HospitalMap {...baseProps} hospitals={[]} error="Unable to load data" />)
     expect(screen.getByRole('alert')).toHaveTextContent(/Unable to load data/)
   })
 })

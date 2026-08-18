@@ -96,7 +96,7 @@ export function HospitalMap({
     )
   }
 
-  if (error) {
+  if (error && hospitals.length === 0) {
     return (
       <p className="border border-m3-error/50 p-4 text-sm text-m3-error" role="alert">
         {error}
@@ -110,9 +110,6 @@ export function HospitalMap({
   return (
     <div
       className="aspect-[4/3] w-full overflow-hidden border border-m3-outline-variant"
-      onKeyDown={(event) => {
-        if (event.key === 'Escape') closePopup()
-      }}
     >
       <svg
         viewBox={`0 0 ${HK_MAP_VIEWBOX.width} ${HK_MAP_VIEWBOX.height}`}
