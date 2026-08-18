@@ -127,17 +127,12 @@ export function HospitalMap({
         />
 
         {/* Simplified HK coastline – rendered behind markers */}
-        <g aria-hidden="true" fill="#2A3D36" fillOpacity={0.5} stroke="#5A7A72" strokeWidth={1.5}>
-          {/* New Territories + Kowloon (mainland) */}
-          <path d="M 130 417 L 762 417 L 762 56 L 130 56 Z" />
-          {/* Kowloon Peninsula */}
-          <path d="M 509 450 L 527 467 L 581 450 L 544 417 Z" />
-          {/* Hong Kong Island */}
-          <path d="M 435 516 L 491 483 L 544 483 L 617 483 L 671 500 L 617 550 L 544 550 L 491 550 Z" />
-          {/* Lantau Island */}
-          <path d="M 76 533 L 166 500 L 257 533 L 166 566 Z" />
-          {/* smaller outlying islands (Cheung Chau, etc.) */}
-          <path d="M 320 555 L 340 548 L 355 555 L 340 562 Z" />
+        <g aria-hidden="true">
+          <path d="M 130 417 L 762 417 L 762 56 L 130 56 Z" fill="#3A5550" fillOpacity={0.6} stroke="#7AA89E" strokeWidth={2} />
+          <path d="M 509 450 L 527 467 L 581 450 L 544 417 Z" fill="#3A5550" fillOpacity={0.6} stroke="#7AA89E" strokeWidth={2} />
+          <path d="M 435 516 L 491 483 L 544 483 L 617 483 L 671 500 L 617 550 L 544 550 L 491 550 Z" fill="#3A5550" fillOpacity={0.6} stroke="#7AA89E" strokeWidth={2} />
+          <path d="M 76 533 L 166 500 L 257 533 L 166 566 Z" fill="#3A5550" fillOpacity={0.6} stroke="#7AA89E" strokeWidth={2} />
+          <path d="M 320 555 L 340 548 L 355 555 L 340 562 Z" fill="#3A5550" fillOpacity={0.6} stroke="#7AA89E" strokeWidth={2} />
         </g>
 
         {userPoint && locationStatus === 'ready' && (
