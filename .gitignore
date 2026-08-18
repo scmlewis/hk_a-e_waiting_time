@@ -16,6 +16,7 @@ dist-ssr
 .agents/
 .agent/
 .github/
+.superpowers/
 _agents/
 _agent/
 .braintrust/
@@ -46,5 +47,4 @@ refactor.js
 eslint-report.json
 dev_response.html
 
-# Testing suite
-src/**/*.test.ts
+# Testing suite (test files are tracked; vitest config excludes them from the build)

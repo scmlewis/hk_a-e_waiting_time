@@ -8,5 +8,5 @@ export const WAIT_STATUS_COLORS: Record<WaitStatus, string> = {
   short: '#22c55e',
   moderate: '#f59e0b',
   long: '#ef4444',
-  unknown: '#79747e',
+  unknown: '#4A635D',
 }

@@ -129,7 +129,7 @@ export function HospitalMap({
         {userPoint && locationStatus === 'ready' && (
           <>
             <circle cx={userPoint.x} cy={userPoint.y} r={radius} fill="rgba(59,130,246,0.12)" />
-            <circle data-testid="user-location" cx={userPoint.x} cy={userPoint.y} r={6} fill="#3b82f6" stroke="#ffffff" strokeWidth={2} />
+            <circle data-testid="user-location" role="img" aria-label={labels.useMyLocation} cx={userPoint.x} cy={userPoint.y} r={6} fill="#3b82f6" stroke="#ffffff" strokeWidth={2} />
           </>
         )}
 
