@@ -8,6 +8,7 @@ import type { AppLabels, LanguageMode } from '../constants/labels'
 import type { Coordinate } from '../utils/distance'
 import type { LocationStatus } from '../hooks/useLocation'
 import { WAIT_STATUS_COLORS } from '../constants/mapColors'
+import { HK_MAP_BOUNDS } from '../utils/geoProjection'
 import { MapPopup } from './MapPopup'
 import { trackEvent } from '../services/telemetry'
 
@@ -76,6 +77,12 @@ export function HospitalMap({
       zoom: HK_ZOOM,
       zoomControl: false,
       attributionControl: true,
+      maxBounds: [
+        [HK_MAP_BOUNDS.latMin, HK_MAP_BOUNDS.lngMin],
+        [HK_MAP_BOUNDS.latMax, HK_MAP_BOUNDS.lngMax],
+      ],
+      maxBoundsViscosity: 0.8,
+      minZoom: 10,
     })
 
     L.tileLayer(TILE_URL, {
