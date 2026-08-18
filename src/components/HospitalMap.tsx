@@ -118,7 +118,7 @@ export function HospitalMap({
         role="img"
         aria-label={labels.viewMap}
       >
-        <rect width={HK_MAP_VIEWBOX.width} height={HK_MAP_VIEWBOX.height} fill="var(--color-m3-surface-container)" />
+        <rect width={HK_MAP_VIEWBOX.width} height={HK_MAP_VIEWBOX.height} className="fill-m3-surface-container" />
         <rect
           width={HK_MAP_VIEWBOX.width}
           height={HK_MAP_VIEWBOX.height}

@@ -86,4 +86,13 @@ describe('HospitalMap', () => {
     render(<HospitalMap {...baseProps} hospitals={[]} error="Unable to load data" />)
     expect(screen.getByRole('alert')).toHaveTextContent(/Unable to load data/)
   })
+
+  it('paints the background rectangle with a reliable (non-var) fill', () => {
+    const { container } = render(<HospitalMap {...baseProps} />)
+    const background = container.querySelector('rect')
+    expect(background).not.toBeNull()
+    // var() in an SVG presentation attribute is unreliable across browsers; use a class.
+    expect(background!.getAttribute('fill') ?? '').not.toMatch(/^var\(/)
+    expect(background!.getAttribute('class') ?? '').toContain('fill-m3-surface-container')
+  })
 })
