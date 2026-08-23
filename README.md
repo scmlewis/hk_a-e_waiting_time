@@ -7,6 +7,12 @@ A professional, high-performance web application providing live visibility into 
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
+---
+
+## Why this exists
+
+When someone needs an A&E department, the last thing they should do is drive to the one with a 4-hour queue. This surfaces live waiting times for every Hong Kong A&E so the nearest short-wait option is one glance away.
+
 ## ✨ Key Features
 
 - **🗺️ Interactive Map View:** A dependency-free SVG map plotting all 18 public A&E hospitals by real location, colour-coded by the selected triage category, with your GPS position overlaid and tap-for-details popups (wait time, call hospital, open in Maps).
@@ -76,3 +82,8 @@ Designed for production-level monitoring, the app includes:
 
 ---
 *Disclaimer: This application is a monitoring tool based on open data. For life-threatening emergencies, always dial 999 directly.*
+
+**▶ Live demo:** https://scmlewis.github.io/hk_a-e_waiting_time/
+---
+
+If this saved you time or gave you an idea, a ⭐ on the repo is appreciated — it helps others find it.
